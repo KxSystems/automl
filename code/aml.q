@@ -31,6 +31,8 @@ run:{[tb;tgt;ftype;ptype;p]
   // This provides an encoding map which can be used in reruns of automl even
   // if the data is no longer in the appropriate format for symbol encoding
   params[`symencode]:prep.i.symencode[tb;10;1;dict;::];
+  // Encode target data if target is a symbol vector
+  if[11h~type tgt;tgt:.ml.labelencode tgt];
   // Preprocess the dataset and provide insights into initial data structure
   prep:preproc[tb;tgt;ftype;dict];
   tb:prep`table;
@@ -41,8 +43,6 @@ run:{[tb;tgt;ftype;ptype;p]
   vals[`feat_tab]:tb`preptab;
   params[`feat_time]:tb`preptime;
   params[`features]:get[dict[`sigfeats]][vals`feat_tab;tgt];
-  // Encode target data if target is a symbol vector
-  if[11h~type tgt;tgt:.ml.labelencode tgt];
   // Apply the appropriate train/test split to the data
   // the following currently runs differently if the parameters are defined
   // in a file or through the more traditional dictionary/(::) format
