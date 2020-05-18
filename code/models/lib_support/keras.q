@@ -26,7 +26,7 @@ binaryfit:regfit:multifit:{[d;m]m[`:fit][npa d[0]0;d[0]1;`batch_size pykw 32;`ve
 /. r > the compiled keras models
 binarymdl:{[d;s;mtype]
   nps[s];
-  if[not 1~checkimport[];tfs[s]];
+  if[0~checkimport[0];tfs[s]];
   m:seq[];
   m[`:add]dns[32;`activation pykw"relu";`input_dim pykw count first d[0]0];
   m[`:add]dns[1;`activation pykw "sigmoid"];
@@ -35,7 +35,7 @@ binarypredict:{[d;m].5<raze m[`:predict][npa d[1]0]`}
 
 regmdl:{[d;s;mtype]
   nps[s];
-  if[not 1~checkimport[];tfs[s]];
+  if[0~checkimport[0];tfs[s]];
   m:seq[];
   m[`:add]dns[32;`activation pykw "relu";`input_dim pykw count first d[0]0];
   m[`:add]dns[1 ;`activation pykw "relu"];
@@ -44,7 +44,7 @@ regpredict   :{[d;m]raze m[`:predict][npa d[1]0]`}
 
 multimdl:{[d;s;mtype]
   nps[s];
-  if[not 1~checkimport[];tfs[s]];
+  if[0~checkimport[0];tfs[s]];
   m:seq[];
   m[`:add]dns[32;`activation pykw "relu";`input_dim pykw count first d[0]0];
   m[`:add]dns[count distinct (d[0]1)`;`activation pykw "softmax"];
@@ -55,7 +55,9 @@ npa:.p.import[`numpy]`:array;
 seq:.p.import[`keras.models]`:Sequential;
 dns:.p.import[`keras.layers]`:Dense;
 nps:.p.import[`numpy.random][`:seed];
-if[not 1~checkimport[];tf:.p.import[`tensorflow];tfs:tf$[2>"I"$first tf[`:__version__]`;[`:set_random_seed];[`:random.set_seed]]];
+if[0~checkimport[0];
+  tf:.p.import[`tensorflow];
+  tfs:tf$[2>"I"$first tf[`:__version__]`;[`:set_random_seed];[`:random.set_seed]]];
 
 / allow multiprocess
 .ml.loadfile`:util/mproc.q

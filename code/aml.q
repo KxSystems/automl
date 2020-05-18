@@ -53,7 +53,7 @@ run:{[tb;tgt;ftype;ptype;p]
   vals[`ytrn]:tts`ytrain;vals[`ytst]:tts`ytest;
   params[`mdls]:i.kerascheck[params`mdls;tts;tgt];
   // Check if Tensorflow/Keras not available for use, NN models removed
-  if[1~checkimport[];params[`mdls]:?[params`mdls;enlist(<>;`lib;enlist `keras);0b;()]];
+  if[1~checkimport[0];params[`mdls]:?[params`mdls;enlist(<>;`lib;enlist `keras);0b;()]];
   -1 i.runout`sig;-1 i.runout`slct;
   -1 i.runout[`tot],string[params[`cnt_feats]:count cols tab];
   // Set numpy random seed if multiple prcoesses
@@ -96,7 +96,7 @@ new:{[t;dt;tm]
   fp:dt_tm[0],"/run_",dt_tm 1;
   // Relevant python functionality for loading of models
   skload:.p.import[`joblib][`:load];
-  if[0~checkimport[];krload:.p.import[`keras.models][`:load_model]];
+  if[0~checkimport[0];krload:.p.import[`keras.models][`:load_model]];
   // Retrieve the metadata from a file path based on the run date/time
   metadata:i.getmeta[i.ssrwin[path,"/outputs/",fp,"/config/metadata"]];
   typ:metadata`typ;

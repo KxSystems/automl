@@ -36,7 +36,7 @@ i.updparam:{[t;p;typ]
                          d[`aggcols]t;
                          11h~abs typagg;d`aggcols;
                          '`$"aggcols must be passed function or list of columns"];
-	   d,enlist[`tf]!enlist 1~checkimport[]}[t;p];
+	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
       typ=`normal;
       {[t;p]d:i.normaldefault[];
        d:$[(ty:type p)in 10 -11 99h;
@@ -47,7 +47,7 @@ i.updparam:{[t;p;typ]
            p~(::);d;
 	   '`$"p must be passed the identity `(::)`, a filepath to a parameter flatfile",
               " or a dictionary with appropriate key/value pairs"];
-	   d,enlist[`tf]!enlist 1~checkimport[]}[t;p];
+	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
       typ=`tseries;
       '`$"This will need to be added once the time-series recipe is in place";
     '`$"Incorrect input type"]}
@@ -146,8 +146,10 @@ i.updmodels:{[mdls;tgt]
 // These are a list of models which are deterministic and thus which do not need to be grid-searched
 // at present this should include the Keras models as a sufficient tuning method
 // has yet to be implemented
-if[1~checkimport[];i.keraslist:`null];
-i.excludelist:i.keraslist,`GaussianNB`LinearRegression;
+if[1~checkimport[0];i.keraslist:`null];
+if[1~checkimport[1];i.torchlist:`null];
+i.nnlist:i.keraslist,i.torchlist;
+i.excludelist:i.nnlist,`GaussianNB`LinearRegression;
 
 // Dictionary with mappings for console printing to reduce clutter in .automl.runexample
 i.runout:`col`pre`sig`slct`tot`ex`gs`sco`cnf`save!
