@@ -12,6 +12,7 @@
 prep.create:{[t;p;typ]
   $[typ=`fresh;prep.freshcreate[t;p];
     typ=`normal;prep.normalcreate[t;p];
+    typ=`nlp;prep.nlpcreate[t;p];
     '`$"Feature extraction type is not currently supported"]
   }
 
@@ -54,3 +55,13 @@ prep.normalcreate:{[t;p]
   fe_end:.z.T-fe_start;
   `preptab`preptime!(tb;fe_end)}
 
+// Apply word2vec on string data for nlp problems
+/. r > table with features created in accordance with the nlp feature creation procedure
+prep.nlpcreate:{[t;p]
+  fe_start:.z.T;
+  r:i.nlp_proc[t;p;0b];
+  tb:r 0;strcol:r 1;model:r 2;
+  if[0<count cols[t] except strcol;tb:tb,'(prep.normalcreate[(strcol)_t;p])[0]];
+  if[p[`saveopt]in 1 2;model[`:save][i.ssrwin[path,"/",p[`spath],"/models/w2v.model"]]];
+  fe_end:.z.T-fe_start;
+  `preptab`preptime!(tb;fe_end)}

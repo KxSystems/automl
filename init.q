@@ -31,3 +31,9 @@ loadfile`:code/aml.q
 $[0~checkimport[2];
  [loadfile`:code/postproc/reports/latex.p;loadfile`:code/postproc/reports/latex.q];
  [-1"Requirements for latex report generation are not satisfied, report will use reportlab.";]]
+
+\d .
+
+$[.automl.nlpchk;
+  .nlp.loadfile`:init.q;
+  [-1"Requirements for NLP-Spacy not available, NLP-Spacy models will not be run";]]

@@ -19,7 +19,8 @@ run:{[tb;tgt;ftype;ptype;p]
   // update the seed based on time of day if user does not specify the seed in p
   if[`rand_val~dict[`seed];dict[`seed]:"j"$.z.t];
   // if required to save data construct the appropriate folders
-  if[dict[`saveopt]in 1 2;spaths:i.pathconstruct[dtdict;dict`saveopt]];
+  if[savemdl:dict[`saveopt]in 1 2;spaths:i.pathconstruct[dtdict;dict`saveopt]];
+  if[savemdl&ftype in `nlp;dict[`spath]:1_-8_last spaths`config];
   // dictionaries allowing parameters and values to be assigned throughout this function
   // this ensures that the number of local variables does not exceed allowed levels
   params:()!();
@@ -104,6 +105,8 @@ new:{[t;dt;tm]
     i.normalproc[t;metadata];
     `fresh=typ;
     i.freshproc[t;metadata];
+    `nlp=typ;
+    i.nlpproc[t;metadata];
     '`$"This form of operation is not currently supported"
     ];
   $[(mp:metadata[`pylib])in `sklearn`keras;
