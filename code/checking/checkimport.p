@@ -16,5 +16,10 @@ p)def< checkimport(x):
       import pylatex;return(0)
     except:
       return(1)
+  elif(x==3):
+    try:
+      import gensim.models;import spacy;import builtins;return(0);
+    except:
+      return(1)
   else:
     return(0)

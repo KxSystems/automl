@@ -29,16 +29,6 @@ prep.freshcreate:{[t;p]
   t:.ml.infreplace t;
   `preptab`preptime!(0^.ml.dropconstant t;fe_end)}
 
-
-// In all cases feature significance currently returns the top 25% of important features
-// if no features are deemed important it currently continues with all available features
-// at present
-/. r > table with only the significant features available or all features as above
-prep.freshsignificance:{[t;tgt]
-  $[0<>count k:.ml.fresh.significantfeatures[t;tgt;.ml.fresh.percentile 0.25];
-    k;[-1 prep.i.freshsigerr;cols t]]}
-
-
 // Create features for 'normal problems' -> one target for each row, no time dependency
 // or fresh like structure
 /. r > table with features created in accordance with the normal feature creation procedure 
@@ -59,9 +49,21 @@ prep.normalcreate:{[t;p]
 /. r > table with features created in accordance with the nlp feature creation procedure
 prep.nlpcreate:{[t;p]
   fe_start:.z.T;
-  r:i.nlp_proc[t;p;0b];
-  tb:r 0;strcol:r 1;model:r 2;
-  if[0<count cols[t] except strcol;tb:tb,'(prep.normalcreate[(strcol)_t;p])[0]];
-  if[p[`saveopt]in 1 2;model[`:save][i.ssrwin[path,"/",p[`spath],"/models/w2v.model"]]];
+  // Preprocess the character data
+  prep:i.nlp_proc[t;p;0b];
+  tb:prep`tb;
+  if[0<count cols[t]except prep`strcol;
+    tb:tb,'(prep.normalcreate[(prep`strcol)_t;p])[0]];
+  if[p[`saveopt]in 1 2;
+    prep[`mdl][`:save][i.ssrwin[path,"/",p[`spath],"/models/w2v.model"]]];
   fe_end:.z.T-fe_start;
   `preptab`preptime!(tb;fe_end)}
+
+// In all cases feature significance currently returns the top 25% of important features
+// if no features are deemed important it currently continues with all available features
+// at present
+/. r > table with only the significant features available or all features as above
+prep.freshsignificance:{[t;tgt]
+  $[0<>count k:.ml.fresh.significantfeatures[t;tgt;.ml.fresh.percentile 0.25];
+    k;[-1 prep.i.freshsigerr;cols t]]}
+

@@ -291,7 +291,7 @@ i.nlp_proc:{[t;p;smdl]
   // Join tables
   tb:tpos,'sentt,'w2vtb,'tner;
   tb[`isStop]:{sum[x]%count x}each corpus`isStop;
-  (.ml.dropconstant prep.i.nullencode[.ml.infreplace tb;med];strcol;model)
+  `tb`strcol`mdl!(.ml.dropconstant prep.i.nullencode[.ml.infreplace tb;med];strcol;model)
   }
 
 // Create the folders that are required for the saving of the config,models, images and reports
@@ -356,3 +356,4 @@ if[nlpchk:(::)~@[{system"l ",x};"nlp/nlp.q";{[err]err;0b}];
   p.dr:.p.import[`builtins][`:dir];
   p.pos:p.dr[p.sp[`:parts_of_speech]]`;
   p.nlpm:p.sp[`:load]["en_core_web_sm"];]
+
