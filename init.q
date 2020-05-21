@@ -6,6 +6,7 @@
 .ml.loadfile`:init.q
 loadfile`:code/updml.q
 
+// Checking functionality for optional use-cases
 loadfile`:code/checking/checkimport.p
 loadfile`:code/checking/check.q
 
@@ -23,12 +24,16 @@ loadfile`:code/postproc/saving.q
 loadfile`:code/postproc/reports/report.q
 loadfile`:code/postproc/utils.q
 
+// Attempt to load keras/pytorch/latex functionality
 i.loadkeras[]
 i.loadtorch[]
 i.loadlatex[]
+
 loadfile`:code/utils.q
 loadfile`:code/aml.q
 
+// Attempt to load nlp functionality, namespace change ensures .automl.path
+// is not overwritten
 \d .nlp
 .automl.i.loadnlp[]
 \d .automl

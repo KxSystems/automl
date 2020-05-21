@@ -269,14 +269,16 @@ i.nlp_proc:{[t;p;smdl;fp]
   // Load in spacy and word2vec modules
   system["export PYTHONHASHSEED=0"];
   // Add NER tagging
-  ents:p.nlpm each sents;
+  ents:.p.import[`spacy][`:load]["en_core_web_sm"]each sents;
   ners:`PERSON`NORP`FAC`ORG`GPE`LOC`PRODUCT`EVENT`WORK_OF_ART`LAW,
     `LANGUAGE`DATE`TIME`PERCENT`MONEY`QUANTITY`ORDINAL`CARDINAL;
   tner:prep.i.percdict[;ners]each{count each group `${(.p.wrap x)[`:label_]`}each x[`:ents]`}each ents;
   // Apply parsing using spacy model
   corpus:.nlp.newParser[`en;`isStop`tokens`uniPOS]sents;
+  // Python function to extract part of speech
+  pos:.p.import[`builtins][`:dir][.p.import[`spacy][`:parts_of_speech]]`;
   // Add uniPOS tagging
-  unipos:`$p.pos[til (first where 0<count each p.pos ss\:"__")];
+  unipos:`$pos[til (first where 0<count each pos ss\:"__")];
   tpos:prep.i.percdict[;unipos]each group each corpus`uniPOS;
   // Apply sentiment analysis
   sentt:.nlp.sentiment each sents;
@@ -284,8 +286,8 @@ i.nlp_proc:{[t;p;smdl;fp]
   tokens:string corpus[`tokens];
   size:300&count raze distinct tokens;window:$[30<tk:avg count each tokens;10;10<tk;5;2];
   model:$[smdl;
-    p.word2vec[`:load][i.ssrwin[fp,"/w2v.model"]];
-    p.word2vec[`:Word2Vec][tokens;`size pykw size;`window pykw window;`seed pykw p[`seed];`workers pykw 1]];
+    .p.import[`gensim.models][`:load][i.ssrwin[fp,"/w2v.model"]];
+    .p.import[`gensim.models][`:Word2Vec][tokens;`size pykw size;`window pykw window;`seed pykw p[`seed];`workers pykw 1]];
   sentvec:{x[y;z]}[tokens]'[til count w2vind;w2vind:where each tokens in model[`:wv.index2word]`];
   w2vtb:flip(`$"col",/:string til size)!flip avg each{$[()~y;0;x[`:wv.__getitem__][y]`]}[model]each sentvec;
   // Join tables
@@ -349,11 +351,4 @@ i.ssrwin:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
 // Used throughout when printing directory of saved objects.
 // this is to keep linux/windows consistent
 i.ssrsv:{[path] ssr[path;"\\";"/"]}
-
-if[nlpchk:(::)~@[{system"l ",x};"nlp/nlp.q";{[err]err;0b}];
-  p.word2vec:.p.import[`gensim.models];
-  p.sp:.p.import[`spacy];
-  p.dr:.p.import[`builtins][`:dir];
-  p.pos:p.dr[p.sp[`:parts_of_speech]]`;
-  p.nlpm:p.sp[`:load]["en_core_web_sm"];]
 
