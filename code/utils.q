@@ -1,3 +1,4 @@
+
 \d .automl
 
 // The following aspects of the parameter naming are used throughout this file
@@ -251,19 +252,18 @@ i.freshproc:{[t;p]
 // Apply feature creation and encoding procedures for nlp on new data
 /. r > table with feature creation and encodings applied appropriately
 i.nlpproc:{[t;p;fp]
-  r:i.nlp_proc[t;p;0b;fp];
+  r:prep.i.nlp_proc[t;p;0b;fp];
   strcol:r`strcol;tb:r`tb;
-  if[0<count cols[t] except strcol;tb:tb,'(prep.normalcreate[(strcol)_t;p])[0]];
+  if[0<count cols[t]except strcol;tb:tb,'first prep.normalcreate[strcol_t;p]];
   tt:tb[p`features];
   flip tt}
 
-// Processing functions for NLP creation and rerunning
 
-i.nlp_proc:{[t;p;smdl;fp]
+prep.i.nlp_proc:{[t;p;smdl;fp]
   // Find string columns to apply spacy word2vec
   // If there is multiple string columns, join them together to be passed to the models later
   strcol:.ml.i.fndcols[t;"C"];
-  sents:$[1<count strcol;raze each flip t[strcol];raze t[strcol]];
+  sents:$[1<count strcol;{" " sv x}each flip t[strcol];raze t[strcol]];
   // Load in spacy and word2vec modules
   system["export PYTHONHASHSEED=0"];
   // Add NER tagging
