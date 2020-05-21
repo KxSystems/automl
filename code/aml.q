@@ -22,7 +22,6 @@ run:{[tb;tgt;ftype;ptype;p]
   if[`rand_val~dict[`seed];dict[`seed]:"j"$.z.t];
   // if required to save data construct the appropriate folders
   if[savemdl:dict[`saveopt]in 1 2;spaths:i.pathconstruct[dtdict;dict`saveopt]];
-  if[savemdl&ftype in `nlp;dict[`spath]:1_-8_last spaths`config];
   // dictionaries allowing parameters and values to be assigned throughout this function
   // this ensures that the number of local variables does not exceed allowed levels
   params:()!();
@@ -41,7 +40,7 @@ run:{[tb;tgt;ftype;ptype;p]
   tb:prep`table;
   params[`describe]:prep`describe;
   -1 i.runout`pre;
-  tb:prep.create[tb;dict;ftype];
+  tb:prep.create[tb;dict;ftype;spaths];
   // assign the returned values from the feature extraction phase
   vals[`feat_tab]:tb`preptab;
   params[`feat_time]:tb`preptime;
@@ -108,7 +107,7 @@ new:{[t;dt;tm]
     `fresh=typ;
     i.freshproc[t;metadata];
     `nlp=typ;
-    i.nlpproc[t;metadata];
+    i.nlpproc[t;metadata;fp];
     '`$"This form of operation is not currently supported"
     ];
   $[(mp:metadata[`pylib])in `sklearn`keras;

@@ -252,16 +252,16 @@ i.freshproc:{[t;p]
 
 // Apply feature creation and encoding procedures for nlp on new data
 /. r > table with feature creation and encodings applied appropriately
-i.nlpproc:{[t;p]
-  r:i.nlp_proc[t;p;0b];
-  strcol:r 1;tb:r 0;
+i.nlpproc:{[t;p;fp]
+  r:i.nlp_proc[t;p;0b;fp];
+  strcol:r`strcol;tb:r`tb;
   if[0<count cols[t] except strcol;tb:tb,'(prep.normalcreate[(strcol)_t;p])[0]];
   tt:tb[p`features];
   flip tt}
 
 // Processing functions for NLP creation and rerunning
 
-i.nlp_proc:{[t;p;smdl]
+i.nlp_proc:{[t;p;smdl;fp]
   // Find string columns to apply spacy word2vec
   // If there is multiple string columns, join them together to be passed to the models later
   strcol:.ml.i.fndcols[t;"C"];
@@ -284,7 +284,7 @@ i.nlp_proc:{[t;p;smdl]
   tokens:string corpus[`tokens];
   size:300&count raze distinct tokens;window:$[30<tk:avg count each tokens;10;10<tk;5;2];
   model:$[smdl;
-    p.word2vec[`:load][i.ssrwin[path,"/",p[`spath],"/models/w2v.model"]];
+    p.word2vec[`:load][i.ssrwin[fp,"/w2v.model"]];
     p.word2vec[`:Word2Vec][tokens;`size pykw size;`window pykw window;`seed pykw p[`seed];`workers pykw 1]];
   sentvec:{x[y;z]}[tokens]'[til count w2vind;w2vind:where each tokens in model[`:wv.index2word]`];
   w2vtb:flip(`$"col",/:string til size)!flip avg each{$[()~y;0;x[`:wv.__getitem__][y]`]}[model]each sentvec;

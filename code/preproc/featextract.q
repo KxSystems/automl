@@ -8,11 +8,12 @@
 
 // Call feature creation procedures based on feature extraction type
 /* typ = feature creation type (`normal;`fresh)
+/* spaths = save paths used for saving word2vec model unused for saveopt = 1 
 /. r   > dictionary `preptab`preptime!(tab with creation completed;time taken to complete creation)
-prep.create:{[t;p;typ]
+prep.create:{[t;p;typ;spaths]
   $[typ=`fresh;prep.freshcreate[t;p];
     typ=`normal;prep.normalcreate[t;p];
-    typ=`nlp;prep.nlpcreate[t;p];
+    typ=`nlp;prep.nlpcreate[t;p;]$[p[`saveopt]in 1 2;spaths[`models]0;(::)];
     '`$"Feature extraction type is not currently supported"]
   }
 
@@ -46,16 +47,20 @@ prep.normalcreate:{[t;p]
   `preptab`preptime!(tb;fe_end)}
 
 // Apply word2vec on string data for nlp problems
+/* mpath = save path for model, if saveopt = 0 then this will be (::) otherwise string filepath
 /. r > table with features created in accordance with the nlp feature creation procedure
-prep.nlpcreate:{[t;p]
+prep.nlpcreate:{[t;p;mpath]
   fe_start:.z.T;
   // Preprocess the character data
-  prep:i.nlp_proc[t;p;0b];
+  prep:i.nlp_proc[t;p;0b;(::)];
+  // Table returned with NLP feature creation complete
   tb:prep`tb;
-  if[0<count cols[t]except prep`strcol;
-    tb:tb,'(prep.normalcreate[(prep`strcol)_t;p])[0]];
-  if[p[`saveopt]in 1 2;
-    prep[`mdl][`:save][i.ssrwin[path,"/",p[`spath],"/models/w2v.model"]]];
+  // run normal feature creation on numeric datasets and add to nlp features
+  if[0<count cols[t]except prep`strcol;tb:tb,'(prep.normalcreate[(prep`strcol)_t;p])[0]];
+  // remove constant columns, replace nulls and infinities
+  tb:.ml.dropconstant prep.i.nullencode[.ml.infreplace tb;med];
+  // save the word2vec model down if applicable for use on new data
+  if[p[`saveopt]in 1 2;prep[`mdl][`:save][i.ssrwin[mpath,"w2v.model"]]];
   fe_end:.z.T-fe_start;
   `preptab`preptime!(tb;fe_end)}
 
