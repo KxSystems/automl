@@ -53,12 +53,10 @@ prep.nlpcreate:{[t;p;mpath]
   fe_start:.z.T;
   // Preprocess the character data
   prep:i.nlp_proc[t;p;0b;(::)];
-  // Table returned with NLP feature creation complete
+  // Table returned with NLP feature creation
   tb:prep`tb;
-  // run normal feature creation on numeric datasets and add to nlp features
-  if[0<count cols[t]except prep`strcol;tb:tb,'(prep.normalcreate[(prep`strcol)_t;p])[0]];
-  // remove constant columns, replace nulls and infinities
-  tb:.ml.dropconstant prep.i.nullencode[.ml.infreplace tb;med];
+  // run normal feature creation on numeric datasets and add to nlp features if relevant
+  if[0<count cols[t]except prep`strcol;tb:tb,'first prep.normalcreate[(prep`strcol)_t;p]];
   // save the word2vec model down if applicable for use on new data
   if[p[`saveopt]in 1 2;prep[`mdl][`:save][i.ssrwin[mpath,"w2v.model"]]];
   fe_end:.z.T-fe_start;

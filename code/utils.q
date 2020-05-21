@@ -22,11 +22,9 @@ i.checkfuncs:{[dict]
 
 // This function ensures that a user that is attempting to use the NLP
 // functionality is passing in appropriate data (i.e. the data contains a char based column)
-i.checknlp:{[t]
+i.validnlp:{[t]
   if[0~count .ml.i.fndcols[t;"C"];
     '`$"User wishing to apply nlp functionality must pass a table containing a character column."];
-  if[not(::)~@[{system"l ",x};"nlp/nlp.q";{[err]err;0b}];
-    '`$"User does not have access to nlp library in $QHOME/%QHOME%, NLP models cannot be run."];
   }
 
 // This function sets or updates the default parameter dictionary as appropriate
@@ -58,7 +56,7 @@ i.updparam:{[t;p;typ]
               " or a dictionary with appropriate key/value pairs"];
 	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
        typ=`nlp;
-       {[t;p]i.checknlp[t];
+       {[t;p]i.validnlp[t];
         d:i.nlpdefault[];
          d:$[(ty:type p)in 10 -11 99h;
            [if[10h~ty;p:.automl.i.getdict p];
