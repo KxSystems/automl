@@ -6,6 +6,7 @@ ARG ml_img=kxsys/ml:latest
 ####
 
 FROM $embedpy_img AS embedpy
+FROM $ml_img AS ml
 
 FROM embedpy AS automl
 
