@@ -259,41 +259,6 @@ i.nlpproc:{[t;p;fp]
   flip tt}
 
 
-prep.i.nlp_proc:{[t;p;smdl;fp]
-  // Find string columns to apply spacy word2vec
-  // If there is multiple string columns, join them together to be passed to the models later
-  strcol:.ml.i.fndcols[t;"C"];
-  sents:$[1<count strcol;{" " sv x}each flip t[strcol];raze t[strcol]];
-  // Load in spacy and word2vec modules
-  system["export PYTHONHASHSEED=0"];
-  // Add NER tagging
-  ents:.p.import[`spacy][`:load]["en_core_web_sm"]each sents;
-  ners:`PERSON`NORP`FAC`ORG`GPE`LOC`PRODUCT`EVENT`WORK_OF_ART`LAW,
-    `LANGUAGE`DATE`TIME`PERCENT`MONEY`QUANTITY`ORDINAL`CARDINAL;
-  tner:prep.i.percdict[;ners]each{count each group `${(.p.wrap x)[`:label_]`}each x[`:ents]`}each ents;
-  // Apply parsing using spacy model
-  corpus:.nlp.newParser[`en;`isStop`tokens`uniPOS]sents;
-  // Python function to extract part of speech
-  pos:.p.import[`builtins][`:dir][.p.import[`spacy][`:parts_of_speech]]`;
-  // Add uniPOS tagging
-  unipos:`$pos[til (first where 0<count each pos ss\:"__")];
-  tpos:prep.i.percdict[;unipos]each group each corpus`uniPOS;
-  // Apply sentiment analysis
-  sentt:.nlp.sentiment each sents;
-  // Apply vectorisation using saved word2vec
-  tokens:string corpus[`tokens];
-  size:300&count raze distinct tokens;window:$[30<tk:avg count each tokens;10;10<tk;5;2];
-  model:$[smdl;
-    .p.import[`gensim.models][`:load][i.ssrwin[fp,"/w2v.model"]];
-    .p.import[`gensim.models][`:Word2Vec][tokens;`size pykw size;`window pykw window;`seed pykw p[`seed];`workers pykw 1]];
-  sentvec:{x[y;z]}[tokens]'[til count w2vind;w2vind:where each tokens in model[`:wv.index2word]`];
-  w2vtb:flip(`$"col",/:string til size)!flip avg each{$[()~y;0;x[`:wv.__getitem__][y]`]}[model]each sentvec;
-  // Join tables
-  tb:tpos,'sentt,'w2vtb,'tner;
-  tb[`isStop]:{sum[x]%count x}each corpus`isStop;
-  `tb`strcol`mdl!(.ml.dropconstant prep.i.nullencode[.ml.infreplace tb;med];strcol;model)
-  }
-
 // Create the folders that are required for the saving of the config,models, images and reports
 /* dt  = date and time dictionary denoting the start of a run
 /* svo = save option defined by the user, this can only be 1/2, 0 never reached in functions
