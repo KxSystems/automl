@@ -8,7 +8,7 @@
 // Utilities for proc.q
 
 // Text files that can be parsed from within the models folder
-proc.i.files:`class`reg`score!("classmodels.txt";"regmodels.txt";"scoring.txt")
+proc.i.files:`class`reg`score!("models/classmodels.txt";"models/regmodels.txt";"scoring/scoring.txt")
 
 // Build up the model to be applied based on naming convention
 /* lib = library which forms the basis for the definition
@@ -42,7 +42,7 @@ proc.i.paramparse:{[fn;fp]key[k]!(value@){(!).("S=;")0:x}each k:(!).("S*";"|")0:
 // based on the applied model
 /. r   > the hyperparameters appropriate for the model being used
 proc.i.edict:{[fn;fp;mdl]key[k]!value each value k:proc.i.paramparse[fn;fp]mdl}
-proc.i.extractdict:proc.i.edict["hyperparams.txt";"/code/models/";]
+proc.i.extractdict:proc.i.edict["hyperparams.txt";"/code/models/hyper_parameters/";]
 
 
 // Utilities for both scripts

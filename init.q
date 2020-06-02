@@ -13,7 +13,13 @@ loadfile`:code/checking/check.q
 // Load all approriate components of the automl platform
 loadfile`:code/preproc/utils.q
 loadfile`:code/preproc/preproc.q
-loadfile`:code/preproc/featextract.q
+loadfile`:code/preproc/create.q
+loadfile`:code/preproc/normal/utils.q
+loadfile`:code/preproc/nlp/utils.q
+loadfile`:code/preproc/normal/create.q
+loadfile`:code/preproc/fresh/create.q
+loadfile`:code/preproc/nlp/create.q
+loadfile`:code/preproc/significance.q
 
 loadfile`:code/proc/utils.q
 loadfile`:code/proc/proc.q

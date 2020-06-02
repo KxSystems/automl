@@ -131,7 +131,7 @@ savedefault:{[fn;ftype]
   fn:$[10h~typf:type fn;fn;
       -11h~typf;$[":"~first strf;1_;]strf:string typf;
       '`$"filename must be string, symbol or hsym"];
-  fp:hsym`$i.ssrwin[raze[path],"/code/models/",fn];
+  fp:hsym`$i.ssrwin[raze[path],"/code/models/flat_parameters/",fn];
   if[not ()~key fp;'"This file already exists."];
   // Open handle to file fn
   h:hopen fp;

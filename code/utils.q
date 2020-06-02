@@ -76,7 +76,7 @@ i.updparam:{[t;p;typ]
 /* nm = name of the file from which the dictionary is being extracted
 /. r  > the dictionary as defined in a float file in models
 i.getdict:{[nm]
-  d:proc.i.paramparse[nm;"/code/models/"];
+  d:proc.i.paramparse[nm;"/code/models/flat_parameters/"];
   idx:(k except`scf;
     k except`xv`gs`scf`seed;
     $[`xv in k;`xv;()],$[`gs in k;`gs;()];
