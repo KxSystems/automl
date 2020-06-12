@@ -40,7 +40,7 @@ prep.i.nlp_proc:{[t;p;smdl;fp]
 prep.i.stop_tab:{[t;col_names]
   num_cols:1<count col_names;
   tdata:t[col_names];
-  sdata:$[num_cols;{{sum[x]%count x}@''x};enlist{{sum[x]%count x}@'x 0}]@tdata;
+  sdata:{sum[x]%count x}@''tdata;
   flip col_names!sdata
   }
 

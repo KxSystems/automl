@@ -14,4 +14,4 @@ prep.nlpcreate:{[t;p;mpath]
   // save the word2vec model down if applicable for use on new data
   if[p[`saveopt]in 1 2;prep[`mdl][`:save][i.ssrwin[mpath,"w2v.model"]]];
   fe_end:.z.T-fe_start;
-  `preptab`preptime!(tb;fe_end)}
+  `preptab`preptime!(.ml.dropconstant prep.i.nullencode[.ml.infreplace tb;med];fe_end)}
