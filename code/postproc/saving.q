@@ -8,7 +8,12 @@
 /. r      > returns save path to console, save to file
 post.save_report:{[params;spaths;ptype;dtdict]
   -1 i.runout[`save],i.ssrsv[spaths[1]`report];
-  post.report[params;dtdict;spaths[0]`report;ptype];
+  $[0~checkimport[2];
+    @[{latexgen . x};
+      (params;dtdict;spaths[0]`report;ptype);
+      {[params;err] -1"The following error occurred when attempting to run latex report generation";-1 err,"\n";
+       post.report . params;}[(params;dtdict;spaths[0]`report;ptype)]];
+    post.report[params;dtdict;spaths[0]`report;ptype]];
   }
 
 // Save models and model information to file
