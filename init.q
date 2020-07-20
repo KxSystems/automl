@@ -35,6 +35,9 @@ i.loadkeras[]
 i.loadtorch[]
 i.loadlatex[]
 
+// set boolean for sobol functionality
+i.usesobol:i.sobolcheck[]
+
 loadfile`:code/utils.q
 loadfile`:code/aml.q
 

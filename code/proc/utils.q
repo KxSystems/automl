@@ -41,9 +41,12 @@ proc.i.paramparse:{[fn;fp]key[k]!(value@){(!).("S=;")0:x}each k:(!).("S*";"|")0:
 // The following two functions together extract the hyperparameter dictionaries
 // based on the applied model
 /. r   > the hyperparameters appropriate for the model being used
-proc.i.edict:{[fn;fp;mdl]key[k]!value each value k:proc.i.paramparse[fn;fp]mdl}
-proc.i.extractdict:proc.i.edict["hyperparams.txt";"/code/models/hyper_parameters/";]
-
+proc.i.extractdict:{[bm;p]
+  // get grid/random hyperparameter file name
+  fn:$[`grid=p`hp;[hptyp:`gs;"grid"];p[`hp]in`random`sobol;[hptyp:`rs;"random"];'"unsupported hyperparameter generation method"];
+  // load in table of hyperparameters to dictionary with (hyperparameter!values)
+  system"l ",path,"/code/models/hyper_parameters/",fn,"_hyperparameters.q";
+  (hptyp;h[`hyperparams]!(h:hyperparams bm)`values)}
 
 // Utilities for both scripts
 
