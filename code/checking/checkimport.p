@@ -1,5 +1,6 @@
 # Ensure that a user that is attempting to use the framework
-# has the required dependencies for neural network models
+# has the required dependencies for relevant sections of the framework
+# this will modify what is possible wrt NLP/network models/Latex/Sobol
 p)def< checkimport(x):
   if(x==0):
     try:
