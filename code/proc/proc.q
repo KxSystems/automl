@@ -54,7 +54,7 @@ proc.runmodels:{[data;tgt;mdls;cnms;p;dt;fpath]
   out_vals:(s1;bs;s2;xv_tend;bm_tend;scf;bm);
   key_vals!out_vals}
 
-// Optimize models using grid search procedures if appropriate, otherwise predict on test data
+// Optimize models using hyperparmeter search procedures if appropriate, otherwise predict on test data
 /* data     = (xtrn;xtst;ytrn;ytst)
 /* dict     = appropriate hyperparameters
 /* ptype    = problem type being approached
@@ -68,6 +68,6 @@ proc.optimize:{[data;dict;ptype;mdls;mdl_name;best_mdl]
     [funcnm:string first exec fnc from mdls where model=mdl_name;
      -1 i.runout`ex;
      i.scorepred[data;mdl_name;best_mdl;fn;funcnm],enlist[`best_model]!enlist best_mdl];
-    [-1 i.runout`gs;proc.gs.psearch[;;;;mdl_name;dict;ptype;mdls]. data]
+    [-1 i.runout`hp;proc.hp.psearch[;;;;mdl_name;dict;ptype;mdls]. data]
    ]
   }

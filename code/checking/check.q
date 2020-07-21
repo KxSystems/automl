@@ -23,10 +23,12 @@ i.loadlatex:{
     [loadfile`:code/postproc/reports/latex.p;loadfile`:code/postproc/reports/latex.q];
     [-1"Requirements for latex report generation are not satisfied, see documentation for requirements. Report will use reportlab.";]]}
 
-
 // Early exiting functionality if a user is trying to run nlp after already being told
 // that they do not have the explicit requirements
 i.nlpcheck:{
   if[not(0~checkimport[3])&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
-   '"User attempting to run NLP models with insufficient requirements, see documentation"]
-  }
+   '"User attempting to run NLP models with insufficient requirements, see documentation"]}
+
+i.sobolcheck:{
+  $[0~checkimport[4];1b;
+    ["Insufficient requirements for sobol search. AutoML will default to random search if sobol is requested.";0b]]}

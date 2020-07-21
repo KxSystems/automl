@@ -21,5 +21,10 @@ p)def< checkimport(x):
       import gensim.models;import spacy;import builtins;return(0);
     except:
       return(1)
+  elif(x==4):
+    try:
+      import sobol_seq;return(0)
+    except:
+      return(1)
   else:
     return(0)
