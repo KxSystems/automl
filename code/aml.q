@@ -16,6 +16,8 @@ run:{[tb;tgt;ftype;ptype;p]
   dict:i.updparam[tb;p;ftype],enlist[`typ]!enlist ftype;
   // Check that the functions to overwrite default behaviour exist in process
   i.checkfuncs[dict];
+  // Check that the hyperparameter method to be applied is suitable
+  i.checkxvhp[dict];
   // Check that if nlp is being run the correct packages are all available
   if[ftype~`nlp;i.nlpcheck[]];
   // update the seed based on time of day if user does not specify the seed in p

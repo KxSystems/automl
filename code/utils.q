@@ -19,7 +19,14 @@ i.checkfuncs:{[dict]
   if[0<cnt:sum locs:@[{$[not type[get[x]]in(99h;100h;104h);'err;0b]};;{[err]err;1b}]each fns;
      funclst:{$[2<x;" ",y;"s ",sv[", ";y]]}[cnt]string fns where locs;
     '"The function",/funclst," are not defined in your process\n"]
- }
+  }
+
+i.checkxvhp:{[dict]
+  typ:dict`hp;
+  if[not typ in`grid`sobol`random;
+    '"Form of hyperparameter '",string[typ],"' optimization not possible"];
+  if[not[i.usesobol]&`sobol~typ;'"Sobol hyperparameter optimization not available"];
+  }
 
 // This function ensures that a user that is attempting to use the NLP
 // functionality is passing in appropriate data (i.e. the data contains a char based column)
@@ -44,7 +51,6 @@ i.updparam:{[t;p;typ]
                          d[`aggcols]t;
                          11h~abs typagg;d`aggcols;
                          '`$"aggcols must be passed function or list of columns"];
-       if[not[i.usesobol]&d[`hp]~`sobol;d[`hp]:`random];
 	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
       typ=`normal;
       {[t;p]d:i.normaldefault[];
@@ -56,7 +62,6 @@ i.updparam:{[t;p;typ]
            p~(::);d;
 	   '`$"p must be passed the identity `(::)`, a filepath to a parameter flatfile",
               " or a dictionary with appropriate key/value pairs"];
-       if[not[i.usesobol]&d[`hp]~`sobol;d[`hp]:`random];
 	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
        typ=`nlp;
        {[t;p]i.validnlp[t];
@@ -69,7 +74,6 @@ i.updparam:{[t;p;typ]
            p~(::);d;
            '`$"p must be passed the identity `(::)`, a filepath to a parameter flatfile",
               " or a dictionary with appropriate key/value pairs"];
-           if[not[i.usesobol]&d[`hp]~`sobol;d[`hp]:`random];
            d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
       typ=`tseries;
       '`$"This will need to be added once the time-series recipe is in place";

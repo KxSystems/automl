@@ -52,24 +52,19 @@ rs:1_xv.i.search@'xv.i.xvpf[{[p]rs.hpgen p}]@'xv.j
 /*    - p    = parameter list
 rs.hpgen:{
   // set default values
-  if[(::)~n:x`n;n:10];
-  // set seed
-  state:$[(::)~x`random_state;42;x`random_state];
+  if[(::)~n:x`n;n:16];
+  // retrieve type
+  typ:x`typ;
   // find numerical parameters
   num:where any`uniform`loguniform=\:first each p:x`p;
-  // find respective namespaces (ns) and append sequence or n pts to generate
-  $[`sobol~typ:x`typ;
-     [ns:`sbl;p,:num!p[num],'enlist each flip rs.i.sobol[count num;n]];
-    typ~`random;
-     [ns:`rdm;system"S ",string state;p,:num!p[num],'n];
-    '"hyperparam type not supported"];
-  // generate each hyperparameter
-  flip rs.i.hpgen[ns;n]each p}
-
-// sobol sequence generator from python
-/* x = dimension
-/* y = number of points
-rs.i.sobol:.p.import[`sobol_seq;`:i4_sobol_generate;<]
+  // Apply random seed to the ensure that results are repeatable
+  system"S ",string $[(::)~x`random_state;42;x`random_state];
+  // generate sequence or number of points needed for sobol/random hyperparameter generation
+  genpts:$[`sobol~typ;enlist each flip .p.import[`sobol_seq;`:i4_sobol_generate;<][count num;n];
+           `random~typ;n;
+           '"hyperparam type not supported"];
+  p,:num!p[num],'genpts;
+  flip rs.i.hpgen[typ;n]each p}
 
 // single list random hyperparameter generator
 /* ns = namespace, either sbl or rdm
@@ -80,13 +75,11 @@ rs.i.hpgen:{[ns;n;p]
   p:@[;0;first](0;1)_p,();
   // respective parameter generation
   typ:p 0;
-  $[`boolean~typ;n?0b;
-    typ~`symbol ;n?p[1]0;
+  $[typ~`boolean;n?0b;
+    typ in`rand`symbol;n?(),p[1]0;
     typ~`uniform;rs.i.uniform[ns]. p 1;
     typ~`loguniform;rs.i.loguniform[ns]. p 1;
-    // addition of a random choice from list
-    typ~`rand;n?(),p[1]0;
-    '"please enter correct type"]}
+    '"please enter a valid type"]}
 
 // generate list of uniform numbers
 /* ns  = namespace, either sbl or rdm
@@ -103,10 +96,10 @@ rs.i.uniform:{[ns;lo;hi;typ;p]
 rs.i.loguniform:xexp[10]rs.i.uniform::
 
 // random uniform generator
-rs.i.rdm.uniform:{[lo;hi;typ;n]lo+n?typ$hi-lo}
+rs.i.random.uniform:{[lo;hi;typ;n]lo+n?typ$hi-lo}
 
 // sobol uniform generator
-rs.i.sbl.uniform:{[lo;hi;typ;seq]typ$lo+(hi-lo)*seq}
+rs.i.sobol.uniform:{[lo;hi;typ;seq]typ$lo+(hi-lo)*seq}
 
 // Utilities for functions to be added to the toolkit
 i.infrep:{
