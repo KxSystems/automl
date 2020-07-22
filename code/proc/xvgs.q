@@ -51,9 +51,10 @@ proc.hp.psearch:{[xtrn;ytrn;xtst;ytst;bm;p;typ;mdls]
   // This is used to ensure that if a hyperparameter search is done on KNN that there are sufficient,
   // data points in the validation set for all hyperparameter nearest neighbour calculations.
   spltcnt:$[p[hptyp;0]in`mcsplit`pcsplit;1-p[hptyp]1;(p[hptyp;1]-1)%p[hptyp]1]*count[xtrn]*1-p`hld;
-  if[(`gs=hptyp)&bm in`KNeighborsClassifier`KNeighborsRegressor;
-    if[0<count where n:spltcnt<dict`n_neighbors;
-      dict[`n_neighbors]@:where not n]];
+  if[(hptyp=`gs)&kncr:bm in`KNeighborsClassifier`KNeighborsRegressor;
+    if[0<count where n:spltcnt<dict`n_neighbors;dict[`n_neighbors]@:where not n]];
+  if[(hptyp=`rs)&kncr;
+    if[spltcnt<dict[`n_neighbors]2;dict[`n_neighbors;2]:"j"$spltcnt]];
   // if random add extra parameters
   if[hptyp=`rs;dict:`typ`random_state`n`p!(`random;p`seed;p`trials;dict)];
   // Complete an appropriate grid search, returning scores for each validation fold

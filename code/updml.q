@@ -42,64 +42,7 @@ xv.i.search:{[sf;k;n;x;y;f;p;t]
           [pykwargs pr:first key desc avg each]]r:sf[k;n;x i 0;y i 0;f;p]](x;y)@\:/:i)}
 xv.i.xvpf:{[pf;xv;k;n;x;y;f;p]p!(xv[k;n;x;y]f pykwargs@)@'p:pf p}
 gs:1_xv.i.search@'xv.i.xvpf[{[p]key[p]!/:1_'(::)cross/value p}]@'xv.j
-rs:1_xv.i.search@'xv.i.xvpf[{[p]rs.hpgen p}]@'xv.j
-
-// generate random hyperparameters
-/* x = dictionary with:
-/*    - rs   = type of random search - sobol or random
-/*    - seed = random seed, can be (::) - always the case for sobol
-/*    - n    = number of points, can be (::)
-/*    - p    = parameter list
-rs.hpgen:{
-  // set default values
-  if[(::)~n:x`n;n:16];
-  // retrieve type
-  typ:x`typ;
-  // find numerical parameters
-  num:where any`uniform`loguniform=\:first each p:x`p;
-  // Apply random seed to the ensure that results are repeatable
-  system"S ",string $[(::)~x`random_state;42;x`random_state];
-  // generate sequence or number of points needed for sobol/random hyperparameter generation
-  genpts:$[`sobol~typ;enlist each flip .p.import[`sobol_seq;`:i4_sobol_generate;<][count num;n];
-           `random~typ;n;
-           '"hyperparam type not supported"];
-  p,:num!p[num],'genpts;
-  flip rs.i.hpgen[typ;n]each p}
-
-// single list random hyperparameter generator
-/* ns = namespace, either sbl or rdm
-/* n  = number of points
-/* p  = list of parameters
-rs.i.hpgen:{[ns;n;p]
-  // split parameters
-  p:@[;0;first](0;1)_p,();
-  // respective parameter generation
-  typ:p 0;
-  $[typ~`boolean;n?0b;
-    typ in`rand`symbol;n?(),p[1]0;
-    typ~`uniform;rs.i.uniform[ns]. p 1;
-    typ~`loguniform;rs.i.loguniform[ns]. p 1;
-    '"please enter a valid type"]}
-
-// generate list of uniform numbers
-/* ns  = namespace, either sbl or rdm
-/* lo  = lower bound
-/* hi  = higher bound
-/* typ = type of parameter, e.g. "i", "f", etc
-/* p   = additional parameters, e.g. sobol sequence (sbl) or number of points (rdm)
-rs.i.uniform:{[ns;lo;hi;typ;p]
-  if[hi<lo;'"upper bound must be greater than lower bound"];
-  rs.i[ns][`uniform][lo;hi;typ;p]}
-
-// generate list of log uniform numbers
-/* params are same as rs.i.uniform, with lo and hi as powers of 10
-rs.i.loguniform:xexp[10]rs.i.uniform::
-
-// random uniform generator
-rs.i.random.uniform:{[lo;hi;typ;n]lo+n?typ$hi-lo}
-
-// sobol uniform generator
-rs.i.sobol.uniform:{[lo;hi;typ;seq]typ$lo+(hi-lo)*seq}
+rs:1_xv.i.search@'xv.i.xvpf[{[p]hp.hpgen p}]@'xv.j
 
 // Utilities for functions to be added to the toolkit
 i.infrep:{
