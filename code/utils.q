@@ -85,15 +85,15 @@ i.updparam:{[t;p;typ]
 i.getdict:{[nm]
   d:proc.i.paramparse[nm;"/code/models/flat_parameters/"];
   idx:(k except`scf;
-    k except`xv`gs`rs`scf`seed;
+    k except`xv`gs`rs`hp`scf`seed;
     $[`xv in k;`xv;()],$[`gs in k;`gs;()],$[`rs in k;`rs;()];
     $[`scf in k;`scf;()];
-    $[`seed in k:key d;`seed;()]);
+    $[`seed in k;`seed;()],$[`hp in k:key d;`hp;()]);
   fnc:(key;
     {get string first x};
     {(x 0;get string x 1)};
     {key[x]!`$value x};
-    {$[`rand_val~first x;first x;get string first x]});
+    {$[first[x]in`rand_val`grid`sobol`random;first x;get string first x]});
   // Addition of empty dictionary entry needed as parsing
   // of file behaves oddly if only a single entry is given to the system
   if[sgl:1=count d;d:(enlist[`]!enlist""),d];
