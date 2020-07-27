@@ -56,7 +56,7 @@ proc.hp.psearch:{[xtrn;ytrn;xtst;ytst;bm;p;typ;mdls]
   if[(hptyp=`rs)&kncr;
     if[spltcnt<dict[`n_neighbors]2;dict[`n_neighbors;2]:"j"$spltcnt]];
   // if random add extra parameters
-  if[hptyp=`rs;dict:`typ`random_state`n`p!(`random;p`seed;p`trials;dict)];
+  if[hptyp=`rs;dict:`typ`random_state`n`p!(p`hp;p`seed;p`trials;dict)];
   // Complete an appropriate grid search, returning scores for each validation fold
   bm:first exec minit from mdls where model=bm;
   // modification of final grid search parameter required to allow modified
