@@ -17,7 +17,7 @@ i.loadtorch:{
 i.loadnlp:{
   $[(0~checkimport[3])&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
    .nlp.loadfile`:init.q;
-   [-1"Requirements for NLP models are not satisfied. Gensim, SpaCy and BuiltIns must be installed. NLP module will not be available.";]]}
+   [-1"Requirements for NLP models are not satisfied. gensim must be installed. NLP module will not be available.";]]}
 
 i.loadlatex:{
   $[0~checkimport[2];
@@ -31,5 +31,5 @@ i.sobolcheck:{
 // Early exiting required if user tries to use unavailable functionality
 i.nlpcheck:{
   if[not(0~checkimport[3])&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
-   -1"In order to run an NLP task you must install the following packages - gensim, spacy, builtins";
+   -1"In order to run an NLP task you must install the following package - gensim";
    '"Insufficient requirements"]}

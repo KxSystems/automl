@@ -67,12 +67,7 @@ torch
 
 **NLP**
 
-The NLP functionality contained within AutoML requires the [Kx NLP library](https://github.com/KxSystems/nlp) along with additional python modules, which can be installed using conda or pip:
-```bash
-gensim
-spacy
-builtins
-```
+The NLP functionality contained within AutoML requires the [Kx NLP library](https://github.com/KxSystems/nlp) along with `gensim` which can be installed using conda or pip.
 
 
 ## Installation
