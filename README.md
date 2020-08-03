@@ -42,7 +42,17 @@ conda install --file requirements.txt
 
 ### Optional requirements for advanced modules
 
-The above requirements allow users to access the base functionality provided within AutoML. Additional modules are available - including Sobol sequence hyperparameter search and Keras, PyTorch and NLP models. However, given the large memory requirement for the dependencies of these modules, they are not included in the base functionality and must be installed by the user themself.
+The above requirements allow users to access the base functionality provided within AutoML. Additional modules are available - including Sobol sequence hyperparameter search, LaTeX report generation and Keras, PyTorch and NLP models. However, given the large memory requirement for the dependencies of these modules, they are not included in the base functionality and must be installed by the user themself.
+
+**Sobol search** - via pip (see package details [here](https://pypi.org/project/sobol-seq/)):
+```bash
+sobol-seq
+```
+
+**LaTeX** - via conda or pip:
+```bash
+pylatex
+```
 
 **Keras** - via conda or pip:
 ```bash
@@ -62,12 +72,6 @@ The NLP functionality contained within AutoML requires the [Kx NLP library](http
 gensim
 spacy
 builtins
-```
-
-**Sobol search** - via pip (see package details [here](https://pypi.org/project/sobol-seq/)):
-
-```bash
-sobol-seq
 ```
 
 
