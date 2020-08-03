@@ -58,7 +58,7 @@ def python_latex(dict,dt,paths,ptype,dscrb,score,grid,exclude):
     createTable(doc,dscrb,'cccccccc')
 
   with doc.create(Section('Pre-processing Breakdown')):
-    doc.append('Following the extraction of features a total of ' + dict['cnt_feats'] + ' features were produced\n')
+    doc.append(dict['typ'] + ' feature extraction was performed with a total of ' + dict['cnt_feats'] + ' features produced\n')
     doc.append('Feature extraction took a total time of ' + dict['feat_time'] + '.\n')
 
   with doc.create(Section('Initial Scores')):
