@@ -182,10 +182,11 @@ i.nnlist:i.keraslist,i.torchlist;
 i.excludelist:i.nnlist,`GaussianNB`LinearRegression;
 
 // Dictionary with mappings for console printing to reduce clutter in .automl.runexample
-i.runout:`col`pre`sig`slct`tot`ex`hp`sco`cnf`save!
+i.runout:`col`pre`sig`nosig`slct`tot`ex`hp`sco`cnf`save!
  ("\nThe following is a breakdown of information for each of the relevant columns in the dataset\n";
   "\nData preprocessing complete, starting feature creation";
   "\nFeature creation and significance testing complete";
+  "Feature significance extraction deemed none of the features to be important. Continuing with all features.";
   "Starting initial model selection - allow ample time for large datasets";
   "\nTotal features being passed to the models = ";
   "Continuing to final model fitting on testing set";
