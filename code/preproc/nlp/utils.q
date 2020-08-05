@@ -11,20 +11,24 @@
 prep.i.nlp_proc:{[t;p;smdl;fp]
   args:(.p.import[`spacy;`:load]"en_core_web_sm";t strcol:.ml.i.fndcols[t;"C"]);
   sents:$[1<count strcol;{x@''flip y};{x each y 0}]. args;
+  regex_tab:prep.i.regex_tab[t;strcol;prep.i.regexlst];
   ner_tab:prep.i.ner_tab[sents;strcol];
   sent_tab:prep.i.sent_tab[t;strcol;`compound`pos`neg`neu];
-  chk:prep.i.col_check cols corpus:prep.i.corpus[t;strcol;`isStop`tokens`uniPOS];
+  chk:prep.i.col_check cols corpus:prep.i.corpus[t;strcol;`isStop`tokens`uniPOS`likeNumber];
   uni_tab:prep.i.unipos_tagging[corpus;strcol]chk"uniPOS*";
-  stop_tab:prep.i.stop_tab[corpus]chk"isStop*";
+  stop_tab:prep.i.bool_tab[corpus]chk"isStop*";
+  num_tab:prep.i.bool_tab[corpus]chk"likeNumber*";
+  cnt_tks:flip enlist[`cnt_tks]!enlist count each corpus`tokens;
   tokens:string(,'/)corpus chk"tokens*";
   w2v_tab:prep.i.word2vec[tokens;p;fp;smdl];
-  `tb`strcol`mdl!((,'/)(uni_tab;sent_tab;w2v_tab 0;ner_tab;stop_tab);strcol;w2v_tab 1)
+  nlp_tab:(,'/)(uni_tab;sent_tab;w2v_tab 0;ner_tab;regex_tab;stop_tab;num_tab;cnt_tks);
+  `tb`strcol`mdl!(nlp_tab;strcol;w2v_tab 1)
   }
 
 /* t   = input table
-/* col = list of corpus columns
-/. r > table with percentage of stop words in a given vector (indication of complexity)
-prep.i.stop_tab:{[t;col]flip col!{sum[x]%count x}@''t col}
+/* col = column containing list of booleans
+/. r > table indicating percentage of true values within a column 
+prep.i.bool_tab:{[t;col]flip col!{sum[x]%count x}@''t col}
 
 /* fields = list of items to retrieve from newParser - also used in the naming of columns
 /. r > table of parsed character data in appropriate corpus for word2vec/stop word/unipos analysis
@@ -72,6 +76,18 @@ prep.i.sent_tab:{[t;col;fields]
   $[1<count col;prep.i.nm_raze[sent_cols]{x@''y};{x each y 0}].(.nlp.sentiment;t col)
   }
 
+// Find Regualar expressions within the text
+/. r > returns a table with the count of each expression found
+prep.i.regex_tab:{[t;col;fields]
+  regex_cols:prep.i.col_naming[fields;col];
+  // get regex values
+  $[1<count col;prep.i.nm_raze[sent_cols]{x@''y};{x each y 0}].(prep.i.regexchk;t col)}
+
+// Function to count each expression within a single text
+/. r > dictionary with count of each expression found
+prep.i.regexchk:{[txt]
+   count each .nlp.findRegex[txt;prep.i.regexlst]}
+
 // Create/load a word2vec model for the corpus and apply this analysis to the sentences
 // to encode the sentence information into a numerical representation which can
 // provide context to the meaning of a sentence.
@@ -84,7 +100,7 @@ prep.i.word2vec:{[tokens;p;fp;smdl]
   tkpl:avg count each tokens;
   window:$[30<tkpl;10;10<tkpl;5;2];
   gen_mdl:.p.import`gensim.models;
-  args:`size`window`seed`workers!(size;window;p`seed;1);
+  args:`size`window`sg`seed`workers!(size;window;p`w2v;p`seed;1);
   model:$[smdl;
           gen_mdl[`:load]i.ssrwin fp,"/w2v.model";
           gen_mdl[`:Word2Vec][tokens;pykwargs args]];
@@ -115,3 +131,6 @@ prep.i.nm_raze:{[col;t](,'/){xcol[x;y]}'[col;t]}
 
 /. r > finds all names according to a regex search
 prep.i.col_check:{[col;attr_check]col where col like attr_check}
+
+// List of expressions to search for within text
+prep.i.regexlst:`specialChars`money`phoneNumber`emailAddress`url`zipCode`postalCode`day`month`year`time
