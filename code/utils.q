@@ -19,7 +19,14 @@ i.checkfuncs:{[dict]
   if[0<cnt:sum locs:@[{$[not type[get[x]]in(99h;100h;104h);'err;0b]};;{[err]err;1b}]each fns;
      funclst:{$[2<x;" ",y;"s ",sv[", ";y]]}[cnt]string fns where locs;
     '"The function",/funclst," are not defined in your process\n"]
- }
+  }
+
+i.checkxvhp:{[dict]
+  typ:dict`hp;
+  if[not typ in`grid`sobol`random;
+    '"Form of hyperparameter '",string[typ],"' optimization not possible"];
+  if[not[i.usesobol]&`sobol~typ;'"Sobol hyperparameter optimization not available"];
+  }
 
 // This function ensures that a user that is attempting to use the NLP
 // functionality is passing in appropriate data (i.e. the data contains a char based column)
@@ -44,7 +51,6 @@ i.updparam:{[t;p;typ]
                          d[`aggcols]t;
                          11h~abs typagg;d`aggcols;
                          '`$"aggcols must be passed function or list of columns"];
-       if[not[i.usesobol]&d[`hp]~`sobol;d[`hp]:`random];
 	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
       typ=`normal;
       {[t;p]d:i.normaldefault[];
@@ -56,7 +62,6 @@ i.updparam:{[t;p;typ]
            p~(::);d;
 	   '`$"p must be passed the identity `(::)`, a filepath to a parameter flatfile",
               " or a dictionary with appropriate key/value pairs"];
-       if[not[i.usesobol]&d[`hp]~`sobol;d[`hp]:`random];
 	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
        typ=`nlp;
        {[t;p]i.validnlp[t];
@@ -69,7 +74,6 @@ i.updparam:{[t;p;typ]
            p~(::);d;
            '`$"p must be passed the identity `(::)`, a filepath to a parameter flatfile",
               " or a dictionary with appropriate key/value pairs"];
-           if[not[i.usesobol]&d[`hp]~`sobol;d[`hp]:`random];
            d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
       typ=`tseries;
       '`$"This will need to be added once the time-series recipe is in place";
@@ -81,15 +85,15 @@ i.updparam:{[t;p;typ]
 i.getdict:{[nm]
   d:proc.i.paramparse[nm;"/code/models/flat_parameters/"];
   idx:(k except`scf;
-    k except`xv`gs`rs`scf`seed;
+    k except`xv`gs`rs`hp`scf`seed;
     $[`xv in k;`xv;()],$[`gs in k;`gs;()],$[`rs in k;`rs;()];
     $[`scf in k;`scf;()];
-    $[`seed in k:key d;`seed;()]);
+    $[`seed in k;`seed;()],$[`hp in k:key d;`hp;()]);
   fnc:(key;
     {get string first x};
     {(x 0;get string x 1)};
     {key[x]!`$value x};
-    {$[`rand_val~first x;first x;get string first x]});
+    {$[first[x]in`rand_val`grid`sobol`random;first x;get string first x]});
   // Addition of empty dictionary entry needed as parsing
   // of file behaves oddly if only a single entry is given to the system
   if[sgl:1=count d;d:(enlist[`]!enlist""),d];
@@ -178,10 +182,11 @@ i.nnlist:i.keraslist,i.torchlist;
 i.excludelist:i.nnlist,`GaussianNB`LinearRegression;
 
 // Dictionary with mappings for console printing to reduce clutter in .automl.runexample
-i.runout:`col`pre`sig`slct`tot`ex`hp`sco`cnf`save!
+i.runout:`col`pre`sig`nosig`slct`tot`ex`hp`sco`cnf`save!
  ("\nThe following is a breakdown of information for each of the relevant columns in the dataset\n";
   "\nData preprocessing complete, starting feature creation";
   "\nFeature creation and significance testing complete";
+  "Feature significance extraction deemed none of the features to be important. Continuing with all features.";
   "Starting initial model selection - allow ample time for large datasets";
   "\nTotal features being passed to the models = ";
   "Continuing to final model fitting on testing set";

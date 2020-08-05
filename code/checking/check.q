@@ -3,32 +3,33 @@
 
 \d .automl
 
+// import checks and statements
 i.loadkeras:{
   $[0~checkimport[0];
     [loadfile`:code/models/lib_support/keras.q;loadfile`:code/models/lib_support/keras.p];
-    [-1"Requirements for Keras models not satisfied. Keras models will be excluded from model evaluation.";]]}
+    [-1"Requirements for Keras models not satisfied. Keras and Tensorflow must be installed. Keras models will be excluded from model evaluation.";]]}
 
 i.loadtorch:{
   $[0~checkimport[1];
     [loadfile`:code/models/lib_support/torch.q;loadfile`:code/models/lib_support/torch.p];
-    [-1"Requirements for PyTorch models not satisfied. PyTorch models will be excluded from model evaluation.";]]}
+    [-1"Requirements for PyTorch models not satisfied. Torch must be installed. PyTorch models will be excluded from model evaluation.";]]}
 
 i.loadnlp:{
   $[(0~checkimport[3])&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
    .nlp.loadfile`:init.q;
-   [-1"Requirements for NLP models are not satisfied, see documentation for requirements and install instructions";]]}
+   [-1"Requirements for NLP models are not satisfied. gensim must be installed. NLP module will not be available.";]]}
 
 i.loadlatex:{
   $[0~checkimport[2];
     [loadfile`:code/postproc/reports/latex.p;loadfile`:code/postproc/reports/latex.q];
-    [-1"Requirements for latex report generation are not satisfied, see documentation for requirements. Report will use reportlab.";]]}
-
-// Early exiting functionality if a user is trying to run nlp after already being told
-// that they do not have the explicit requirements
-i.nlpcheck:{
-  if[not(0~checkimport[3])&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
-   '"User attempting to run NLP models with insufficient requirements, see documentation"]}
+    [-1"Requirements for latex report generation are not satisfied. Pylatex must be installed. Reportlab will be used for report generation.";]]}
 
 i.sobolcheck:{
   $[0~checkimport[4];1b;
-    ["Insufficient requirements for sobol search. AutoML will default to random search if sobol is requested.";0b]]}
+    ["Insufficient requirements for Sobol search.\nTo use Sobol search you must pip install sobol-seq.\nAutoML will default to random search if sobol is requested.";0b]]}
+
+// Early exiting required if user tries to use unavailable functionality
+i.nlpcheck:{
+  if[not(0~checkimport[3])&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
+   -1"In order to run an NLP task you must install the following package - gensim";
+   '"Insufficient requirements"]}
