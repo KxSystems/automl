@@ -14,8 +14,11 @@ i.Data_Check_function:{[cfg;feat;tgt]
   check.functions[cfg];
   check.length[feat;tgt;cfg];
   check.target[tgt];
+  check.NLPType[cfg;feat];
+  check.NLPLib[cfg];
   feat:check.featureTypes[feat;cfg];
-  `Config`Features`Target!(cfg;feat;tgt)}
+  `Config`Features`Target!(cfg;feat;tgt)
+  }
 
 i.Data_Check_input   :`Config`Features`Target!"!+F"
 i.Data_Check_output  :`Config`Features`Target!"!+F"

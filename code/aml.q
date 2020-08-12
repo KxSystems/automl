@@ -19,4 +19,4 @@ run:{[graph;xdata;ydata;ftype;ptype;params]
 prep.i.default:{x}
 xv.fitpredict:{x}
 prep.freshsignificance:{x}
-
+.ml.ttsnonshuff:{x}

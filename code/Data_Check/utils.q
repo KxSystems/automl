@@ -15,6 +15,7 @@ i.errColumns:{[clist;slist;cfg]
   ]
   }
 
+
 // Parameter retrieval functionality
 
 //  Function takes in a string which is the name of a parameter flatfile
@@ -42,7 +43,6 @@ i.getdict:{[nm]
 
 // Default parameters used in the population of parameters at the start of a run
 // or in the creation of a new initialisation parameter flat file
-/* None of these function take a parameter as input
 /. r > default dictionaries which will be used by the automl
 i.freshDefault:{`aggcols`funcs`xv`gs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
   ({first cols x};`.ml.fresh.params;(`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);`.automl.xv.fitpredict;
@@ -63,3 +63,24 @@ i.nlpDefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
 /. returns  > dictionary mapping model name to possible hyper parameters 
 i.paramParse:{[fn;fp]
   key[k]!(value@){(!).("S=;")0:x}each k:(!).("S*";"|")0:hsym`$.automl.path,filePath,fileName}
+
+
+// Save path generation functionality
+
+// Create the folders that are required for the saving of the config,models, images and reports
+/* cfg     = configuration fictionary
+/. returns > the file paths in its full path format and truncated for use in outputs to terminal
+i.pathConstruct:{[cfg]
+  names:`configSavePath`modelsSavePath;
+  if[cfg[`saveopt]=2;names:names,`imagesSavePath`reportSavePath]
+  pname:{"/",ssr["outputs/",string[x`startDate],"/run_",string[x`startTime],"/",y,"/";":";"."]};
+  paths:path,/:pname[cfg]each string names;
+  paths:i.ssrwin each paths;
+  {[fnm]system"mkdir",$[.z.o like "w*";" ";" -p "],fnm}each paths;
+  names!flip(paths;{count[path]_x}each paths)
+  }
+
+// Used throughout the library to convert linux/mac file names to windows equivalent
+/* path = the linux 'like' path
+/. r    > the path modified to be suitable for windows systems
+i.ssrwin:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}

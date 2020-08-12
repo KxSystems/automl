@@ -9,22 +9,26 @@ check.functions:{[cfg]
   function:raze cfg[`funcs`prf`tts`sigfeats],value[cfg`scf],first each cfg`xv`gs;
   // Ensure the custom inputs are suitably typed
   locs:@[{$[not type[get x]in(99h;100h;104h);'err;0b]};;{[err]err;1b}]each function;
-  if[0<cnt:sum loc;
-     functionList:{$[2<x;" ",y;"s ",sv[", ";y]]}[cnt]string functions where loc;
+  if[0<cnt:sum locs;
+     functionList:{$[2<x;" ",y;"s ",sv[", ";y]]}[cnt]string function where locs;
     '`$"The function",/functionList," are not defined in your process\n"
   ]
   }
 
-// Ensure that NLP functionality is available if it is to be envoked
+// Ensure that NLP functionality is available if a user needs to call it
+/* cfg     = configuration dictionary
 /. returns > error on issue otherwise generic null
-check.NLPLib:{
+check.NLPLib:{[cfg]
+  if[not `nlp~cfg`featExtractType;:()];
   if[not (0~checkimport[3]) & ((::)~@[{system"l ",x};"nlp/nlp.q";{0b}]);
     '"User attempting to run NLP models with insufficient requirements, see documentation"];
   }
 
 // Ensure the data contains an appropriate type for application of NLP
+/* t       = tabular feature dataset
 /. returns > error indicating insufficient data or generic null on success
-check.NLPType:{[t]
+check.NLPType:{[cfg;t]
+  if[not `nlp~cfg`featExtractType;:()];
   if[0~count .ml.i.fndcols[t;"C"];
     '`$"User wishing to apply nlp functionality must pass a table containing a character column."];
   }
@@ -61,7 +65,7 @@ check.length:{[t;tgt;cfg]
   $[-11h=type typ;
     $[`fresh=typ;
       // Check that the number of unique aggregating sets is the same as number of targets
-      if[count[tgt]<>count distinct $[1=count p`aggcols;t[p`aggcols];(,'/)t p`aggcols];
+      if[count[tgt]<>count distinct $[1=count cfg`aggcols;t[cfg`aggcols];(,'/)t cfg`aggcols];
          '`$"Target count must equal count of unique agg values for fresh"
       ];
       typ in`tseries`normal`nlp;

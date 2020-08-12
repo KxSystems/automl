@@ -41,9 +41,8 @@ update.config:{[t;cfg]
     }[t;customCfg];
     typ=`nlp;
     {[t;cfg]
-      i.checkNLPType[t];
       d:i.nlpDefault[];
-      d:$[(typ:type p)in 10 -11 99h;
+      d:$[(typ:type cfg)in 10 -11 99h;
           [if[10h~typ ;cfg:i.getdict cfg];
            if[-11h~typ;cfg:i.getdict$[":"~first cfg;1_;]cfg:string cfg];
            $[min key[cfg]in key d;d,cfg;'`$"You can only pass appropriate keys to nlp"]
@@ -57,5 +56,7 @@ update.config:{[t;cfg]
     typ=`tseries;
     '`$"This will need to be added once the time-series recipe is in place";
     '`$"Incorrect input type"];
-  standardCfg,updateCfg
+  config:standardCfg,updateCfg;
+  savePaths:$[0<config`saveopt;i.pathConstruct[config];()!()];
+  config,savePaths
   }
