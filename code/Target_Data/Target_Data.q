@@ -1,9 +1,8 @@
-// Function for the ingestion of the target dataset based on user defined input, this should allow
-// a user to load data from their process or from alternative datasources, using loading.q in Auto_Testing?
+// Loading of the target dataset, data can be loaded from in process or alternative data sources
 \d .automl
 
 nodekeys:`function`inputs`outputs
 i.Target_Data_inputs  :"!"
 i.Target_Data_outputs :"F"
-i.Target_Data_function:{[cfg]100?1f}
+i.Target_Data_function:.ml.i.loaddset
 Target_Data:nodekeys!(i.Target_Data_function;i.Target_Data_inputs;i.Target_Data_outputs)

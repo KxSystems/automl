@@ -1,7 +1,7 @@
-\d .automl
-
 \l ml/ml.q
 .ml.loadfile`:init.q
+
+\d .automl 
 
 // Load all nodes required for graph based on init file within associated folder
 nodelist:`Configuration`Feature_Data`Target_Data`Data_Check`Model_Generation`Feature_Modification,
