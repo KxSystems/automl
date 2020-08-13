@@ -19,7 +19,7 @@ check.functions:{[cfg]
 // Ensure that NLP functionality is available if a user needs to call it
 /* cfg     = configuration dictionary
 /. returns > error on issue otherwise generic null
-check.NLPLib:{[cfg]
+check.NLPLoad:{[cfg]
   if[not `nlp~cfg`featExtractType;:()];
   if[not (0~checkimport[3]) & ((::)~@[{system"l ",x};"nlp/nlp.q";{0b}]);
     '"User attempting to run NLP models with insufficient requirements, see documentation"];
@@ -28,7 +28,7 @@ check.NLPLib:{[cfg]
 // Ensure the data contains an appropriate type for application of NLP
 /* t       = tabular feature dataset
 /. returns > error indicating insufficient data or generic null on success
-check.NLPType:{[cfg;t]
+check.NLPSchema:{[cfg;t]
   if[not `nlp~cfg`featExtractType;:()];
   if[0~count .ml.i.fndcols[t;"C"];
     '`$"User wishing to apply nlp functionality must pass a table containing a character column."];
