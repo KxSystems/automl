@@ -6,7 +6,7 @@
 /* cfg     = configuration dictionary
 /. returns > error indicating invalid fuctions otherwise generic null on success
 check.functions:{[cfg]
-  // List of possible areas where user may input a custom function
+  // List of possible objects where user may input a custom function
   function:raze cfg[`funcs`prf`tts`sigfeats],value[cfg`scf],first each cfg`xv`gs;
   // Ensure the custom inputs are suitably typed
   locs:@[{$[not type[get x]in(99h;100h;104h);'err;0b]};;{[err]err;1b}]each function;
@@ -72,7 +72,7 @@ check.length:{[t;tgt;cfg]
       if[count[tgt]<>count distinct $[1=count cfg`aggcols;t[cfg`aggcols];(,'/)t cfg`aggcols];
          '`$"Target count must equal count of unique agg values for fresh"
       ];
-      typ in`tseries`normal`nlp;
+      typ in`normal`nlp;
       if[count[tgt]<>count t;'"Must have the same number of targets as values in table"];
       '"Input for typ must be a supported type"
     ];
@@ -84,6 +84,6 @@ check.length:{[t;tgt;cfg]
 /* tgt     = target vector
 /. returns > error on unsuitable target otherwise generic null
 check.target:{[tgt]
-  if[not 0<var tgt;'"Target must have more than one unique value"]
+  if[1=count distinct tgt;'"Target must have more than one unique value"]
   }
 
