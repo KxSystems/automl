@@ -21,7 +21,7 @@ i.errColumns:{[clist;slist;cfg]
 //  Function takes in a string which is the name of a parameter flatfile
 /* nm = name of the file from which the dictionary is being extracted
 /. r  > the dictionary as defined in a float file in models
-i.getdict:{[nm]
+i.getDict:{[nm]
   d:i.paramParse[nm;"/models/flat_parameters/"];
   idx:(k except`scf;
     k except`xv`gs`scf`seed;
@@ -61,21 +61,21 @@ i.nlpDefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
 /* fileName = Name of the file to be parsed
 /* filePath = File path to the 
 /. returns  > dictionary mapping model name to possible hyper parameters 
-i.paramParse:{[fn;fp]
+i.paramParse:{[fileName;filePath]
   key[k]!(value@){(!).("S=;")0:x}each k:(!).("S*";"|")0:hsym`$.automl.path,filePath,fileName}
 
 
 // Save path generation functionality
 
 // Create the folders that are required for the saving of the config,models, images and reports
-/* cfg     = configuration fictionary
+/* cfg     = configuration dictionary
 /. returns > the file paths in its full path format and truncated for use in outputs to terminal
 i.pathConstruct:{[cfg]
   names:`configSavePath`modelsSavePath;
   if[cfg[`saveopt]=2;names:names,`imagesSavePath`reportSavePath]
   pname:{"/",ssr["outputs/",string[x`startDate],"/run_",string[x`startTime],"/",y,"/";":";"."]};
   paths:path,/:pname[cfg]each string names;
-  paths:i.ssrwin each paths;
+  paths:i.ssrWindows each paths;
   {[fnm]system"mkdir",$[.z.o like "w*";" ";" -p "],fnm}each paths;
   names!flip(paths;{count[path]_x}each paths)
   }
@@ -83,4 +83,33 @@ i.pathConstruct:{[cfg]
 // Used throughout the library to convert linux/mac file names to windows equivalent
 /* path = the linux 'like' path
 /. r    > the path modified to be suitable for windows systems
-i.ssrwin:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
+i.ssrWindows:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
+
+
+// Retrieval of full list of default parameters and update with custom information
+/* t       = tabular feature dataset
+/* cfg     = custom configuration information as a dictionary or path to user defined config file
+/* ptyp    = problem type being solved (`nlp/`normal/`fresh)
+/. returns > configuration dictionary modified with any custom information
+i.getCustomConfig:{[t;cfg;ptyp]
+  d:$[ptyp=`fresh ;i.freshDefault[];
+      ptyp=`normal;i.normalDefault[];
+      ptyp=`nlp   ;i.nlpDefault[];
+      '`$"Inappropriate type supplied"];
+  d:$[(typ:type cfg)in 10 -11 99h;
+      [if[10h~typ ;cfg:i.getDict cfg];
+       if[-11h~typ;cfg:i.getDict$[":"~first cfg;1_;]cfg:string cfg];
+       $[min key[cfg]in key d;d,cfg;'`$"Inappropriate key provided for configuration input"]
+      ];
+      not any cfg;d;
+      '`$"cfg must be passed the identity `(::)`, a filepath to a parameter flatfile",
+         " or a dictionary with appropriate key/value pairs"
+    ];
+  if[ptyp=`fresh;
+     d[`aggcols]:$[100h~typagg:type d`aggcols;d[`aggcols]t;
+                   11h~abs typagg;d`aggcols;
+                   '`$"aggcols must be passed function or list of columns"
+                 ];
+  ]
+  d,enlist[`tf]!enlist 1~checkimport[0]
+  }

@@ -1,7 +1,9 @@
 \d .automl
 
 run:{[graph;xdata;ydata;ftype;ptype;params]
-  if[params=(::);params:()!()];
+  // Handle default parameters and retrieval from file path
+  if[params~(::);params:()!()];
+  if[type[params]in 10 -11h;params:enlist[`configPath]!enlist params];
   amlConfig:params,`featExtractType`problemType`startDate`startTime!(ftype;ptype;.z.D;.z.T);
   // Default = accept data from process. Overwritten if dictionary input
   xdata:$[99h=type xdata;xdata;`typ`data!(`process;xdata)];

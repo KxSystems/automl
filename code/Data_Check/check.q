@@ -6,6 +6,7 @@
 /* cfg     = configuration dictionary
 /. returns > error indicating invalid fuctions otherwise generic null on success
 check.functions:{[cfg]
+  // List of possible areas where user may input a custom function
   function:raze cfg[`funcs`prf`tts`sigfeats],value[cfg`scf],first each cfg`xv`gs;
   // Ensure the custom inputs are suitably typed
   locs:@[{$[not type[get x]in(99h;100h;104h);'err;0b]};;{[err]err;1b}]each function;
@@ -40,7 +41,9 @@ check.NLPType:{[cfg;t]
 check.featureTypes:{[t;cfg]
   typ:cfg`featExtractType;
   $[typ in `tseries`normal;
-    [fCols:.ml.i.fndcols[t;"sfihjbepmdznuvt"];tab:flip fCols!t fCols];
+    [fCols:.ml.i.fndcols[t;"sfihjbepmdznuvt"];
+     tab:flip fCols!t fCols
+    ];
     typ=`fresh;
     // ignore the aggregating columns for FRESH as these can be of any type
     [apprCols:flip(aggCols:cfg[`aggcols])_ flip t;
@@ -50,7 +53,8 @@ check.featureTypes:{[t;cfg]
       fCols:cols tab
     ];
     typ=`nlp;
-    [fCols:.ml.i.fndcols[t;"sfihjbepmdznuvtC"];tab:flip fCols!t fCols];
+    [fCols:.ml.i.fndcols[t;"sfihjbepmdznuvtC"];
+     tab:flip fCols!t fCols];
     '`$"This form of feature extraction is not currently supported"];
   i.errColumns[cols t;fCols;typ];
   tab
