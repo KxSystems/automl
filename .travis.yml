@@ -39,12 +39,11 @@ script:
 - echo "Packaged as automl_$TRAVIS_OS_NAME-$TRAVIS_BRANCH.zip"
 -  if [[ "x$QLIC_KC" != "x" ]]; then
     curl -fsSL -o test.q https://github.com/KxSystems/embedpy/raw/master/test.q;
-    q test.q code/Configuration/tests/ code/Data_Check/tests/ code/Data_Preprocessing/tests/ code/Feature_Creation/tests/ code/Feature_Data/tests/ code/Feature_Modification/tests/ code/Feature_Significance/tests/ code/Label_Encode/tests/ code/Model_Generation/tests/ code/Optimize_Models/tests/ code/Param_Consolidate/tests/ code/Predict_Params/tests/ code/Preproc_Params/tests/ code/Run_Models/tests/ code/Save_Graph/tests/ code/Save_Meta/tests/ code/Save_Models/tests/ code/Save_Report/tests/ code/Select_Models/tests/ code/Target_Data/tests/ code/Train_Test_Split/tests/ code/tests/ -q;
+    q test.q -q 
 
   else
     echo No kdb+, no tests;
   fi
-
 
 deploy:
   provider: releases

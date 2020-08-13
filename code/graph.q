@@ -4,106 +4,106 @@
 graph:.ml.createGraph[]
 
 // Populate all required Nodes for the graph
-graph:.ml.addNode[graph;`Configuration       ;Configuration]
-graph:.ml.addNode[graph;`Feature_Data        ;Feature_Data]
-graph:.ml.addNode[graph;`Target_Data         ;Target_Data]
-graph:.ml.addNode[graph;`Data_Check          ;Data_Check]
-graph:.ml.addNode[graph;`Model_Generation    ;Model_Generation]
-graph:.ml.addNode[graph;`Feature_Modification;Feature_Modification]
-graph:.ml.addNode[graph;`Label_Encode        ;Label_Encode]
-graph:.ml.addNode[graph;`Data_Preprocessing  ;Data_Preprocessing]
-graph:.ml.addNode[graph;`Feature_Creation    ;Feature_Creation]
-graph:.ml.addNode[graph;`Feature_Significance;Feature_Significance]
-graph:.ml.addNode[graph;`Train_Test_Split    ;Train_Test_Split]
-graph:.ml.addNode[graph;`Select_Models       ;Select_Models]
-graph:.ml.addNode[graph;`Run_Models          ;Run_Models]
-graph:.ml.addNode[graph;`Optimize_Models     ;Optimize_Models]
-graph:.ml.addNode[graph;`Preproc_Params      ;Preproc_Params]
-graph:.ml.addNode[graph;`Predict_Params      ;Predict_Params]
-graph:.ml.addNode[graph;`Param_Consolidate   ;Param_Consolidate]
-graph:.ml.addNode[graph;`Save_Graph          ;Save_Graph]
-graph:.ml.addNode[graph;`Save_Meta           ;Save_Meta]
-graph:.ml.addNode[graph;`Save_Report         ;Save_Report]
+graph:.ml.addNode[graph;`configuration      ;configuration.node]
+graph:.ml.addNode[graph;`featureData        ;featureData.node]
+graph:.ml.addNode[graph;`targetData         ;targetData.node]
+graph:.ml.addNode[graph;`dataCheck          ;dataCheck.node]
+graph:.ml.addNode[graph;`modelGeneration    ;modelGeneration.node]
+graph:.ml.addNode[graph;`featureModification;featureModification.node]
+graph:.ml.addNode[graph;`labelEncode        ;labelEncode.node]
+graph:.ml.addNode[graph;`dataPreprocessing  ;dataPreprocessing.node]
+graph:.ml.addNode[graph;`featureCreation    ;featureCreation.node]
+graph:.ml.addNode[graph;`featureSignificance;featureSignificance.node]
+graph:.ml.addNode[graph;`trainTestSplit     ;trainTestSplit.node]
+graph:.ml.addNode[graph;`selectModels       ;selectModels.node]
+graph:.ml.addNode[graph;`runModels          ;runModels.node]
+graph:.ml.addNode[graph;`optimizeModels     ;optimizeModels.node]
+graph:.ml.addNode[graph;`preprocParams      ;preprocParams.node]
+graph:.ml.addNode[graph;`predictParams      ;predictParams.node]
+graph:.ml.addNode[graph;`paramConsolidate   ;paramConsolidate.node]
+graph:.ml.addNode[graph;`saveGraph          ;saveGraph.node]
+graph:.ml.addNode[graph;`saveMeta           ;saveMeta.node]
+graph:.ml.addNode[graph;`saveReport         ;saveReport.node]
 
 
 // Connect all possible edges prior to the data/config ingestion
 
 // Data_Check
-graph:.ml.connectEdge[graph;`Configuration;`output;`Data_Check;`Config];
-graph:.ml.connectEdge[graph;`Feature_Data ;`output;`Data_Check;`Features];
-graph:.ml.connectEdge[graph;`Target_Data  ;`output;`Data_Check;`Target];
+graph:.ml.connectEdge[graph;`configuration;`output;`dataCheck;`config];
+graph:.ml.connectEdge[graph;`featureData ;`output;`dataCheck;`features];
+graph:.ml.connectEdge[graph;`targetData  ;`output;`dataCheck;`target];
 
 // Model_Generation
-graph:.ml.connectEdge[graph;`Data_Check;`Config;`Model_Generation;`Config]
-graph:.ml.connectEdge[graph;`Data_Check;`Target;`Model_Generation;`Target]
+graph:.ml.connectEdge[graph;`dataCheck;`config;`modelGeneration;`config]
+graph:.ml.connectEdge[graph;`dataCheck;`target;`modelGeneration;`target]
 
 // Feature_Modification
-graph:.ml.connectEdge[graph;`Data_Check;`Config  ;`Feature_Modification;`Config]
-graph:.ml.connectEdge[graph;`Data_Check;`Features;`Feature_Modification;`Features]
+graph:.ml.connectEdge[graph;`dataCheck;`config  ;`featureModification;`config]
+graph:.ml.connectEdge[graph;`dataCheck;`features;`featureModification;`features]
 
 // Label_Encode
-graph:.ml.connectEdge[graph;`Data_Check;`Target;`Label_Encode;`input]
+graph:.ml.connectEdge[graph;`dataCheck;`target;`labelEncode;`input]
 
 // Data_Preprocessing
-graph:.ml.connectEdge[graph;`Data_Check          ;`Config  ;`Data_Preprocessing;`Config]
-graph:.ml.connectEdge[graph;`Feature_Modification;`Features;`Data_Preprocessing;`Features]
-graph:.ml.connectEdge[graph;`Label_Encode        ;`output  ;`Data_Preprocessing;`Target]
+graph:.ml.connectEdge[graph;`dataCheck          ;`config  ;`dataPreprocessing;`config]
+graph:.ml.connectEdge[graph;`featureModification;`features;`dataPreprocessing;`features]
+graph:.ml.connectEdge[graph;`labelEncode        ;`output  ;`dataPreprocessing;`target]
 
 // Feature_Creation
-graph:.ml.connectEdge[graph;`Data_Preprocessing;`Features;`Feature_Creation;`Features]
-graph:.ml.connectEdge[graph;`Data_Check        ;`Config  ;`Feature_Creation;`Config]
+graph:.ml.connectEdge[graph;`dataPreprocessing;`features;`featureCreation;`features]
+graph:.ml.connectEdge[graph;`dataCheck        ;`config  ;`featureCreation;`config]
 
 // Feature_Significance
-graph:.ml.connectEdge[graph;`Feature_Creation;`Features;`Feature_Significance;`Features]
-graph:.ml.connectEdge[graph;`Label_Encode    ;`output  ;`Feature_Significance;`Target]
-graph:.ml.connectEdge[graph;`Data_Check      ;`Config  ;`Feature_Significance;`Config]
+graph:.ml.connectEdge[graph;`featureCreation;`features;`featureSignificance;`features]
+graph:.ml.connectEdge[graph;`labelEncode    ;`output  ;`featureSignificance;`target]
+graph:.ml.connectEdge[graph;`dataCheck      ;`config  ;`featureSignificance;`config]
 
 // Train_Test_Split
-graph:.ml.connectEdge[graph;`Feature_Significance;`Features ;`Train_Test_Split;`Features]
-graph:.ml.connectEdge[graph;`Feature_Significance;`Sig_Feats;`Train_Test_Split;`Sig_Feats]
-graph:.ml.connectEdge[graph;`Label_Encode        ;`output   ;`Train_Test_Split;`Target]
-graph:.ml.connectEdge[graph;`Data_Check          ;`Config   ;`Train_Test_Split;`Config]
+graph:.ml.connectEdge[graph;`featureSignificance;`features;`trainTestSplit;`features]
+graph:.ml.connectEdge[graph;`featureSignificance;`sigFeats;`trainTestSplit;`sigFeats]
+graph:.ml.connectEdge[graph;`labelEncode        ;`output  ;`trainTestSplit;`target]
+graph:.ml.connectEdge[graph;`dataCheck          ;`config  ;`trainTestSplit;`config]
 
 // Select_Models
-graph:.ml.connectEdge[graph;`Data_Check      ;`Config;`Select_Models;`Config]
-graph:.ml.connectEdge[graph;`Train_Test_Split;`output;`Select_Models;`tts_obj]
-graph:.ml.connectEdge[graph;`Model_Generation;`output;`Select_Models;`Models]
+graph:.ml.connectEdge[graph;`dataCheck      ;`config;`selectModels;`config]
+graph:.ml.connectEdge[graph;`trainTestSplit ;`output;`selectModels;`ttsObject]
+graph:.ml.connectEdge[graph;`modelGeneration;`output;`selectModels;`models]
 
 // Run_Models
-graph:.ml.connectEdge[graph;`Select_Models;`tts_obj;`Run_Models;`tts_obj]
-graph:.ml.connectEdge[graph;`Select_Models;`Models ;`Run_Models;`Models]
-graph:.ml.connectEdge[graph;`Data_Check   ;`Config ;`Run_Models;`Config]
+graph:.ml.connectEdge[graph;`selectModels;`ttsObject;`runModels;`ttsObject]
+graph:.ml.connectEdge[graph;`selectModels;`models ;`runModels;`models]
+graph:.ml.connectEdge[graph;`dataCheck   ;`config ;`runModels;`config]
 
 // Optimize_Models
-graph:.ml.connectEdge[graph;`Run_Models   ;`Best_Model       ;`Optimize_Models;`Best_Model]
-graph:.ml.connectEdge[graph;`Run_Models   ;`Best_Scoring_Name;`Optimize_Models;`Best_Scoring_Name]
-graph:.ml.connectEdge[graph;`Select_Models;`Models           ;`Optimize_Models;`Models]
-graph:.ml.connectEdge[graph;`Select_Models;`tts_obj          ;`Optimize_Models;`tts_obj]
-graph:.ml.connectEdge[graph;`Data_Check   ;`Config           ;`Optimize_Models;`Config]
+graph:.ml.connectEdge[graph;`runModels   ;`bestModel      ;`optimizeModels;`bestModel]
+graph:.ml.connectEdge[graph;`runModels   ;`bestScoringName;`optimizeModels;`bestScoringName]
+graph:.ml.connectEdge[graph;`selectModels;`models         ;`optimizeModels;`models]
+graph:.ml.connectEdge[graph;`selectModels;`ttsObject      ;`optimizeModels;`ttsObject]
+graph:.ml.connectEdge[graph;`dataCheck   ;`config         ;`optimizeModels;`config]
 
 
 // Preproc_Params
-graph:.ml.connectEdge[graph;`Data_Check          ;`Config          ;`Preproc_Params;`Config]
-graph:.ml.connectEdge[graph;`Data_Preprocessing  ;`Data_Description;`Preproc_Params;`Data_Description]
-graph:.ml.connectEdge[graph;`Feature_Creation    ;`Creation_Time   ;`Preproc_Params;`Creation_Time]
-graph:.ml.connectEdge[graph;`Feature_Significance;`Sig_Feats       ;`Preproc_Params;`Sig_Feats]
-graph:.ml.connectEdge[graph;`Feature_Modification;`Sym_Encode      ;`Preproc_Params;`Sym_Encode]
+graph:.ml.connectEdge[graph;`dataCheck          ;`config         ;`preprocParams;`config]
+graph:.ml.connectEdge[graph;`dataPreprocessing  ;`dataDescription;`preprocParams;`dataDescription]
+graph:.ml.connectEdge[graph;`featureCreation    ;`creationTime   ;`preprocParams;`creationTime]
+graph:.ml.connectEdge[graph;`featureSignificance;`sigFeats       ;`preprocParams;`sigFeats]
+graph:.ml.connectEdge[graph;`featureModification;`symEncode      ;`preprocParams;`symEncode]
 
 // Predict_Params
-graph:.ml.connectEdge[graph;`Optimize_Models;`Best_Model ;`Predict_Params;`Best_Model]
-graph:.ml.connectEdge[graph;`Optimize_Models;`Test_Score ;`Predict_Params;`Test_Score]
-graph:.ml.connectEdge[graph;`Optimize_Models;`Predictions;`Predict_Params;`Predictions]
+graph:.ml.connectEdge[graph;`optimizeModels;`bestModel  ;`predictParams;`bestModel]
+graph:.ml.connectEdge[graph;`optimizeModels;`testScore  ;`predictParams;`testScore]
+graph:.ml.connectEdge[graph;`optimizeModels;`predictions;`predictParams;`predictions]
 
 // Param_Consolidate
-graph:.ml.connectEdge[graph;`Predict_Params;`output;`Param_Consolidate;`Prediction_Store]
-graph:.ml.connectEdge[graph;`Preproc_Params;`output;`Param_Consolidate;`Preproc_Params]
+graph:.ml.connectEdge[graph;`predictParams;`output;`paramConsolidate;`predictionStore]
+graph:.ml.connectEdge[graph;`preprocParams;`output;`paramConsolidate;`preprocParams]
 
 // Save_Graph
-graph:.ml.connectEdge[graph;`Param_Consolidate;`output;`Save_Graph;`input]
+graph:.ml.connectEdge[graph;`paramConsolidate;`output;`saveGraph;`input]
 
 // Save_Meta
-graph:.ml.connectEdge[graph;`Param_Consolidate;`output;`Save_Meta;`input]
+graph:.ml.connectEdge[graph;`paramConsolidate;`output;`saveMeta;`input]
 
 // Save_Report
-graph:.ml.connectEdge[graph;`Param_Consolidate;`output;`Save_Report;`input]
+graph:.ml.connectEdge[graph;`paramConsolidate;`output;`saveReport;`input]
 

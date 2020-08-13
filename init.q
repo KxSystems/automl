@@ -4,12 +4,12 @@
 \d .automl 
 
 // Load all nodes required for graph based on init file within associated folder
-nodelist:`Configuration`Feature_Data`Target_Data`Data_Check`Model_Generation`Feature_Modification,
-         `Label_Encode`Data_Preprocessing`Feature_Creation`Feature_Significance`Train_Test_Split,
-         `Run_Models`Select_Models`Optimize_Models`Preproc_Params`Predict_Params`Param_Consolidate,
-         `Save_Graph`Save_Meta`Save_Report
+nodelist:`configuration`featureData`targetData`dataCheck`modelGeneration`featureModification,
+         `labelEncode`dataPreprocessing`featureCreation`featureSignificance`trainTestSplit,
+         `runModels`selectModels`optimizeModels`preprocParams`predictParams`paramConsolidate,
+         `saveGraph`saveMeta`saveReport
 
-{loadfile hsym `$"code/",string[x],"/init.q"}each nodelist
+{loadfile hsym `$"code/nodes/",string[x],"/init.q"}each nodelist;
 loadfile`:code/graph.q
 loadfile`:code/aml.q
 
