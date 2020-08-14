@@ -1,16 +1,20 @@
-// Update configuration to include default parameters. Check that various aspects of the
-// dataset and configuration are suitable for running with AutoML
 \d .automl
 
-// Update configuration to include and overwrite default behaviour
-// check that the configuration supplied and data provided is sufficient to
-// apply machine learning in the context the user is attempting to
-/* cfg     = configuration dictionary
-/* feat    = feature dataset
-/* tgt     = target dataset
-/. returns > dictionary containing modified configuration, feature and target datasets
+// Update configuration to include default parameters. Check that various aspects of the
+// dataset and configuration are suitable for running with AutoML
+
+// @kind function
+// @category node
+// @fileoverview Ensure that the data and configuration provided are suitable for the application
+//   of AutoML, in the case that there are issues error as appropriate or augment the data to 
+//   be suitable for the use case in question
+// @param cfg  {dict} Configuration information assigned by the user and related to the current run
+// @param feat {tab} The feature data as a table 
+// @param tgt  {(num[];sym[])} numerical or symbol vector containing the target dataset
+// @return     {dict} modified configuration, feature and target datasets.
+//   Error on issues with configuration, setup, target or feature dataset
 dataCheck.node.function:{[cfg;feat;tgt]
-  cfg:dataCheck.config[feat;cfg];
+  cfg:dataCheck.updateConfig[feat;cfg];
   dataCheck.functions[cfg];
   dataCheck.length[feat;tgt;cfg];
   dataCheck.target[tgt];
@@ -20,6 +24,9 @@ dataCheck.node.function:{[cfg;feat;tgt]
   `config`features`target!(cfg;feat;tgt)
   }
 
+// Input information
 dataCheck.node.inputs   :`config`features`target!"!+F"
+
+// Output information
 dataCheck.node.outputs  :`config`features`target!"!+F"
 

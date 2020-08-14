@@ -1,5 +1,10 @@
 \d .automl
 
+// Generate the complete graph following the definition of configuration information
+// as displayed in `graph/Automl_graph.png`, code is structured through the addition
+// of all relevant nodes followed by the connection of input nodes for these nodes to
+// the relevant source node.
+
 // Generate an empty graph
 graph:.ml.createGraph[]
 
