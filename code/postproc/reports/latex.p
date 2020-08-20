@@ -37,7 +37,7 @@ def createImage(doc,img,caption):
 ## dscrb   = pandas dataframe describing the 'main' table
 ## score   = pandas dataframe containing the scores achieved in cross validation
 ## grid    = pandas dataframe containing 'where required' the hyperparameters
-## exclude = list of methods (NN/deterministic) on which a grid search is not applied 
+## exclude = list of methods (NN/deterministic) on which a hyperparameter search is not applied 
 
 def python_latex(dict,dt,paths,ptype,dscrb,score,grid,exclude):
   geometry_options = {"margin": "2.5cm"}
@@ -58,7 +58,7 @@ def python_latex(dict,dt,paths,ptype,dscrb,score,grid,exclude):
     createTable(doc,dscrb,'cccccccc')
 
   with doc.create(Section('Pre-processing Breakdown')):
-    doc.append('Following the extraction of features a total of ' + dict['cnt_feats'] + ' features were produced\n')
+    doc.append(dict['typ'] + ' feature extraction was performed with a total of ' + dict['cnt_feats'] + ' features produced\n')
     doc.append('Feature extraction took a total time of ' + dict['feat_time'] + '.\n')
 
   with doc.create(Section('Initial Scores')):
@@ -79,13 +79,27 @@ def python_latex(dict,dt,paths,ptype,dscrb,score,grid,exclude):
     doc.append('The score on the validation set for this model was = ' + dict['holdout'] + '\n\n')
     doc.append('The total time to complete the running of this model on the validation set was: ' + dict['val_time'])
 
-  # If appropriate return the output from a completed grid search
+  # Check for hyperparameter search type
+  typ_upper = ''
+  typ_lower = ''
+  typ_key = ''
+  if dict['hp']=='sobol':
+      typ_upper = 'Sobol'
+      typ_key = 'rs'
+  elif dict['hp']=='random':
+      typ_upper = 'Random'
+      typ_key = 'rs'
+  else:
+      typ_upper = 'Grid'
+      typ_key = 'gs'
+    
+  # If appropriate return the output from a completed hyperparameter search
   if(not dict['best_scoring_name'] in exclude):
-    with doc.create(Section('Grid search for a ' + dict['best_scoring_name'] + ' model.')):
-      if(dict['gs'][0] in ['.ml.gs.mcsplit','.ml.gs.pcsplit']):
-        doc.append('The grid search was completed using ' + dict['gs'][0] + ' with a split of ' + dict['gs'][1] + ' of training data used for validation.\n')
+    with doc.create(Section(typ_upper + ' search for a ' + dict['best_scoring_name'] + ' model.')):
+      if(dict[typ_key][0] in ['.ml.gs.mcsplit','.ml.gs.pcsplit']):
+        doc.append('The ' + dict['hp'] + ' search was completed using ' + dict[typ_key][0] + ' with a split of ' + dict[typ_key][1] + ' of training data used for validation.\n')
       else:
-        doc.append('A ' + dict['gs'][1] + '-fold grid search was performed on the training set to find the best model using ' + dict['gs'][0] + '.\n')
+        doc.append('A ' + dict[typ_key][1] + '-fold ' + dict['hp'] + ' search was performed on the training set to find the best model using ' + dict[typ_key][0] + '.\n')
       doc.append('The following are the hyper parameters which have been deemed optimal for the model.\n')
       createTable(doc,grid,'cc')
       doc.append('The score for the best model fit on the entire training set and scored on the testing set was = ' + dict['test_score'])

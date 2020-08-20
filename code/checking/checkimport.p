@@ -1,5 +1,6 @@
 # Ensure that a user that is attempting to use the framework
-# has the required dependencies for neural network models
+# has the required dependencies for relevant sections of the framework
+# this will modify what is possible wrt NLP/network models/Latex/Sobol
 p)def< checkimport(x):
   if(x==0):
     try:
@@ -18,7 +19,12 @@ p)def< checkimport(x):
       return(1)
   elif(x==3):
     try:
-      import gensim.models;import spacy;import builtins;return(0);
+      import gensim.models;return(0);
+    except:
+      return(1)
+  elif(x==4):
+    try:
+      import sobol_seq;return(0)
     except:
       return(1)
   else:

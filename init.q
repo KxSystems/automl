@@ -35,6 +35,9 @@ i.loadkeras[]
 i.loadtorch[]
 i.loadlatex[]
 
+// set boolean indicating if sobol is available
+i.usesobol:i.sobolcheck[]
+
 loadfile`:code/utils.q
 loadfile`:code/aml.q
 

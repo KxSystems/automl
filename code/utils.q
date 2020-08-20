@@ -15,11 +15,18 @@
 // default behaviour with are valid, this can be expanded as required
 /. r > null or error if a function to be applied is not valid
 i.checkfuncs:{[dict]
-  fns:raze dict[`funcs`prf`tts`sigfeats],value[dict`scf],first each dict`xv`gs;
+  fns:raze dict[`funcs`prf`tts`sigfeats],value[dict`scf],first each dict`xv`gs`rs;
   if[0<cnt:sum locs:@[{$[not type[get[x]]in(99h;100h;104h);'err;0b]};;{[err]err;1b}]each fns;
      funclst:{$[2<x;" ",y;"s ",sv[", ";y]]}[cnt]string fns where locs;
     '"The function",/funclst," are not defined in your process\n"]
- }
+  }
+
+i.checkxvhp:{[dict]
+  typ:dict`hp;
+  if[not typ in`grid`sobol`random;
+    '"Form of hyperparameter '",string[typ],"' optimization not possible"];
+  if[not[i.usesobol]&`sobol~typ;'"Sobol hyperparameter optimization not available"];
+  }
 
 // This function ensures that a user that is attempting to use the NLP
 // functionality is passing in appropriate data (i.e. the data contains a char based column)
@@ -78,15 +85,15 @@ i.updparam:{[t;p;typ]
 i.getdict:{[nm]
   d:proc.i.paramparse[nm;"/code/models/flat_parameters/"];
   idx:(k except`scf;
-    k except`xv`gs`scf`seed;
-    $[`xv in k;`xv;()],$[`gs in k;`gs;()];
+    k except`xv`gs`rs`hp`scf`seed;
+    $[`xv in k;`xv;()],$[`gs in k;`gs;()],$[`rs in k;`rs;()];
     $[`scf in k;`scf;()];
-    $[`seed in k:key d;`seed;()]);
+    $[`seed in k;`seed;()],$[`hp in k:key d;`hp;()]);
   fnc:(key;
     {get string first x};
     {(x 0;get string x 1)};
     {key[x]!`$value x};
-    {$[`rand_val~first x;first x;get string first x]});
+    {$[first[x]in`rand_val`grid`sobol`random;first x;get string first x]});
   // Addition of empty dictionary entry needed as parsing
   // of file behaves oddly if only a single entry is given to the system
   if[sgl:1=count d;d:(enlist[`]!enlist""),d];
@@ -98,15 +105,15 @@ i.getdict:{[nm]
 // or in the creation of a new initialisation parameter flat file
 /* Neither of these function take a parameter as input
 /. r > default dictionaries which will be used by the automl
-i.freshdefault:{`aggcols`funcs`xv`gs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
-  ({first cols x};`.ml.fresh.params;(`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);`.automl.xv.fitpredict;
+i.freshdefault:{`aggcols`funcs`xv`gs`rs`hp`trials`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
+  ({first cols x};`.ml.fresh.params;(`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);(`.ml.rs.kfshuff;5);`grid;256;`.automl.xv.fitpredict;
    `class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;0.2;`.ml.ttsnonshuff;0.2;`.automl.prep.freshsignificance)}
-i.normaldefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
-  ((`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);`.automl.prep.i.default;`.automl.xv.fitpredict;
+i.normaldefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
+  ((`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);(`.ml.rs.kfshuff;5);`grid;256;`.automl.prep.i.default;`.automl.xv.fitpredict;
    `class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.prep.freshsignificance)}
-i.nlpdefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats!
-  ((`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);`.automl.prep.i.default;`.automl.xv.fitpredict;
-   `class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.prep.freshsignificance)}
+i.nlpdefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats`w2v!
+  ((`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);(`.ml.rs.kfshuff;5);`grid;256;`.automl.prep.i.default;`.automl.xv.fitpredict;
+   `class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.prep.freshsignificance;1)}
 
 // Apply an appropriate scoring function to predictions from a model
 /* data = testing dataset (xtrain;ytrain;xtest;ytest)
@@ -175,14 +182,15 @@ i.nnlist:i.keraslist,i.torchlist;
 i.excludelist:i.nnlist,`GaussianNB`LinearRegression;
 
 // Dictionary with mappings for console printing to reduce clutter in .automl.runexample
-i.runout:`col`pre`sig`slct`tot`ex`gs`sco`cnf`save!
+i.runout:`col`pre`sig`nosig`slct`tot`ex`hp`sco`cnf`save!
  ("\nThe following is a breakdown of information for each of the relevant columns in the dataset\n";
   "\nData preprocessing complete, starting feature creation";
   "\nFeature creation and significance testing complete";
+  "Feature significance extraction deemed none of the features to be important. Continuing with all features.";
   "Starting initial model selection - allow ample time for large datasets";
   "\nTotal features being passed to the models = ";
   "Continuing to final model fitting on testing set";
-  "Continuing to grid-search and final model fitting on testing set";
+  "Continuing to hyperparameter search and final model fitting on testing set";
   "\nBest model fitting now complete - final score on testing set = ";
   "Confusion matrix for testing set:\n";
   "\nSaving down procedure report to ")

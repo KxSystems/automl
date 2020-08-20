@@ -7,8 +7,8 @@ prep.nlpcreate:{[t;p;mpath]
   fe_start:.z.T;
   // Preprocess the character data
   prep:prep.i.nlp_proc[t;p;0b;(::)];
-  // Table returned with NLP feature creation
-  tb:prep`tb;
+  // Table returned with NLP feature creation, any constant columns are dropped
+  tb:.ml.dropconstant prep`tb;
   // run normal feature creation on numeric datasets and add to nlp features if relevant
   if[0<count cols[t]except prep`strcol;tb:tb,'first prep.normalcreate[(prep`strcol)_t;p]];
   // save the word2vec model down if applicable for use on new data
