@@ -10,9 +10,9 @@
 // @return    {(num[];sym[])} numerical or symbol vector containing the target dataset
 targetData.node.function:{[cfg]
   dset:.ml.i.loaddset cfg;
-  $[.Q.ty[dset]in "efhijs";
+  $[.Q.ty[dset]in "befhijs";
     dset;
-    '`$"Dataset not of a suitable type only 'efhijs' currently supported"
+    '`$"Dataset not of a suitable type only 'befhijs' currently supported"
   ]
   }
 
