@@ -105,7 +105,8 @@ passingTest[.automl.dataCheck.functions;apprFuncs;1b;(::)]
 -1"\nTest inappropriate schema provided for an NLP problem";
 
 inapprTab:([]100?1f;100?1f)
-schemaErr:"User wishing to apply nlp functionality must pass a table containing a character column."
+schemaErr:"User wishing to apply nlp functionality must pass ",
+          "a table containing a character column."
 failingTest[.automl.dataCheck.NLPSchema;(nlpConfig;inapprTab);0b;schemaErr]
 
 

@@ -51,7 +51,7 @@ inapprDict     :`a`b!(til 10;10?1f)
 inapprTable    :([]10?1f;10?1f)
 inapprArray    :{@[;0;string]x#/:prd[x]?/:(`6;0Ng;.Q.a),("xpdznuvt"$\:0)}[enlist 50]
 procInapprDict :`typ`data!`process,enlist inapprDict
-procInapprTable:`typ`data!`process,enlist inapprDict
+procInapprTable:`typ`data!`process,enlist flip inapprDict
 procInapprArray:{x!y}[`typ`data]each `process,/:enlist each inapprArray
 
 // Expected error message
