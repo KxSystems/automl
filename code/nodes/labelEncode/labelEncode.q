@@ -3,7 +3,7 @@
 \d .automl
 
 labelEncode.node.inputs  :"F"
-labelEncode.node.outputs :"F"
+labelEncode.node.outputs :`symMap`target!"!F"
 labelEncode.node.function:{[tgt]
-  tgt
+  `symMap`target!(`sym1`sym2!1 2;tgt)
   }

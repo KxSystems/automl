@@ -2,7 +2,12 @@
 // such they can be consolidated into a single node later in the workflow
 \d .automl
 
-preprocParams.node.inputs  :`config`dataDescription`creationTime`sigFeats`symEncode!"!+tSS"
+inputKeys :`config`dataDescription`creationTime`sigFeats`symEncode`symMap
+inputTypes:"!+tSS!"
+preprocParams.node.inputs  :inputKeys!inputTypes
 preprocParams.node.outputs :"!"
-preprocParams.node.function:{[cfg;descrip;ctime;sigfeat;symenc]
-  `config`dataDescription`creationTime`sigFeats`symEncode!(cfg;descrip;ctime;sigfeat;symenc)}
+preprocParams.node.function:{[cfg;descrip;ctime;sigfeat;symenc;symmap]
+  preprocKeys:`config`dataDescription`creationTime`sigFeats`symEncode`symMap;
+  preprocVals:(cfg;descrip;ctime;sigfeat;symenc;symmap);
+  preprocKeys!preprocVals
+  }

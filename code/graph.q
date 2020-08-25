@@ -52,7 +52,7 @@ graph:.ml.connectEdge[graph;`dataCheck;`target;`labelEncode;`input]
 // Data_Preprocessing
 graph:.ml.connectEdge[graph;`dataCheck          ;`config  ;`dataPreprocessing;`config]
 graph:.ml.connectEdge[graph;`featureModification;`features;`dataPreprocessing;`features]
-graph:.ml.connectEdge[graph;`labelEncode        ;`output  ;`dataPreprocessing;`target]
+graph:.ml.connectEdge[graph;`labelEncode        ;`target  ;`dataPreprocessing;`target]
 
 // Feature_Creation
 graph:.ml.connectEdge[graph;`dataPreprocessing;`features;`featureCreation;`features]
@@ -60,13 +60,13 @@ graph:.ml.connectEdge[graph;`dataCheck        ;`config  ;`featureCreation;`confi
 
 // Feature_Significance
 graph:.ml.connectEdge[graph;`featureCreation;`features;`featureSignificance;`features]
-graph:.ml.connectEdge[graph;`labelEncode    ;`output  ;`featureSignificance;`target]
+graph:.ml.connectEdge[graph;`labelEncode    ;`target  ;`featureSignificance;`target]
 graph:.ml.connectEdge[graph;`dataCheck      ;`config  ;`featureSignificance;`config]
 
 // Train_Test_Split
 graph:.ml.connectEdge[graph;`featureSignificance;`features;`trainTestSplit;`features]
 graph:.ml.connectEdge[graph;`featureSignificance;`sigFeats;`trainTestSplit;`sigFeats]
-graph:.ml.connectEdge[graph;`labelEncode        ;`output  ;`trainTestSplit;`target]
+graph:.ml.connectEdge[graph;`labelEncode        ;`target  ;`trainTestSplit;`target]
 graph:.ml.connectEdge[graph;`dataCheck          ;`config  ;`trainTestSplit;`config]
 
 // Select_Models
@@ -93,6 +93,7 @@ graph:.ml.connectEdge[graph;`dataPreprocessing  ;`dataDescription;`preprocParams
 graph:.ml.connectEdge[graph;`featureCreation    ;`creationTime   ;`preprocParams;`creationTime]
 graph:.ml.connectEdge[graph;`featureSignificance;`sigFeats       ;`preprocParams;`sigFeats]
 graph:.ml.connectEdge[graph;`featureModification;`symEncode      ;`preprocParams;`symEncode]
+graph:.ml.connectEdge[graph;`labelEncode        ;`symMap         ;`preprocParams;`symMap]
 
 // Predict_Params
 graph:.ml.connectEdge[graph;`optimizeModels;`bestModel  ;`predictParams;`bestModel]
