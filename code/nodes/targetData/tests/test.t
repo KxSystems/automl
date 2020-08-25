@@ -37,7 +37,7 @@ failingTest:{[function;data;applyType;expectedError]
 // @return {boolean} Function returned the appropriate output (1b), function failed 
 //   or executed with incorrect output (0b)
 passingTest:{[function;data;applyType;expectedReturn]
-  // Is function to be applied unary or multivariable
+  // Is function to be applied unary or multivariant
   applyType:$[applyType;@;.];
   functionReturn:applyType[function;data];
   expectedReturn~functionReturn
