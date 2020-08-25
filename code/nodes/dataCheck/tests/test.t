@@ -105,8 +105,7 @@ passingTest[.automl.dataCheck.functions;apprFuncs;1b;(::)]
 -1"\nTest inappropriate schema provided for an NLP problem";
 
 inapprTab:([]100?1f;100?1f)
-schemaErr:"User wishing to apply nlp functionality must pass ",
-          "a table containing a character column."
+schemaErr:"User wishing to apply nlp functionality must pass a table containing a character column."
 failingTest[.automl.dataCheck.NLPSchema;(nlpConfig;inapprTab);0b;schemaErr]
 
 
@@ -116,4 +115,58 @@ apprTab:([]100?1f;100?1f;100?("testing";"character data"))
 passingTest[.automl.dataCheck.NLPSchema;(nlpConfig;apprTab)   ;0b;(::)]
 passingTest[.automl.dataCheck.NLPSchema;(freshConfig;apprTab) ;0b;()]
 passingTest[.automl.dataCheck.NLPSchema;(normalConfig;apprTab);0b;()]
+
+
+-1"\nTest inappropriate target lengths";
+
+// Variables required for target length testing
+normNLPTab:([]100?1f;100?1f;100?1f)
+freshTab:([]5000?100?0t;5000?1f;5000?1f)
+// Inappropriate length target
+inapprTarget:99?1f
+
+freshError  :"Target count must equal count of unique agg values for fresh";
+normNLPError:"Must have the same number of targets as values in table";
+failingTest[.automl.dataCheck.length;(normNLPTab;inapprTarget;normalConfig);0b;normNLPError]
+failingTest[.automl.dataCheck.length;(normNLPTab;inapprTarget;nlpConfig)   ;0b;normNLPError]
+
+// Update FRESH config to retrieve the correct columns
+updFreshConfig:freshConfig,enlist[`aggcols]!enlist `x
+failingTest[.automl.dataCheck.length;(freshTab  ;inapprTarget;updFreshConfig);0b;freshError]
+
+// Provide an inappropriately feature extraction type
+updConfigType:normalConfig,enlist[`featExtractType]!enlist `NYI
+nyiError:"Input for typ must be a supported type"
+failingTest[.automl.dataCheck.length;(normNLPTab;inapprTarget;updConfigType);0b;nyiError]
+
+// Provide an inappropriate type in feature extraction for config
+updConfigType:normalConfig,enlist[`featExtractType]!enlist 1f
+typError:"Input for typ must be a supported symbol"
+failingTest[.automl.dataCheck.length;(normNLPTab;inapprTarget;updConfigType);0b;typError]
+
+
+-1"\nTest appropriate target lengths";
+
+// Appropriate target length 
+apprTarget:100?1f
+
+passingTest[.automl.dataCheck.length;(normNLPTab;apprTarget;normalConfig)  ;0b;(::)]
+passingTest[.automl.dataCheck.length;(normNLPTab;apprTarget;nlpConfig)     ;0b;(::)]
+passingTest[.automl.dataCheck.length;(freshTab  ;apprTarget;updFreshConfig);0b;(::)]
+
+
+-1"\nTest inappropriate target distribution";
+
+// Generate a target with one unique value and outline expected error
+inapprTgt:100#0
+tgtError:"Target must have more than one unique value"
+failingTest[.automl.dataCheck.target;inapprTgt;1b;tgtError]
+
+
+-1"\nTest appropriate target distribution";
+
+// Generate a target appropriate for ML
+apprTgt:100?1f
+passingTest[.automl.dataCheck.target;apprTgt;1b;(::)]
+
 
