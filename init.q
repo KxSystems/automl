@@ -4,7 +4,7 @@
 \d .automl 
 
 // Load all nodes required for graph based on init file within associated folder
-nodelist:`configuration`featureData`targetData`dataCheck`modelGeneration`featureModification,
+nodelist:`configuration`featureData`targetData`dataCheck`modelGeneration`featureDescription,
          `labelEncode`dataPreprocessing`featureCreation`featureSignificance`trainTestSplit,
          `runModels`selectModels`optimizeModels`preprocParams`predictParams`paramConsolidate,
          `saveGraph`saveMeta`saveReport

@@ -14,7 +14,7 @@ graph:.ml.addNode[graph;`featureData        ;featureData.node]
 graph:.ml.addNode[graph;`targetData         ;targetData.node]
 graph:.ml.addNode[graph;`dataCheck          ;dataCheck.node]
 graph:.ml.addNode[graph;`modelGeneration    ;modelGeneration.node]
-graph:.ml.addNode[graph;`featureModification;featureModification.node]
+graph:.ml.addNode[graph;`featureDescription ;featureDescription.node]
 graph:.ml.addNode[graph;`labelEncode        ;labelEncode.node]
 graph:.ml.addNode[graph;`dataPreprocessing  ;dataPreprocessing.node]
 graph:.ml.addNode[graph;`featureCreation    ;featureCreation.node]
@@ -42,20 +42,20 @@ graph:.ml.connectEdge[graph;`targetData  ;`output;`dataCheck;`target];
 graph:.ml.connectEdge[graph;`dataCheck;`config;`modelGeneration;`config]
 graph:.ml.connectEdge[graph;`dataCheck;`target;`modelGeneration;`target]
 
-// Feature_Modification
-graph:.ml.connectEdge[graph;`dataCheck;`config  ;`featureModification;`config]
-graph:.ml.connectEdge[graph;`dataCheck;`features;`featureModification;`features]
+// Feature_Description
+graph:.ml.connectEdge[graph;`dataCheck;`config  ;`featureDescription;`config]
+graph:.ml.connectEdge[graph;`dataCheck;`features;`featureDescription;`features]
 
 // Label_Encode
 graph:.ml.connectEdge[graph;`dataCheck;`target;`labelEncode;`input]
 
 // Data_Preprocessing
-graph:.ml.connectEdge[graph;`dataCheck          ;`config  ;`dataPreprocessing;`config]
-graph:.ml.connectEdge[graph;`featureModification;`features;`dataPreprocessing;`features]
-graph:.ml.connectEdge[graph;`labelEncode        ;`target  ;`dataPreprocessing;`target]
+graph:.ml.connectEdge[graph;`dataCheck         ;`config  ;`dataPreprocessing;`config]
+graph:.ml.connectEdge[graph;`featureDescription;`features;`dataPreprocessing;`features]
+graph:.ml.connectEdge[graph;`labelEncode       ;`target  ;`dataPreprocessing;`target]
 
 // Feature_Creation
-graph:.ml.connectEdge[graph;`dataPreprocessing;`features;`featureCreation;`features]
+graph:.ml.connectEdge[graph;`dataPreprocessing;`output;`featureCreation;`features]
 graph:.ml.connectEdge[graph;`dataCheck        ;`config  ;`featureCreation;`config]
 
 // Feature_Significance
@@ -89,10 +89,10 @@ graph:.ml.connectEdge[graph;`dataCheck   ;`config         ;`optimizeModels;`conf
 
 // Preproc_Params
 graph:.ml.connectEdge[graph;`dataCheck          ;`config         ;`preprocParams;`config]
-graph:.ml.connectEdge[graph;`dataPreprocessing  ;`dataDescription;`preprocParams;`dataDescription]
+graph:.ml.connectEdge[graph;`featureDescription ;`dataDescription;`preprocParams;`dataDescription]
+graph:.ml.connectEdge[graph;`featureDescription ;`symEncode      ;`preprocParams;`symEncode]
 graph:.ml.connectEdge[graph;`featureCreation    ;`creationTime   ;`preprocParams;`creationTime]
 graph:.ml.connectEdge[graph;`featureSignificance;`sigFeats       ;`preprocParams;`sigFeats]
-graph:.ml.connectEdge[graph;`featureModification;`symEncode      ;`preprocParams;`symEncode]
 graph:.ml.connectEdge[graph;`labelEncode        ;`symMap         ;`preprocParams;`symMap]
 
 // Predict_Params
