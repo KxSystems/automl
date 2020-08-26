@@ -1,6 +1,6 @@
 \d .automl
 
-// Definition of the main callable functions used in the application of .automl.featureModification
+// Definition of the main callable functions used in the application of .automl.featureDescription
 
 
 // @kind function
