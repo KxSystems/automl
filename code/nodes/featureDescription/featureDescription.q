@@ -7,6 +7,6 @@ featureDescription.node.inputs  :`config`features!"!+"
 featureDescription.node.outputs :`symEncode`dataDescription`features!"S++"
 featureDescription.node.function:{[cfg;feats]
   symEncode  :featureDescription.symEncodeSchema[feats;10;cfg];
-  dataSummary:featureDescription.dataDescription[feats;cfg];
+  dataSummary:featureDescription.dataDescription[feats];
   `symEncode`dataDescription`features!(symEncode;dataSummary;feats)
   }

@@ -36,14 +36,14 @@ featureDescription.symEncodeSchema:{[feat;nVals;cfg]
 // @param feat {tab} The feature data as a table
 // @returns {keyed tab} Description of the feature dataset content highlighting useful statistics this
 //   includes: min/max/avg/unique values/type/standart deviation/count
-featureDescription.dataDescription:{[feat;cfg]
+featureDescription.dataDescription:{[feat]
   columns :`count`unique`mean`std`min`max`type;
   // Find columns based on their type
   numcols :.ml.i.fndcols[feat;"hijef"];
   timecols:.ml.i.fndcols[feat;"pmdznuvt"];
   boolcols:.ml.i.fndcols[feat;"b"];
   catcols :.ml.i.fndcols[feat;"s"];
-  textcols:.ml.i.fndcols[feat;"c"];
+  textcols:.ml.i.fndcols[feat;"cC"];
   // Projection for the retrieval of appropriate metadata information
   featureMeta:featureDescription.i.metaData[feat;;];
   // Apply metadata retrieval to different columns types
@@ -52,7 +52,7 @@ featureDescription.dataDescription:{[feat;cfg]
   times:featureMeta[timecols;featureDescription.i.nonNumeric[{`time}]];
   text :featureMeta[textcols;featureDescription.i.nonNumeric[{`text}]];
   bool :featureMeta[boolcols;featureDescription.i.nonNumeric[{`boolean}]];
-  flip columns!flip num,symb,times,bool
+  flip columns!flip num,symb,times,bool,text
   }
 
 
