@@ -11,10 +11,11 @@
 //   encoded target data 
 labelEncode.node.function:{[tgt]
   symMap:()!();
+  
   if[11h~type tgt;
-     distinctTgt:distinct tgt;
-     symMap:asc[distinctTgt]!til count distinctTgt;
-     tgt:.ml.labelencode tgt;
+     encode:.ml.labelencode tgt;
+     symMap:encode`mapping;
+     tgt   :encode`encoding
      ];
   `symMap`target!(symMap;tgt)
   }
