@@ -1,10 +1,24 @@
+\d .automl
+
 // Based on the problem type being solved and user defined configuration retrieve the full list of
 // models which can be applied in the running of AutoML, the list of models to be run may be
 // reduced following the processing of the data and splitting to comply with the model requirements
-\d .automl
 
-modelGeneration.node.inputs  :`config`target!"!F"
-modelGeneration.node.outputs :"+"
-modelGeneration.node.function:{[cfg;feats]
-  ([5?`a`b`c]5?`abc`cab;5?1f)
+// @kind function
+// @category node
+// @fileoverview Create table of appropriate models for the problem type being solved
+// @param cfg  {dict} Configuration information assigned by the user and related to the current run
+// @param tgt  {(num[];sym[])} numerical or symbol vector containing the target dataset
+// @return     {dict} Table with all information needed for appropriate models to be applied to data
+modelGeneration.node.function:{[cfg;tgt]
+  modelGeneration.filesChk[cfg];
+  mdlDict:modelGeneration.txtParse[cfg;"/code/customization/models/modelConfig/"];
+  mdlTab:modelGeneration.modelPrep[cfg;mdlDict;tgt];
+  modelGeneration.updModels[mdlTab;tgt]
   }
+
+// Input information
+modelGeneration.node.inputs  :`config`target!"!F"
+
+// Output information
+modelGeneration.node.outputs :"+"
