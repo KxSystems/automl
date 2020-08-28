@@ -8,5 +8,5 @@
 torch:.p.import[`torch];
 
 // list all defined PyTorch models defined by the user, here `null as none are to be used by default
-i.torchlist:`null;
-i.nnlist:i.keraslist,i.torchlist
+models.torchlist:`null;
+models.nnlist:models.keraslist,models.torchlist

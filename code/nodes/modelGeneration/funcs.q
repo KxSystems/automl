@@ -7,10 +7,8 @@
 // @fileoverview Check that the text file exists for the given problem type
 // @param cfg {dict} configuration information relating to the current run of AutoML
 // @return    {(Null;err)} error indicating that the text file does not exist
-modelGeneration.filesChk:{[cfg]
-  if[not cfg[`problemType] in key modelGeneration.files;
-    '`$"text file not found"
-    ]
+modelGeneration.filesCheck:{[cfg]
+  if[not cfg[`problemType]in key modelGeneration.files;'`$"text file not found"]
   }
 
 
@@ -25,7 +23,8 @@ modelGeneration.txtParse:{[cfg;fp]
   readTxt:("S*";"|")0:hsym filePath;
   modelDict:{key(!).("S=;")0:x}each(!). readTxt;
   if[1b~cfg`tf;
-   modelDict:l!modelDict l:key[modelDict]where not `keras=first each value modelDict
+    apprModels:key[modelDict]where `keras<>value modelDict[;0];
+    modelDict:apprModels!modelDict apprModels
    ];
   modelDict
   }
@@ -41,12 +40,13 @@ modelGeneration.txtParse:{[cfg;fp]
 // @return        {tab} table containing appropriate models that can be used  based on 
 //  target and problem type
 modelGeneration.modelPrep:{[cfg;mdlDict;tgt]
+  // Convert a parsed dictionary from flat file to an approprate tabular representation
   mdlTab:flip`model`lib`fnc`seed`typ!flip key[mdlDict],'value mdlDict;
-  if[cfg[`problemType]=`class;
+  if[`class=cfg`problemType;
     // For classification tasks remove inappropriate classification models
-    m:$[2<count distinct tgt;
+    mdlTab:$[2<count distinct tgt;
         delete from mdlTab where typ=`binary;
-        delete from mdlTab where model=`multikeras
+        delete from mdlTab where lib=`keras,typ=`multi
        ]
     ];
   // Add a column with appropriate initialized models for each row
@@ -65,8 +65,7 @@ modelGeneration.modelPrep:{[cfg;mdlDict;tgt]
 // @return     {<} the appropriate function or projection in the case of sklearn
 modelGeneration.mdlFunc:{[lib;fnc;mdl]
   $[`keras~lib;
-    // retrieve keras model from the .automl namespace eg '.automl.regfitscore'
-    get` sv``automl`models`fitscore;
+    .automl.models.kerasFitScore;
     // construct the projection used for sklearn models eg '.p.import[`sklearn.svm][`:SVC]'
     {[x;y;z].p.import[x]y}[` sv lib,fnc;hsym mdl]
     ]
@@ -84,7 +83,7 @@ modelGeneration.updModels:{[mdls;tgt]
  $[10000<count tgt;
    [-1"\nLimiting the models being applied due to number targets>10,000";
     -1"No longer running neural nets or svms\n";
-    select from mdls where(lib<>`keras),not fnc in`neural_network`svm
+    select from mdls where lib<>`keras,not fnc in`neural_network`svm
    ];
    mdls
    ]
@@ -92,5 +91,4 @@ modelGeneration.updModels:{[mdls;tgt]
 
 // Text files that can be parsed from within the models folder
 modelGeneration.files:`class`reg!("classmodels.txt";"regmodels.txt")
-
 
