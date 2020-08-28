@@ -3,7 +3,7 @@
 // These are the names of all the keras models that are defined within most vanilla
 // workflow, a user wishing to add their own models must augment this list to ensure
 // that this list is appropriately updated.
-models.i.keraslist:`regkeras`multikeras`binarykeras
+models.keraslist:`regkeras`multikeras`binarykeras
 
 // @kind function
 // @category models
@@ -14,7 +14,7 @@ models.i.keraslist:`regkeras`multikeras`binarykeras
 // @param mname {sym} name of the model being applied
 // @param mtype {sym} problem type
 // @return      {int;float;bool} the predicted values for a given model as applied to input data
-models.fitscore:{[data;seed;mname;mtype]
+models.kerasFitScore:{[data;seed;mname;mtype]
   // encode multi-class labels appropriately
   if[mtype~`multi;
    data[;1]:npArray@'flip@'./:[;((::;0);(::;1))](0,count data[0]1)_/:value .ml.i.onehot1(,/)data[;1]

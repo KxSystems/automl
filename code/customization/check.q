@@ -4,7 +4,7 @@
 // functionality within the framework, namely dependancies for deep learning/nlp models etc.
 
 // import checks and statements
-check.i.loadkeras:{
+check.loadkeras:{
   $[0~checkimport[0];
     [loadfile`:code/customization/models/libSupport/keras.q;
      loadfile`:code/customization/models/libSupport/keras.p
@@ -14,7 +14,7 @@ check.i.loadkeras:{
   ]
   }
 
-check.i.loadtorch:{
+check.loadtorch:{
   $[0~checkimport[1];
     [loadfile`:code/customization/models/libSupport/torch.q;
      loadfile`:code/customization/models/libSupport/torch.p
