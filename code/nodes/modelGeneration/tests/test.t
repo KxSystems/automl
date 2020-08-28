@@ -91,7 +91,7 @@ tgtReg       :100?1f
 tgtClass     :100?0b
 tgtMultiClass:100?3
 
-// Testing that all problem types return a dictionary
+// Testing that all problem types return a table
 98h~type .automl.modelGeneration.modelPrep[configNormalReg  ;regModelDict  ;tgtReg       ]
 98h~type .automl.modelGeneration.modelPrep[configNormalClass;classModelDict;tgtClass     ]
 98h~type .automl.modelGeneration.modelPrep[configNormalClass;classModelDict;tgtMultiClass]
@@ -118,7 +118,14 @@ passingTest[.automl.modelGeneration.updModels;(regModelTab  ;tgtReg       );0b;r
 passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtClass     );0b;classModelTab]
 passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtMultiClass);0b;classModelTab]
 
+// Model table with inappropriate models removed for large target volumes
+regModelUpd  :select from regModelTab where(lib<>`keras),not fnc in`neural_network`svm
+classModelUpd:select from classModelTab where(lib<>`keras),not fnc in`neural_network`svm
+
+
 // Test all appropriate model tables and target values that are greater than threshold
-98h~type .automl.modelGeneration.updModels[regModelTab  ;tgtRegLarge       ]
-98h~type .automl.modelGeneration.updModels[classModelTab;tgtClassLarge     ] 
-98h~type .automl.modelGeneration.updModels[classModelTab;tgtMultiClassLarge]
+passingTest[.automl.modelGeneration.updModels;(regModelTab  ;tgtRegLarge       );0b;regModelUpd  ]
+passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtClassLarge     );0b;classModelUpd]
+passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtMultiClassLarge);0b;classModelUpd]
+
+

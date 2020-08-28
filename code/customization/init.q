@@ -3,5 +3,5 @@
 loadfile`:code/customization/check.q
 
 // Attempt to load keras/pytorch functionality
-i.loadkeras[]
-i.loadtorch[]
+check.i.loadkeras[]
+check.i.loadtorch[]
