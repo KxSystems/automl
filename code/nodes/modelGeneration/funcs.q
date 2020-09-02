@@ -64,8 +64,8 @@ modelGeneration.modelPrep:{[cfg;mdlDict;tgt]
 // @param mdl  {sym} the model being applied from within the library
 // @return     {<} the appropriate function or projection in the case of sklearn
 modelGeneration.mdlFunc:{[lib;fnc;mdl]
-  $[`keras~lib;
-    .automl.models.kerasFitScore;
+  $[lib in key models;
+    get[".automl.models.",string[lib],".fitScore"];
     // construct the projection used for sklearn models eg '.p.import[`sklearn.svm][`:SVC]'
     {[x;y;z].p.import[x]y}[` sv lib,fnc;hsym mdl]
     ]
