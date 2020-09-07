@@ -111,7 +111,7 @@ apprSigFeat:enlist[`sigfeats]!enlist `.automl.newsigfeat
 // Testing of appropriate function inputs
 passingTest[.automl.dataCheck.functions;apprFunc;1b;(::)]
 passingTest[.automl.dataCheck.functions;apprFuncs;1b;(::)]
-passsingTest[.automl.dataCheck.functions;apprFuncs;1b;(::)]
+passingTest[.automl.dataCheck.functions;apprFuncs;1b;(::)]
 
 
 -1"\nTesting inappropriate schema provided for an NLP problem";

@@ -10,6 +10,7 @@ nodelist:`configuration`featureData`targetData`dataCheck`modelGeneration`feature
          `saveGraph`saveMeta`saveReport
 
 {loadfile hsym `$"code/nodes/",string[x],"/init.q"}each nodelist;
+loadfile`:code/customization/init.q
 loadfile`:code/graph.q
 loadfile`:code/aml.q
 
