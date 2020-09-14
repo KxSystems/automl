@@ -140,6 +140,7 @@ savedefault:{[fn;ftype]
   // Set d to default dictionary for feat_typ
   d:$[`fresh ~ftype;i.freshdefault[];
       `normal~ftype;i.normaldefault[];
+      `nlp   ~ftype;i.nlpdefault[];
       '`$"feature extraction type not supported"];
   // String values for file
   vals:{$[1=count x;
