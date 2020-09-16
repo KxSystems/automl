@@ -123,7 +123,7 @@ i.nlpdefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats
 /* fnm  = name of the base representation of the function to be applied (reg/multi/bin)
 /. r    > dictionary outlining model score and predicted values
 i.scorepred:{[data;bmn;mdl;scf;fnm]
-  pred:$[bmn in i.keraslist;
+  pred:$[bmn in i.nnlist;
          // Formatting of first param is a result of previous implementation choices
          get[".automl.",fnm,"predict"][(0n;(data 2;0n));mdl];
          mdl[`:predict][data 2]`];

@@ -7,7 +7,7 @@
 i.loadkeras:{
   $[0~checkimport[0];
     [loadfile`:code/models/lib_support/keras.q;loadfile`:code/models/lib_support/keras.p];
-    [-1"Requirements for Keras models not satisfied. Keras and Tensorflow must be installed. Keras models will be excluded from model evaluation.";]]}
+    [i.keraslist:();-1"Requirements for Keras models not satisfied. Keras and Tensorflow must be installed. Keras models will be excluded from model evaluation.";]]}
 
 i.loadtorch:{
   $[0~checkimport[1];
