@@ -32,7 +32,7 @@ proc.runmodels:{[data;tgt;mdls;cnms;p;dt;fpath]
   // Extract the best model, fit on entire training set and predict/score on test set
   // for the appropriate scoring function
   bm_tstart:.z.T;
-  $[bs in i.keraslist;
+  $[bs in i.nnlist;
     [data:((xtrn;ytrn);(xtst;ytst));
      funcnm:string first exec fnc from mdls where model=bs;
      if[funcnm~"multi";data[;1]:npa@'reverse flip@'./:[;((::;0);(::;1))](0,count ytst)_/:

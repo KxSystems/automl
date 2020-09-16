@@ -15,11 +15,19 @@ proc.i.files:`class`reg`score!("models/classmodels.txt";"models/regmodels.txt";"
 /* fnc = function name if keras or module from which model is derived for keras
 /. r   > the appropriate function or projection in the case of sklearn
 proc.i.mdlfunc:{[lib;fnc;mdl]
-  $[`keras~lib;
+  $[lib in `keras`pytorch;
     // retrieve keras model from the .automl namespace eg '.automl.regfitscore'
-    get` sv``automl,`fitscore;
+    proc.i.fitscore;
     // construct the projection used for sklearn models eg '.p.import[`sklearn.svm][`:SVC]'
     {[x;y;z].p.import[x]y}[` sv lib,fnc;hsym mdl]]}
+
+proc.i.fitscore:{[d;s;mtype]
+  // encode multi-class labels appropriately
+  if[mtype~`multi;
+    d[;1]:npa@'flip@'./:[;((::;0);(::;1))](0,count d[0]1)_/:value .ml.i.onehot1(,/)d[;1]];
+  m:get[".automl.",string[mtype],"mdl"][d;s;mtype];
+  m:get[".automl.",string[mtype],"fit"][d;m];
+    get[".automl.",string[mtype],"predict"][d;m]}
 
 // Update models available for use based on the number of rows in the data set
 /* mdls = table defining models which are to be applied to the dataset
@@ -30,7 +38,6 @@ proc.i.updmodels:{[mdls;tgt]
    [-1"\nLimiting the models being applied due as the number targets exceeds 100,000";
     -1"No longer running neural nets or svms\n";
     select from mdls where(lib<>`keras),not fnc in`neural_network`svm];mdls]}
-
 
 // Utilities for xvgs.q
 
