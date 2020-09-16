@@ -12,14 +12,6 @@
 // that this list is appropriately updated.
 i.keraslist:`regkeras`multikeras`binarykeras
 
-/. r > the predicted values for a given model as applied to input data
-fitscore:{[d;s;mtype]
-  // encode multi-class labels appropriately
-  if[mtype~`multi;d[;1]:npa@'flip@'./:[;((::;0);(::;1))](0,count d[0]1)_/:value .ml.i.onehot1(,/)d[;1]];
-  m:get[".automl.",string[mtype],"mdl"][d;s;mtype];
-  m:get[".automl.",string[mtype],"fit"][d;m];
-    get[".automl.",string[mtype],"predict"][d;m]}
-
 /. r > the fit functionality used for all the vanilla keras models
 binaryfit:regfit:multifit:{[d;m]m[`:fit][npa d[0]0;d[0]1;`batch_size pykw 32;`verbose pykw 0];m}
 
@@ -62,4 +54,3 @@ if[0~checkimport[0];
 / allow multiprocess
 .ml.loadfile`:util/mproc.q
 if[0>system"s";.ml.mproc.init[abs system"s"]("system[\"l automl/automl.q\"]";".automl.loadfile`:init.q")];
-
