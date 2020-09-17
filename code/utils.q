@@ -113,7 +113,7 @@ i.normaldefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfe
    `class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.prep.freshsignificance)}
 i.nlpdefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats`w2v!
   ((`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);(`.ml.rs.kfshuff;5);`grid;256;`.automl.prep.i.default;`.automl.xv.fitpredict;
-   `class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.prep.freshsignificance;1)}
+   `class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.prep.freshsignificance;0)}
 
 // Apply an appropriate scoring function to predictions from a model
 /* data = testing dataset (xtrain;ytrain;xtest;ytest)

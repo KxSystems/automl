@@ -36,7 +36,7 @@ prep.i.corpus:{[t;col;fields]
   parse_cols:prep.i.col_naming[fields;col];
   new_parser:.nlp.newParser[`en;fields];
   // apply new parser to table data
-  $[1<count col;prep.i.nm_raze[parse_cols]{x@'y};{x@y 0}].(new_parser;t col)
+  $[1<count col;prep.i.nm_raze[parse_cols]new_parser@'t[col];new_parser@t[col]0]
   }
 
 /. r > table containing part of speech components as a percentage of the total parts of speech
@@ -73,7 +73,7 @@ prep.i.ner_tab:{[sents;col]
 prep.i.sent_tab:{[t;col;fields]
   sent_cols:prep.i.col_naming[fields;col];
   // get sentiment values
-  $[1<count col;prep.i.nm_raze[sent_cols]{x@''y};{x each y 0}].(.nlp.sentiment;t col)
+  $[1<count col;prep.i.nm_raze[sent_cols].nlp.sentiment@''t[col];.nlp.sentiment each t[col][0]]
   }
 
 // Find Regualar expressions within the text
@@ -81,7 +81,7 @@ prep.i.sent_tab:{[t;col;fields]
 prep.i.regex_tab:{[t;col;fields]
   regex_cols:prep.i.col_naming[fields;col];
   // get regex values
-  $[1<count col;prep.i.nm_raze[sent_cols]{x@''y};{x each y 0}].(prep.i.regexchk;t col)}
+  $[1<count col;prep.i.nm_raze[regex_cols]prep.i.regexchk@''t[col];prep.i.regexchk each t[col] 0]}
 
 // Function to count each expression within a single text
 /. r > dictionary with count of each expression found
