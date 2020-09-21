@@ -33,3 +33,13 @@ i.nlpcheck:{
   if[not(0~checkimport[3])&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
    -1"In order to run an NLP task you must install the following package - gensim";
    '"Insufficient requirements"]}
+
+/ allow multiprocess
+.ml.loadfile`:util/mproc.q
+if[0>system"s";
+  .ml.mproc.init[abs system"s"]enlist("system[\"l automl/automl.q\"];
+  system[\"d .automl\"];
+  .automl.loadfile`:code/checking/checkimport.p;
+  .automl.loadfile`:code/checking/check.q;
+  .automl.i.loadkeras[];.automl.i.loadtorch[]")];
+
