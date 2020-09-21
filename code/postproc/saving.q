@@ -19,7 +19,7 @@ post.save_report:{[params;spaths;ptype;dtdict]
     post.report[params;dtdict;spaths[0]`report;ptype]];
   // Move to the original directory location if a failure of tex report generation 
   // has caused the current directory to change without rectification. 
-  report_dir:system cmd
+  report_dir:system cmd;
   if[not initial_dir~report_dir;system raze "cd ",initial_dir];
   }
 
