@@ -128,12 +128,13 @@ dataCheck.i.paramParse:{[fileName;filePath]
 //   and truncated for use in outputs to terminal
 dataCheck.i.pathConstruct:{[cfg]
   names:`configSavePath`modelsSavePath;
-  if[cfg[`saveopt]=2;names:names,`imagesSavePath`reportSavePath]
-  pname:{"/",ssr["outputs/",string[x`startDate],"/run_",string[x`startTime],"/",y,"/";":";"."]};
-  paths:path,/:pname[cfg]each string names;
-  paths:dataCheck.i.ssrWindows each paths;
-  // Generate folders in which to place saved information
-  {[fnm]system"mkdir",$[.z.o like "w*";" ";" -p "],fnm}each paths;
+  if[cfg[`saveopt]=2;names:names,`imagesSavePath`reportSavePath];
+  pname:path,"/",ssr["outputs/",string[cfg`startDate],"/run_",string[cfg`startTime],"/";":";"."];
+  paths:pname,/:string[names],\:"/";
+  if[all b:names in key hsym`$pname;
+    paths:dataCheck.i.ssrWindows each paths;
+    // Generate folders in which to place saved information
+    {[fnm;b]$[not b;system"mkdir",$[.z.o like "w*";" ";" -p "],fnm;]}'[paths;b]];
   names!flip(paths;{count[path]_x}each paths)
   }
 
