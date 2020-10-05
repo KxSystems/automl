@@ -50,9 +50,9 @@ graph:.ml.connectEdge[graph;`dataCheck;`features;`featureDescription;`features]
 graph:.ml.connectEdge[graph;`dataCheck;`target;`labelEncode;`input]
 
 // Data_Preprocessing
-graph:.ml.connectEdge[graph;`dataCheck         ;`config  ;`dataPreprocessing;`config]
-graph:.ml.connectEdge[graph;`featureDescription;`features;`dataPreprocessing;`features]
-graph:.ml.connectEdge[graph;`labelEncode       ;`target  ;`dataPreprocessing;`target]
+graph:.ml.connectEdge[graph;`dataCheck         ;`config   ;`dataPreprocessing;`config]
+graph:.ml.connectEdge[graph;`featureDescription;`features ;`dataPreprocessing;`features]
+graph:.ml.connectEdge[graph;`featureDescription;`symEncode;`dataPreprocessing;`symEncode]
 
 // Feature_Creation
 graph:.ml.connectEdge[graph;`dataPreprocessing;`output;`featureCreation;`features]

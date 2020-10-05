@@ -66,6 +66,7 @@ dataCheck.NLPLoad:{[cfg]
 // @kind function
 // @category dataCheck
 // @fileoverview Ensure the data contains an appropriate type for application of NLP
+// @param cfg  {dict} configuration information relating to the current run of AutoML
 // @param feat {tab} the feature data as a table
 // @return     {(Null;err)} error indicating inappropriate data or generic null on success
 dataCheck.NLPSchema:{[cfg;feat]
@@ -109,16 +110,16 @@ dataCheck.featureTypes:{[feat;cfg]
 // @param tgt  {(num[];sym[])} the target data as a numeric/symbol vector 
 // @param cfg  {dict} configuration information relating to the current run of AutoML
 // @return     {(Null;err)} error on length check between target and feature otherwise generic null
-dataCheck.length:{[t;tgt;cfg]
+dataCheck.length:{[feat;tgt;cfg]
   typ:cfg`featExtractType;
   $[-11h=type typ;
     $[`fresh=typ;
       // Check that the number of unique aggregating sets is the same as number of targets
-      if[count[tgt]<>count distinct $[1=count cfg`aggcols;t[cfg`aggcols];(,'/)t cfg`aggcols];
+      if[count[tgt]<>count distinct $[1=count cfg`aggcols;feat[cfg`aggcols];(,'/)feat cfg`aggcols];
          '`$"Target count must equal count of unique agg values for fresh"
       ];
       typ in`normal`nlp;
-      if[count[tgt]<>count t;'"Must have the same number of targets as values in table"];
+      if[count[tgt]<>count feat;'"Must have the same number of targets as values in table"];
       '"Input for typ must be a supported type"
     ];
     '"Input for typ must be a supported symbol"

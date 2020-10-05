@@ -9,7 +9,7 @@
 // @param mname {sym} name of the model being applied
 // @return      {int;float;bool} the predicted values for a given model as applied to input data
 models.keras.fitScore:{[data;seed;mname]
-  mdl:get[".automl.models.keras.",string[mname]".mdl"][data;seed];
+  mdl:get[".automl.models.keras.",string[mname]".model"][data;seed];
   mdl:get[".automl.models.keras.",string[mname],".fit"][data;mdl];
   get[".automl.models.",string[mname],".predict"][data;mdl]
   }
@@ -35,7 +35,7 @@ models.keras.binary.fit:models.keras.reg.fit:models.keras.multi.fit:{[data;mdl]
 // @return      {<} the compiled keras models
 models.keras.binary.model:{[data;seed]
   models.i.numpySeed[seed];
-  if[0~checkimport[0];models.i.tensorflowSeed[seed]];
+  models.i.tensorflowSeed[seed];
   mdl:models.i.kerasSeq[];
   mdl[`:add]models.i.kerasDense[32;`activation pykw"relu";`input_dim pykw count first data`ytrn];
   mdl[`:add]models.i.kerasDense[1;`activation pykw "sigmoid"];
@@ -62,9 +62,9 @@ models.keras.binary.predict:{[data;mdl]
 //   `xtrn`ytrn`xtst`ytst
 // @param seed  {int} seed used for initialising the same model
 // @return      {<} the compiled keras models
-models.keras.reg.mdl:{[data;seed]
+models.keras.reg.model:{[data;seed]
   models.i.numpySeed[seed];
-  if[0~checkimport[0];models.i.tensorflowSeed[seed]];
+  models.i.tensorflowSeed[seed];
   mdl:models.i.kerasSeq[];
   mdl[`:add]models.i.kerasDense[32;`activation pykw "relu";`input_dim pykw count first data`xtrn];
   mdl[`:add]models.i.kerasDense[1 ;`activation pykw "relu"];
@@ -91,10 +91,10 @@ models.keras.reg.predict:{[data;mdl]
 //   `xtrn`ytrn`xtst`ytst
 // @param seed  {int} seed used for initialising the same model
 // @return      {<} the compiled keras models
-models.keras.multi.mdl:{[data;seed]
+models.keras.multi.model:{[data;seed]
   data`ytrn:models.i.npArray flip value .ml.i.onehot1  data`ytrn; 
   models.i.numpySeed[seed];
-  if[0~checkimport[0];models.i.tensorflowSeed[seed]];
+  models.i.tensorflowSeed[seed];
   mdl:models.i.kerasSeq[];
   mdl[`:add]models.i.kerasDense[32;`activation pykw "relu";`input_dim pykw count first data`xtrn];
   mdl[`:add]models.i.kerasDense[count distinct data[`ytrn]`;`activation pykw "softmax"];
@@ -121,13 +121,9 @@ models.i.kerasDense:.p.import[`keras.layers]`:Dense;
 models.i.numpySeed :.p.import[`numpy.random]`:seed;
 
 // import appropriate random seed depending on tensorflow version
-if[0~checkimport[0];
-  tf:.p.import[`tensorflow];
-  models.i.tensorflowSeed:tf$[2>"I"$first tf[`:__version__]`;
-                    [`:set_random_seed];
-                    [`:random.set_seed]
-                    ]
-  ];
+models.i.tf:.p.import[`tensorflow];
+models.i.tfType:$[2>"I"$first models.i.tf[`:__version__]`;`:set_random_seed;`:random.set_seed];
+models.i.tensorflowSeed:models.i.tf models.i.tfType;
 
 // allow multiprocess
 .ml.loadfile`:util/mproc.q

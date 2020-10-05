@@ -61,7 +61,7 @@ all passingTest[.automl.featureDescription.symEncodeSchema;;0b;]'[freshData   ;t
 -1"\nTesting for application of function for summarizing feature data";
 
 // Generate test table containing one of each category
-testTab::([]a:1 2 1 2;b:`a`b`c`d;c:1 2 1 2f;d:4?0t;e:("abc";"def";"abc";"deg");f:4?0b)
+testTab:([]a:1 2 1 2;b:`a`b`c`d;c:1 2 1 2f;d:4?0t;e:("abc";"def";"abc";"deg");f:4?0b)
 
 // Generate the summary table to be returned
 keyVals :`a`c`b`d`f`e

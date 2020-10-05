@@ -71,8 +71,8 @@ dataCheck.i.getCustomConfig:{[feat;cfg;ptyp]
      d[`aggcols]:$[100h~typagg:type d`aggcols;d[`aggcols]feat;
                    11h~abs typagg;d`aggcols;
                    '`$"aggcols must be passed function or list of columns"
-                 ];
-  ]
+                 ]
+  ];
   d,enlist[`tf]!enlist 1~checkimport[0]
   }
 
