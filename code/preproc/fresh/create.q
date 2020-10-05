@@ -1,3 +1,5 @@
+\d .automl
+
 // Create features using the FRESH algorithm
 /* t = table from which features are to be extracted
 /* p = parameter dictionary containing information used in the extraction of features

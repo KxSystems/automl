@@ -106,7 +106,7 @@ prep.i.word2vec:{[tokens;p;fp;smdl]
           gen_mdl[`:Word2Vec][tokens;pykwargs args]];
   w2vind:where each tokens in model[`:wv.index2word]`;
   sentvec:{x[y;z]}[tokens]'[til count w2vind;w2vind];
-  avg_vec:avg each{$[()~y;0;x[`:wv.__getitem__][y]`]}[model]each sentvec;
+  avg_vec:avg each prep.i.getw2vitem[model]each sentvec;
   (flip(`$"col",/:string til size)!flip avg_vec;model)
   }
 
