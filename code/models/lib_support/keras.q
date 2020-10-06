@@ -50,7 +50,3 @@ nps:.p.import[`numpy.random][`:seed];
 if[0~checkimport[0];
   tf:.p.import[`tensorflow];
   tfs:tf$[2>"I"$first tf[`:__version__]`;[`:set_random_seed];[`:random.set_seed]]];
-
-/ allow multiprocess
-.ml.loadfile`:util/mproc.q
-if[0>system"s";.ml.mproc.init[abs system"s"]("system[\"l automl/automl.q\"]";".automl.loadfile`:init.q")];

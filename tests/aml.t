@@ -9,7 +9,6 @@ savedefault[nlp  :"newnlpparams.txt"   ;`nlp   ]
 rdm_dict:enlist[`hp]!enlist`random
 sbl_dict:enlist[`hp]!enlist`sobol
 
-
 tgt_f:asc 100?1f
 tgt_b:100?0b
 tgt_mul:100?3

@@ -35,6 +35,13 @@ i.validnlp:{[t]
     '`$"User wishing to apply nlp functionality must pass a table containing a character column."];
   }
 
+i.w2vseedchk:{
+ if[""~getenv`PYTHONHASHSEED;
+   -1"\nFor full reproducibility between q processes of the NLP word2vec implementation, the PYTHONHASHSEED",
+   " environment variable must be set upon initializing q. See https://code.kx.com/q/ml/automl/ug/options/#seed",
+   " for more details"];
+   }
+
 // This function sets or updates the default parameter dictionary as appropriate
 /. r > dictionary with default parameters updated as required
 i.updparam:{[t;p;typ]
@@ -65,6 +72,7 @@ i.updparam:{[t;p;typ]
 	   d,enlist[`tf]!enlist 1~checkimport[0]}[t;p];
        typ=`nlp;
        {[t;p]i.validnlp[t];
+        i.w2vseedchk[];
         d:i.nlpdefault[];
          d:$[(ty:type p)in 10 -11 99h;
            [if[10h~ty;p:.automl.i.getdict p];

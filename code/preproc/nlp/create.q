@@ -1,3 +1,5 @@
+\d .automl
+
 // Apply word2vec on string data for nlp problems
 /* t = table from which NLP features are to be extracted
 /* p = parameter dictionary containing information used in the extraction of features

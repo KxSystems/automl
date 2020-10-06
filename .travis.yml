@@ -28,6 +28,7 @@ install:
   - if [[ "x$QLIC_KC" != "x" ]]; then
       echo -n $QLIC_KC |base64 --decode > q/kc.lic;
       pip -q install -r requirements.txt;
+      pip install torch;
       pip install gensim;
       pip install sobol-seq;
 
