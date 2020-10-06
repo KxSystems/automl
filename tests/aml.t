@@ -6,8 +6,8 @@ loadfile`:init.q
 savedefault[norm :"newnormalparams.txt";`normal]
 savedefault[fresh:"newfreshparams.txt" ;`fresh ]
 savedefault[nlp  :"newnlpparams.txt"   ;`nlp   ]
-rdm_dict:enlist[`hp]!enlist`random
-sbl_dict:enlist[`hp]!enlist`sobol
+rdm_dict:`hp`trials!(`random;8)
+sbl_dict:`hp`trials!(`sobol;8)
 
 tgt_f:asc 100?1f
 tgt_b:100?0b
