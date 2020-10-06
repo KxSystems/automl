@@ -87,11 +87,11 @@ $[(::)~@[{.automl.run[x;tgt_b  ;`fresh;`class;::];};freshtab2;{[err]err;0b}];1b;
 $[(::)~@[{.automl.run[x;tgt_mul;`fresh;`class;::];};freshtab2;{[err]err;0b}];1b;0b]
 
 
-nlptab1:([]string 1000?`2;1000?0b;1000?1f)
+nlptab1:([]string 100?`2;100?0b;100?1f)
 
-tgt_f_nlp  :1000?1f
-tgt_b_nlp  :1000?0b
-tgt_mul_nlp:1000?3
+tgt_f_nlp  :100?1f
+tgt_b_nlp  :100?0b
+tgt_mul_nlp:100?3
 
 $[(::)~@[{.automl.run[x;tgt_f_nlp  ;`nlp;`reg  ;::];};nlptab1;{[err]err;0b}];1b;0b]
 $[(::)~@[{.automl.run[x;tgt_b_nlp  ;`nlp;`class;::];};nlptab1;{[err]err;0b}];1b;0b]
@@ -109,7 +109,7 @@ $[(::)~@[{.automl.run[x;tgt_mul_nlp;`nlp;`class;`scf`saveopt`w2v!((enlist[`class
 0b~$[(::)~@[{.automl.run[x;tgt_b_nlp  ;`nlp;`class;`seed`scf!(1234;.ml.accuracy)];};nlptab1;{[err]err;0b}];1b;0b]
 0b~$[(::)~@[{.automl.run[x;tgt_mul_nlp;`nlp;`class;`saveopt`tts!(2;`ttsnon)];};nlptab1;{[err]err;0b}];1b;0b]
 
-nlptab2:([]string 1000?`6;string 1000?`2;1000?0Ng;1000?100f;1000?0b)
+nlptab2:([]string 100?`6;string 100?`2;100?0Ng;100?100f;100?0b)
 
 $[(::)~@[{.automl.run[x;tgt_f_nlp  ;`nlp;`reg  ;::];};nlptab2;{[err]err;0b}];1b;0b]
 $[(::)~@[{.automl.run[x;tgt_b_nlp  ;`nlp;`class;::];};nlptab2;{[err]err;0b}];1b;0b]
