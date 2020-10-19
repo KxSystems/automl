@@ -13,4 +13,8 @@ nodelist:`configuration`featureData`targetData`dataCheck`modelGeneration`feature
 loadfile`:code/customization/init.q
 loadfile`:code/graph.q
 loadfile`:code/aml.q
+loadfile`:code/utils.q
 
+\d .nlp
+.automl.i.loadNLP[]
+\d .automl

@@ -12,7 +12,7 @@
 // @return     {tab} feature table with the data preprocessed appropriately
 dataPreprocessing.node.function:{[cfg;feat;symEncode]
   symTable:dataPreprocessing.symEncoding[feat;cfg;symEncode];
-  dataPreprocessing.featPreprocess[symTable;cfg];
+  dataPreprocessing.featPreprocess[symTable;cfg]
   }
 
 // Input information

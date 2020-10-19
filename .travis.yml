@@ -39,7 +39,7 @@ script:
 - echo "Packaged as automl_$TRAVIS_OS_NAME-$TRAVIS_BRANCH.zip"
 -  if [[ "x$QLIC_KC" != "x" ]]; then
     curl -fsSL -o test.q https://github.com/KxSystems/embedpy/raw/master/test.q;
-    q test.q -q 
+    PYTHONHASHSEED=0 q test.q -q 
 
   else
     echo No kdb+, no tests;

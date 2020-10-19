@@ -57,7 +57,7 @@ dataPreprocessing.featPreprocess:{[feat;cfg]
 dataPreprocessing.nonTextPreprocess:{[feat]
   feat:.ml.dropconstant feat;
   feat:dataPreprocessing.nullEncode[feat;med];
-  .ml.infreplace feat
+  dataPreprocessing.infreplace feat
   }
 
 // @kind function
@@ -91,3 +91,38 @@ dataPreprocessing.nullEncode:{[feat;func]
    flip 0^(func each flip feat)^flip[feat],names!nullValues
    ]
   }
+
+
+// Temporary infreplace function until toolkit is updated
+dataPreprocessing.infreplace:{
+  $[98=t:type x;
+    [appCols:.ml.i.fndcols[x;"hijefpnuv"];
+    typCols:type each dt:appCols!x appCols;
+    flip flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
+    ];
+    0=t;
+     [appIndex:where all each string[type each x]in key i.inftyp;
+      typIndex:type each dt:x appIndex;
+     (x til[count x]except appIndex),dataPreprocessing.i.infrep'[dt;typIndex]
+     ];
+    98=type keyX:key x;
+     [appCols:.ml.i.fndcols[x:value x;"hijefpnuv"];
+     typCols:type each dt:appCols!x appCols;
+     cols[keyX]xkey flip flip[keyX],flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
+     ];
+    [appCols:.ml.i.fndcols[x:flip x;"hijefpnuv"];
+    typCols:type each dt:appCols!x appCols;
+     flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
+     ]
+   ]
+  }
+
+// Utilities for functions to be added to the toolkit
+dataPreprocessing.i.infrep:{
+  // Character representing the type
+  typ:.Q.t@abs y;
+  // the relevant null+infs for type
+  t:typ$(0N;-0w;0w);
+  {[n;x;y;z]@[x;i;:;z@[x;i:where x=y;:;n]]}[t 0]/[x;t 1 2;(min;max)]
+  }
+

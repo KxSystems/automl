@@ -94,6 +94,7 @@ graph:.ml.connectEdge[graph;`featureDescription ;`symEncode      ;`preprocParams
 graph:.ml.connectEdge[graph;`featureCreation    ;`creationTime   ;`preprocParams;`creationTime]
 graph:.ml.connectEdge[graph;`featureSignificance;`sigFeats       ;`preprocParams;`sigFeats]
 graph:.ml.connectEdge[graph;`labelEncode        ;`symMap         ;`preprocParams;`symMap]
+graph:.ml.connectEdge[graph;`featureCreation    ;`featModel          ;`preprocParams;`featModel]
 
 // Predict_Params
 graph:.ml.connectEdge[graph;`optimizeModels;`bestModel  ;`predictParams;`bestModel]

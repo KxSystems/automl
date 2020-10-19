@@ -29,6 +29,7 @@ dataCheck.updateConfig:{[feat;cfg]
   config:standardCfg,updateCfg;
   // If applicable add save path information to configuration dictionary
   savePaths:$[0<config`saveopt;dataCheck.i.pathConstruct[config];()!()];
+  if[`rand_val~config[`seed];config[`seed]:"j"$.z.t];
   config,savePaths
   }
 
@@ -61,6 +62,11 @@ dataCheck.NLPLoad:{[cfg]
   if[not `nlp~cfg`featExtractType;:()];
   if[not (0~checkimport[3]) & ((::)~@[{system"l ",x};"nlp/nlp.q";{0b}]);
     '"User attempting to run NLP models with insufficient requirements, see documentation"];
+  if[""~getenv`PYTHONHASHSEED;
+    -1"For full reproducibility between q processes of the NLP word2vec implementation,",
+    " the PYTHONHASHSEED environment variable must be set upon initialization of q. See ",
+    "https://code.kx.com/q/ml/automl/ug/options/#seed for details.";
+    ];
   }
 
 // @kind function
