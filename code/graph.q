@@ -25,7 +25,7 @@ graph:.ml.addNode[graph;`runModels          ;runModels.node]
 graph:.ml.addNode[graph;`optimizeModels     ;optimizeModels.node]
 graph:.ml.addNode[graph;`preprocParams      ;preprocParams.node]
 graph:.ml.addNode[graph;`predictParams      ;predictParams.node]
-graph:.ml.addNode[graph;`paramConsolidate   ;paramConsolidate.node]
+graph:.ml.addNode[graph;`pathConstruct      ;pathConstruct.node]
 graph:.ml.addNode[graph;`saveGraph          ;saveGraph.node]
 graph:.ml.addNode[graph;`saveMeta           ;saveMeta.node]
 graph:.ml.addNode[graph;`saveReport         ;saveReport.node]
@@ -103,16 +103,16 @@ graph:.ml.connectEdge[graph;`optimizeModels;`testScore    ;`predictParams;`testS
 graph:.ml.connectEdge[graph;`optimizeModels;`predictions  ;`predictParams;`predictions]
 graph:.ml.connectEdge[graph;`runModels     ;`modelMetaData;`predictParams;`modelMetaData]
 
-// Param_Consolidate
-graph:.ml.connectEdge[graph;`predictParams;`output;`paramConsolidate;`predictionStore]
-graph:.ml.connectEdge[graph;`preprocParams;`output;`paramConsolidate;`preprocParams]
+// path_Construct
+graph:.ml.connectEdge[graph;`predictParams;`output;`pathConstruct;`predictionStore]
+graph:.ml.connectEdge[graph;`preprocParams;`output;`pathConstruct;`preprocParams]
 
 // Save_Graph
-graph:.ml.connectEdge[graph;`paramConsolidate;`output;`saveGraph;`input]
+graph:.ml.connectEdge[graph;`pathConstruct;`output;`saveGraph;`input]
 
 // Save_Meta
-graph:.ml.connectEdge[graph;`paramConsolidate;`output;`saveMeta;`input]
+graph:.ml.connectEdge[graph;`pathConstruct;`output;`saveMeta;`input]
 
 // Save_Report
-graph:.ml.connectEdge[graph;`paramConsolidate;`output;`saveReport;`input]
+graph:.ml.connectEdge[graph;`pathConstruct;`output;`saveReport;`input]
 
