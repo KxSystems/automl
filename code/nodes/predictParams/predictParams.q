@@ -1,9 +1,27 @@
-// Collect all the parameters relevant for the generation of reports/graphs etc in the prediction step
-// such they can be consolidated into a single node later in the workflow
 \d .automl
 
-predictParams.node.inputs  :`bestModel`testScore`predictions!"<fF"
-predictParams.node.outputs :"!"
-predictParams.node.function:{[bmdl;tscore;preds]
-  `bestModel`testScore`predictions!(bmdl;tscore;preds)
+// Collect all the parameters relevant for the generation of reports/graphs etc in the prediction step
+// such they can be consolidated into a single node later in the workflow
+
+// @kind function
+// @category node
+// @fileoverview Collect all relevant parameters from previous prediction steps to 
+//  be consolidated for report/graph generation
+// @param bestModel     {<} The best model fitted 
+// @param hyperParmams  {dict} Hyperparameters used for model (if any)
+// @param testScore     {float} Score of model on testing data
+// @param predictions   {(int[];float[];bool[]} Predicted values from best model
+// @param modelMetaData {dict} Meta data from finding best model
+// @return {dict} Consolodated parameters to be passed to generate reports/graphs 
+predictParams.node.function:{[bestModel;hyperParams;testScore;predictions;modelMetaData]
+  predictParams.printScore[testScore];
+  returnKeys:`bestModel`hyperParams`testScore`predictions`modelMetaData;
+  returnKeys!(bestModel;hyperParams;testScore;predictions;modelMetaData)
   }
+
+// Input information
+predictParams.node.inputs  :`bestModel`hyperParams`testScore`predictions`modelMetaData!"<!fF!"
+
+// Output information
+predictParams.node.outputs :"!"
+

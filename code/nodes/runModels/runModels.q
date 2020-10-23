@@ -3,8 +3,8 @@
 // prior to the application of grid/random/sobol search optimization
 \d .automl
 
-runModels.node.inputs  :`config`ttsObject`models!"!!+"
-runModels.node.outputs :`bestModel`bestScoringName!"<s"
+runModels.node.inputs  :`config`ttsObject`models!"! +"
+runModels.node.outputs :`bestModel`modelMetaData`bestScoringName!"<!s"
 runModels.node.function:{[cfg;tts;mdls]
-  `bestModel`bestScoringName!(`embedpymdl;`RandomForestRegressor)
+  `bestModel`modelMetaData`bestScoringName!(`embedpymdl;()!();`RandomForestRegressor)
   }
