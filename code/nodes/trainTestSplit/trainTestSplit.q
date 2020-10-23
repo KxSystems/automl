@@ -3,7 +3,7 @@
 \d .automl
 
 trainTestSplit.node.inputs  :`config`features`target`sigFeats!"!+FS"
-trainTestSplit.node.outputs :" "
+trainTestSplit.node.outputs :"!"
 trainTestSplit.node.function:{[cfg;feats;tgt;sigfeats]
-  (80?1f;80?1f;20?1f;20?1f)
+  `xtrain`ytrain`xtest`ytest!(80?1f;80?1f;20?1f;20?1f)
   }

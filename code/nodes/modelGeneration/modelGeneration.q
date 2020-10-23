@@ -13,8 +13,7 @@
 modelGeneration.node.function:{[cfg;tgt]
   modelGeneration.filesCheck[cfg];
   mdlDict:modelGeneration.txtParse[cfg;"/code/customization/models/modelConfig/"];
-  mdlTab :modelGeneration.modelPrep[cfg;mdlDict;tgt];
-  modelGeneration.updModels[mdlTab;tgt]
+  modelGeneration.modelPrep[cfg;mdlDict;tgt]
   }
 
 // Input information

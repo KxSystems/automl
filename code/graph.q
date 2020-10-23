@@ -70,21 +70,21 @@ graph:.ml.connectEdge[graph;`labelEncode        ;`target  ;`trainTestSplit;`targ
 graph:.ml.connectEdge[graph;`dataCheck          ;`config  ;`trainTestSplit;`config]
 
 // Select_Models
-graph:.ml.connectEdge[graph;`dataCheck      ;`config;`selectModels;`config]
 graph:.ml.connectEdge[graph;`trainTestSplit ;`output;`selectModels;`ttsObject]
+graph:.ml.connectEdge[graph;`labelEncode    ;`target;`selectModels;`target]
 graph:.ml.connectEdge[graph;`modelGeneration;`output;`selectModels;`models]
 
 // Run_Models
-graph:.ml.connectEdge[graph;`selectModels;`ttsObject;`runModels;`ttsObject]
-graph:.ml.connectEdge[graph;`selectModels;`models ;`runModels;`models]
-graph:.ml.connectEdge[graph;`dataCheck   ;`config ;`runModels;`config]
+graph:.ml.connectEdge[graph;`trainTestSplit;`output ;`runModels;`ttsObject]
+graph:.ml.connectEdge[graph;`selectModels  ;`output ;`runModels;`models]
+graph:.ml.connectEdge[graph;`dataCheck     ;`config ;`runModels;`config]
 
 // Optimize_Models
-graph:.ml.connectEdge[graph;`runModels   ;`bestModel      ;`optimizeModels;`bestModel]
-graph:.ml.connectEdge[graph;`runModels   ;`bestScoringName;`optimizeModels;`bestScoringName]
-graph:.ml.connectEdge[graph;`selectModels;`models         ;`optimizeModels;`models]
-graph:.ml.connectEdge[graph;`selectModels;`ttsObject      ;`optimizeModels;`ttsObject]
-graph:.ml.connectEdge[graph;`dataCheck   ;`config         ;`optimizeModels;`config]
+graph:.ml.connectEdge[graph;`runModels     ;`bestModel      ;`optimizeModels;`bestModel]
+graph:.ml.connectEdge[graph;`runModels     ;`bestScoringName;`optimizeModels;`bestScoringName]
+graph:.ml.connectEdge[graph;`selectModels  ;`output         ;`optimizeModels;`models]
+graph:.ml.connectEdge[graph;`trainTestSplit;`output         ;`optimizeModels;`ttsObject]
+graph:.ml.connectEdge[graph;`dataCheck     ;`config         ;`optimizeModels;`config]
 
 
 // Preproc_Params

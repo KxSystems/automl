@@ -110,31 +110,3 @@ classModelTab:flip`model`lib`fnc`seed`typ!flip key[classModelDict],'value classM
 // Test that all inputs return a lambda or projection type
 all (type each .automl.modelGeneration.mdlFunc .'flip regModelTab`lib`fnc`model  )in 100 104h 
 all (type each .automl.modelGeneration.mdlFunc .'flip classModelTab`lib`fnc`model)in 100 104h
-
-
--1"\nTesting that the number of target values < 10000 does not update the model table";
-
-// Test all appropriate model tables and target values that are less than threshold
-passingTest[.automl.modelGeneration.updModels;(regModelTab  ;tgtReg       );0b;regModelTab  ]
-passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtClass     );0b;classModelTab]
-passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtMultiClass);0b;classModelTab]
-
-
--1"\nTesting that the number of target values > 10000 does update the model table";
-
-// target values that exceed the 10000 limit
-tgtRegLarge       :20000?1f
-tgtClassLarge     :20000?0b
-tgtMultiClassLarge:20000?3
-
-// Model table with inappropriate models removed for large target volumes
-regModelUpd  :select from regModelTab where(lib<>`keras),not fnc in`neural_network`svm
-classModelUpd:select from classModelTab where(lib<>`keras),not fnc in`neural_network`svm
-
-
-// Test all appropriate model tables and target values that are greater than threshold
-passingTest[.automl.modelGeneration.updModels;(regModelTab  ;tgtRegLarge       );0b;regModelUpd  ]
-passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtClassLarge     );0b;classModelUpd]
-passingTest[.automl.modelGeneration.updModels;(classModelTab;tgtMultiClassLarge);0b;classModelUpd]
-
-
