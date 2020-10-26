@@ -29,6 +29,7 @@ graph:.ml.addNode[graph;`pathConstruct      ;pathConstruct.node]
 graph:.ml.addNode[graph;`saveGraph          ;saveGraph.node]
 graph:.ml.addNode[graph;`saveMeta           ;saveMeta.node]
 graph:.ml.addNode[graph;`saveReport         ;saveReport.node]
+graph:.ml.addNode[graph;`saveModels         ;saveModels.node]
 
 
 // Connect all possible edges prior to the data/config ingestion
@@ -114,5 +115,7 @@ graph:.ml.connectEdge[graph;`pathConstruct;`output;`saveGraph;`input]
 graph:.ml.connectEdge[graph;`pathConstruct;`output;`saveMeta;`input]
 
 // Save_Report
-graph:.ml.connectEdge[graph;`pathConstruct;`output;`saveReport;`input]
+graph:.ml.connectEdge[graph;`saveGraph;`output;`saveReport;`input]
 
+// Save_Model
+graph:.ml.connectEdge[graph;`pathConstruct;`output;`saveModels;`input]

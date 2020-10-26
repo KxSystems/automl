@@ -7,7 +7,7 @@
 nodelist:`configuration`featureData`targetData`dataCheck`modelGeneration`featureDescription,
          `labelEncode`dataPreprocessing`featureCreation`featureSignificance`trainTestSplit,
          `runModels`selectModels`optimizeModels`preprocParams`predictParams`pathConstruct,
-         `saveGraph`saveMeta`saveReport
+         `saveGraph`saveMeta`saveReport`saveModels
 
 {loadfile hsym `$"code/nodes/",string[x],"/init.q"}each nodelist;
 loadfile`:code/customization/init.q

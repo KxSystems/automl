@@ -29,7 +29,9 @@ utils.loadNLP:{
 // @category Utility
 // @fileoverview Used throughout the library to convert linux/mac file names to windows equivalent
 // @param path {str} the linux 'like' path
-// @return {str} path modified to be suitable for windows systems
-utils.ssrwin:{[path]
-  $[.z.o like "w*";ssr[path;"/";"\\"];path]
-  }
+// @retutn {str} path modified to be suitable for windows systems
+utils.ssrwin:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
+
+
+// Python plot functionality
+utils.plt:.p.import`matplotlib.pyplot;
