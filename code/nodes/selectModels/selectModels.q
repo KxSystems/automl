@@ -3,7 +3,6 @@
 // class are not present across the folds of the dataset
 \d .automl
 
-
 // @kind function
 // @category node
 // @fileoverview Delect models based on limitations imposed by the dataset and users environment

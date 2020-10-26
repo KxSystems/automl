@@ -47,5 +47,4 @@ run:{[graph;xdata;ydata;ftype;ptype;params]
 // currently required in order to pass data check  
 prep.i.default:{x}
 xv.fitpredict:{x}
-prep.freshsignificance:{x}
 .ml.ttsnonshuff:{x}

@@ -86,7 +86,6 @@ graph:.ml.connectEdge[graph;`selectModels  ;`output         ;`optimizeModels;`mo
 graph:.ml.connectEdge[graph;`trainTestSplit;`output         ;`optimizeModels;`ttsObject]
 graph:.ml.connectEdge[graph;`dataCheck     ;`config         ;`optimizeModels;`config]
 
-
 // Preproc_Params
 graph:.ml.connectEdge[graph;`dataCheck          ;`config         ;`preprocParams;`config]
 graph:.ml.connectEdge[graph;`featureDescription ;`dataDescription;`preprocParams;`dataDescription]
@@ -95,6 +94,7 @@ graph:.ml.connectEdge[graph;`featureCreation    ;`creationTime   ;`preprocParams
 graph:.ml.connectEdge[graph;`featureSignificance;`sigFeats       ;`preprocParams;`sigFeats]
 graph:.ml.connectEdge[graph;`labelEncode        ;`symMap         ;`preprocParams;`symMap]
 graph:.ml.connectEdge[graph;`featureCreation    ;`featModel      ;`preprocParams;`featModel]
+graph:.ml.connectEdge[graph;`trainTestSplit     ;`output          ;`preprocParams;`ttsObject]
 
 // Predict_Params
 graph:.ml.connectEdge[graph;`optimizeModels;`bestModel    ;`predictParams;`bestModel]

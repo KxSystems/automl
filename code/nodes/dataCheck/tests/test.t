@@ -43,6 +43,8 @@ passingTest:{[function;data;applyType;expectedReturn]
   expectedReturn~functionReturn
   }
 
+// Load Python version of .ml.traintestsplit
+\l code/nodes/dataCheck/tests/pythonTTS.p
 
 // Suitable feature data and configuration for testing of configuration update
 featData:([]100?1f;100?1f)
@@ -103,15 +105,19 @@ failingTest[.automl.dataCheck.functions;inapprFuncPrf;1b;inapprFuncPrfPrint]
 -1"\nTesting appropriate function inputs to overwrite default behaviour";
 
 // appropriate function inputs
-apprFunc :normalConfig,enlist[`xv]!enlist (`.ml.xv.pcsplit;0.2)
-apprFuncs:normalConfig,`xv`gs!((`.ml.xv.pcsplit;0.2);(`.ml.gs.mcsplit;0.2))
+apprFunc   :normalConfig,enlist[`xv]!enlist (`.ml.xv.pcsplit;0.2)
+apprFuncs  :normalConfig,`xv`gs!((`.ml.xv.pcsplit;0.2);(`.ml.gs.mcsplit;0.2))
+apprPyFuncs:normalConfig,`tts`sz!(`python_train_test_split;.2)
 .automl.newSigfeat:{.ml.fresh.significantfeatures[x;y;.ml.fresh.ksigfeat 2]}
-apprSigFeat:enlist[`sigfeats]!enlist `.automl.newsigfeat
+apprSigFeat:normalConfig,enlist[`sigfeats]!enlist `.automl.newsigfeat
 
 // Testing of appropriate function inputs
-passingTest[.automl.dataCheck.functions;apprFunc;1b;(::)]
-passingTest[.automl.dataCheck.functions;apprFuncs;1b;(::)]
-passingTest[.automl.dataCheck.functions;apprFuncs;1b;(::)]
+passingTest[.automl.dataCheck.functions;apprFunc   ;1b;(::)]
+passingTest[.automl.dataCheck.functions;apprFuncs  ;1b;(::)]
+passingTest[.automl.dataCheck.functions;apprFuncs  ;1b;(::)]
+passingTest[.automl.dataCheck.functions;apprFuncs  ;1b;(::)]
+passingTest[.automl.dataCheck.functions;apprSigFeat;1b;(::)]
+
 
 
 -1"\nTesting inappropriate schema provided for an NLP problem";

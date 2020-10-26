@@ -11,7 +11,6 @@ modelGeneration.filesCheck:{[cfg]
   if[not cfg[`problemType]in key modelGeneration.files;'`$"text file not found"]
   }
 
-
 // @kind function
 // @category modelGeneration
 // @fileoverview Extraction of an appropriately valued dictionary from a non complex flat file
@@ -28,7 +27,6 @@ modelGeneration.txtParse:{[cfg;fp]
    ];
   modelDict
   }
-
 
 // @kind function
 // @category modelGeneration
@@ -54,7 +52,6 @@ modelGeneration.modelPrep:{[cfg;mdlDict;tgt]
   mdlTab
   }
 
-
 // @kind function
 // @category modelGeneration
 // @fileoverview Build up the model to be applied based on naming convention
@@ -65,7 +62,7 @@ modelGeneration.modelPrep:{[cfg;mdlDict;tgt]
 // @return     {<} the appropriate function or projection in the case of sklearn
 modelGeneration.mdlFunc:{[lib;fnc;mdl]
   $[lib in key models;
-    get[".automl.models.",string[lib],".fitScore"];
+    get".automl.models.",string[lib],".fitScore";
     // construct the projection used for sklearn models eg '.p.import[`sklearn.svm][`:SVC]'
     {[x;y;z].p.import[x]y}[` sv lib,fnc;hsym mdl]
     ]
@@ -73,4 +70,3 @@ modelGeneration.mdlFunc:{[lib;fnc;mdl]
 
 // Text files that can be parsed from within the models folder
 modelGeneration.files:`class`reg!("classmodels.txt";"regmodels.txt")
-

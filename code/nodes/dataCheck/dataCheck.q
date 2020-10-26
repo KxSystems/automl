@@ -18,6 +18,7 @@ dataCheck.node.function:{[cfg;feat;tgt]
   dataCheck.functions[cfg];
   dataCheck.length[feat;tgt;cfg];
   dataCheck.target[tgt];
+  dataCheck.ttsSize[cfg];
   dataCheck.NLPLoad[cfg];
   dataCheck.NLPSchema[cfg;feat];
   feat:dataCheck.featureTypes[feat;cfg];

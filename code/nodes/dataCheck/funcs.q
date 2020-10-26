@@ -44,9 +44,9 @@ dataCheck.updateConfig:{[feat;cfg]
 // @return    {(Null;err)} error indicating invalid fuctions otherwise generic null on success
 dataCheck.functions:{[cfg]
   // List of possible objects where user may input a custom function
-  function:raze cfg[`funcs`prf`tts`sigfeats],value[cfg`scf],first each cfg`xv`gs;
+  function:raze cfg[`funcs`prf`tts`sigFeats],value[cfg`scf],first each cfg`xv`gs;
   // Ensure the custom inputs are suitably typed
-  locs:@[{$[not type[get x]in(99h;100h;104h);'err;0b]};;{[err]err;1b}]each function;
+  locs:@[{$[not type[utils.qpyFuncSearch x]in(99h;100h;104h;105h);'err;0b]};;{[err]err;1b}]each function;
   if[0<cnt:sum locs;
      functionList:{$[2>x;" ",y," is";"s ",sv[", ";y]," are"]}[cnt]string function where locs;
     '`$"The function",/functionList," not defined in your process\n"
@@ -141,3 +141,12 @@ dataCheck.target:{[tgt]
   if[1=count distinct tgt;'"Target must have more than one unique value"]
   }
 
+// @kind function
+// @category dataCheck
+// @fileoverview Checks that the traintestsplit size provided in cfg is a floating value between
+//   0 and 1
+// @param cfg  {dict} configuration information relating to the current run of AutoML
+// @return {(Null;err)} error on unsuitable target otherwise generic null
+dataCheck.ttsSize:{[cfg]
+  if[(sz<0.)|(sz>1.)|-9h<>type sz:cfg`sz;'"Testing size must be in range 0-1"]
+  }
