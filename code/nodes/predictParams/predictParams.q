@@ -12,7 +12,7 @@
 // @param testScore     {float} Score of model on testing data
 // @param predictions   {(int[];float[];bool[]} Predicted values from best model
 // @param modelMetaData {dict} Meta data from finding best model
-// @return {dict} Consolodated parameters to be passed to generate reports/graphs 
+// @return {dict} Consolidated parameters to be passed to generate reports/graphs 
 predictParams.node.function:{[bestModel;hyperParams;testScore;predictions;modelMetaData]
   predictParams.printScore[testScore];
   returnKeys:`bestModel`hyperParams`testScore`predictions`modelMetaData;
