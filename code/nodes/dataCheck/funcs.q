@@ -48,8 +48,8 @@ dataCheck.functions:{[cfg]
   // Ensure the custom inputs are suitably typed
   locs:@[{$[not type[utils.qpyFuncSearch x]in(99h;100h;104h;105h);'err;0b]};;{[err]err;1b}]each function;
   if[0<cnt:sum locs;
-     functionList:{$[2>x;" ",y," is";"s ",sv[", ";y]," are"]}[cnt]string function where locs;
-    '`$"The function",/functionList," not defined in your process\n"
+     functionList:{$[2>x;" ",raze[y]," is";"s ",sv[", ";y]," are"]}[cnt]string function where locs;
+    '`$"The function",functionList," not defined in your process\n"
   ]
   }
 

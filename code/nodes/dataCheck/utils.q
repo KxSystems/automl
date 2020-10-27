@@ -81,7 +81,7 @@ dataCheck.i.getCustomConfig:{[feat;cfg;ptyp]
 // @return {dict} default dictionary which will be used if no user updates are supplied
 dataCheck.i.freshDefault:{`aggcols`funcs`xv`gs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats!
   ({first cols x};`.ml.fresh.params;(`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);
-   `.automl.xv.fitpredict;`class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;
+   `.automl.runModels.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;
    0.2;`.ml.ttsnonshuff;0.2;`.automl.featureSignificance.significance)
   }
 
@@ -91,7 +91,7 @@ dataCheck.i.freshDefault:{`aggcols`funcs`xv`gs`prf`scf`seed`saveopt`hld`tts`sz`s
 // @return {dict} default dictionary which will be used if no user updates are supplied
 dataCheck.i.normalDefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats!
   ((`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);`.automl.prep.i.default;
-   `.automl.xv.fitpredict; `class`reg!(`.ml.accuracy;`.ml.mse);
+   `.automl.runModels.fitPredict; `class`reg!(`.ml.accuracy;`.ml.mse);
    `rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.featureSignificance.significance)
   }
 
@@ -99,10 +99,10 @@ dataCheck.i.normalDefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats
 // @category dataCheckUtility
 // @fileoverview default parameters used in the application of 'NLP' AutoML
 // @return {dict} default dictionary which will be used if no user updates are supplied
-dataCheck.i.nlpDefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigfeats`w2v!
+dataCheck.i.nlpDefault:{`xv`gs`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats`w2v!
   ((`.ml.xv.kfshuff;5);(`.ml.gs.kfshuff;5);`.automl.prep.i.default;
-   `.automl.xv.fitpredict;`class`reg!(`.ml.accuracy;`.ml.mse);
-   `rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.prep.freshsignificance;0)
+   `.automl.runModels.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);
+   `rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.featureSignificance.significance;0)
   }
 
 // @kind function

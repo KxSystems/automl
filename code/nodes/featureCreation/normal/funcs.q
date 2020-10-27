@@ -12,7 +12,7 @@
 featureCreation.normal.applyFunc:{[feat;func]
   typ:type func;
   // util.qpyFuncSearch to be used here when tts addition made 
-  func:$[-11h=typ;get func;100h=typ;func;.automl.featureCreation.normal.default];
+  func:$[-11h=typ;utils.qpyFuncSearch func;100h=typ;func;.automl.featureCreation.normal.default];
   returnTab:func feat;
   $[98h~type returnTab;
    returnTab;
