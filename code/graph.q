@@ -98,10 +98,10 @@ graph:.ml.connectEdge[graph;`featureCreation    ;`featModel      ;`preprocParams
 graph:.ml.connectEdge[graph;`trainTestSplit     ;`output         ;`preprocParams;`ttsObject]
 
 // Predict_Params
-graph:.ml.connectEdge[graph;`optimizeModels;`bestModel    ;`predictParams;`bestModel]
-graph:.ml.connectEdge[graph;`optimizeModels;`hyperParams  ;`predictParams;`hyperParams]
-graph:.ml.connectEdge[graph;`optimizeModels;`testScore    ;`predictParams;`testScore]
-graph:.ml.connectEdge[graph;`optimizeModels;`predictions  ;`predictParams;`predictions]
+graph:.ml.connectEdge[graph;`optimizeModels;`bestModel   ;`predictParams;`bestModel]
+graph:.ml.connectEdge[graph;`optimizeModels;`testScore   ;`predictParams;`testScore]
+graph:.ml.connectEdge[graph;`optimizeModels;`hyperParams ;`predictParams;`hyperParams]
+graph:.ml.connectEdge[graph;`optimizeModels;`analyzeModel;`predictParams;`analyzeModel]
 graph:.ml.connectEdge[graph;`runModels     ;`modelMetaData;`predictParams;`modelMetaData]
 
 // path_Construct

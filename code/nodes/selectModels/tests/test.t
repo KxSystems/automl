@@ -34,7 +34,7 @@ configReg     :enlist[`problemType]!enlist`reg
 configClass   :enlist[`problemType]!enlist`class
 
 // Generate model dictionaries 
-modelDict     :.automl.modelGeneration.txtParse[;"/code/customization/models/modelConfig/"]
+modelDict     :.automl.modelGeneration.txtParse[;"/code/customization/"]
 regModelDict  :modelDict configReg
 classModelDict:modelDict configClass
 

@@ -79,14 +79,14 @@ all passingTest[.automl.modelGeneration.filesCheck;;1b;(::)]each configList
 -1"\nTesting appropriate inputs to extract desired model dictionary";
 
 // Appropriate configurations should return a dictionary
-parsePathGen:.automl.modelGeneration.txtParse[;"/code/customization/models/modelConfig/"]
+parsePathGen:.automl.modelGeneration.txtParse[;"/code/customization/"]
 all 99h=/:type each parsePathGen each configList
 
 
 -1"\nTesting appropriate input to extract correct models based on problem type";
 
 // generate model dictionaries 
-modelDict     :.automl.modelGeneration.txtParse[;"/code/customization/models/modelConfig/"]
+modelDict     :.automl.modelGeneration.txtParse[;"/code/customization/"]
 regModelDict  :modelDict configNormalReg
 classModelDict:modelDict configNormalClass
 

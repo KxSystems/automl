@@ -91,7 +91,7 @@ nullList:1 0n 4 3 2 2 0n 4 1 0n
 
 // Constant, null and infinity return lists and dictionaries
 nullListReturn:1 1.5 4 3 2 2 1.5 4 1 1.5
-nullPlacement:0 1 0 0 0 0 1 0 0 1f
+nullPlacement:0 1 0 0 0 0 1 0 0 1j
 nullReturnDict:`nullList`nullList_null!(nullListReturn;nullPlacement)
 infListReturn:2 1 2 2 2 2 1 2 0 0f
 

@@ -18,9 +18,7 @@ modelGeneration.filesCheck:{[cfg]
 // @param fp  {char} file path to directory containing text files 
 // @return    {dict} dictionary of models extracted from text file
 modelGeneration.txtParse:{[cfg;fp]
-  filePath:`$path,fp,modelGeneration.files cfg[`problemType];
-  readTxt:("S*";"|")0:hsym filePath;
-  modelDict:{key(!).("S=;")0:x}each(!). readTxt;
+  modelDict:utils.txtParse[;fp]cfg[`problemType];
   if[1b~cfg`tf;
     apprModels:key[modelDict]where `keras<>value modelDict[;0];
     modelDict:apprModels!modelDict apprModels
