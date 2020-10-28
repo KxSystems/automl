@@ -30,10 +30,11 @@ passingTest:{[function;data;applyType;expectedReturn]
 // Name of best model
 modelName:`randomForestRegressor
 
+-1"\nCreating output directory";
+
 // Generate a path to save images to
 savePath:.automl.utils.ssrwin .automl.path,"/outputs/testing/images/"
 system"mkdir",$[.z.o like "w*";" ";" -p "],savePath;
-pathDict:enlist[`images]!enlist savePath
 
 // Generate confusion matrix
 preds:10?0b
@@ -66,15 +67,16 @@ symMapNull:()!()
 symMap    :`a`b!0 1
 
 // Generate config dictionaries
-configClass0:`problemType`saveopt!(`class;0)
-configClass1:`problemType`saveopt!(`class;1)
-configClass2:`problemType`saveopt!(`class;2)
-configReg0  :`problemType`saveopt!(`reg  ;0)
-configReg1  :`problemType`saveopt!(`reg  ;1)
-configReg2  :`problemType`saveopt!(`reg  ;2)
+configSave  :enlist[`imagesSavePath]!enlist savePath
+configClass0:configSave,`problemType`saveopt!(`class;0)
+configClass1:configSave,`problemType`saveopt!(`class;1)
+configClass2:configSave,`problemType`saveopt!(`class;2)
+configReg0  :configSave,`problemType`saveopt!(`reg  ;0)
+configReg1  :configSave,`problemType`saveopt!(`reg  ;1)
+configReg2  :configSave,`problemType`saveopt!(`reg  ;2)
 
-paramDictKeys:`modelName`pathDict`analyzeModel`sigFeats
-paramDictVals:(modelName;pathDict;analyzeModel;sigFeats)
+paramDictKeys:`modelName`analyzeModel`sigFeats
+paramDictVals:(modelName;analyzeModel;sigFeats)
 paramDict    :paramDictKeys!paramDictVals
 
 paramDictConfig0   :paramDict,`config`tts`symMap!(configClass0;ttsClass;symMapNull)
@@ -96,6 +98,7 @@ passingTest[.automl.saveGraph.node.function;paramDictConfigReg0;1b;paramDictConf
 passingTest[.automl.saveGraph.node.function;paramDictConfigReg1;1b;paramDictConfigReg1]
 passingTest[.automl.saveGraph.node.function;paramDictConfigReg2;1b;paramDictConfigReg2]
 
+-1"\nRemoving any directories created";
 
 // Remove any directories made
 rmPath:.automl.utils.ssrwin .automl.path,"/outputs/testing/";

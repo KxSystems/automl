@@ -35,3 +35,11 @@ utils.ssrwin:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
 
 // Python plot functionality
 utils.plt:.p.import`matplotlib.pyplot;
+
+// @kind function
+// @category Utility
+// @fileoverview Used throughout when printing directory of saved objects.
+//  this is to keep linux/windows consistent
+// @param path {str} the linux 'like' path
+// @retutn {str} path modified to be suitable for windows systems
+utils.ssrsv:{[path] ssr[path;"\\";"/"]}

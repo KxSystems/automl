@@ -18,7 +18,6 @@ pathConstruct.constructPath:{[preProcParams]
   pathName:path,/:pathNames;
   pathName:utils.ssrwin each pathName;
   pathConstruct.createFile each pathName;
-  fileNames!pathNames
   }
 
 
