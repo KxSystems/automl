@@ -74,11 +74,9 @@ optimizeModels.i.updDict:{[modelName;hyperTyp;splitCnt;hyperDict;cfg]
 // @kind function
 // @category optimizeModelsUtilitity
 // @fileoverview Show true and predicted values from confusion matrix
-// @param pred {(int[];bool[])} Predicted values
-// @param true {(int[];bool[])} True values
+// @param confMatrix {dict} Confusion matric
 // @return {dict} Confusion matrix with true and predicted values
-optimizeModels.i.confTab:{[pred;true]
-  confMatrix:.ml.confmat[pred;true];
+optimizeModels.i.confTab:{[confMatrix]
   keyMatrix:string key confMatrix;
   predVals:`$"pred_",/:keyMatrix;
   trueVals:`$"true_",/:keyMatrix;

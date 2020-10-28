@@ -26,7 +26,8 @@ passingTest:{[function;data;applyType;expectedReturn]
 
 // Default configuration dictionaries
 configKeys   :`seed`tts`gs`xv`prf`scf`hld
-configDefault:configKeys!(1234;`.ml.traintestsplit;(`.ml.gs.kfshuff;5);(`.ml.xv.kfshuff;5);`.automl.runModels.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);.2)
+configVals   :(1234;`.ml.traintestsplit;(`.automl.gs.kfshuff;5);(`.automl.xv.kfshuff;5);`.automl.utils.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);.2)
+configDefault:configKeys!configVals
 
 /S 42
 

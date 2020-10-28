@@ -22,7 +22,7 @@ optimizeModels.hyperSearch:{[mdlLib;mdls;bestModel;modelName;tts;scoreFunc;cfg]
     optimizeModels.paramSearch[mdls;modelName;tts;scoreFunc;cfg]
     ];
   score:get[scoreFunc][predDict`predictions;tts`ytest];
-  predDict,enlist[`testScore]!enlist score
+  predDict,`modelName`testScore!(modelName;score)
   }
 
 // @kind function
@@ -35,8 +35,8 @@ optimizeModels.hyperSearch:{[mdlLib;mdls;bestModel;modelName;tts;scoreFunc;cfg]
 // @return {(float[];bool[];int[])} Predicted values  
 optimizeModels.scorePred:{[custom;mdlLib;bestModel;tts]
   pred:$[custom;
-    optimize.scoreCustom[mdlLib];
-    optimize.scoreSklearn
+    optimizeModels.scoreCustom[mdlLib];
+    optimizeModels.scoreSklearn
     ][bestModel;tts];
   `bestModel`hyperParams`predictions!(bestModel;()!();pred)
   }
@@ -49,7 +49,7 @@ optimizeModels.scorePred:{[custom;mdlLib;bestModel;tts]
 // @param tts        {dict} Feature and target data split into training and testing set
 // @return {(float[];bool[];int[])} Predicted values  
 optimizeModels.scoreCustom:{[mdlLib;bestModel;tts]
-   get[".automl.models",mdlLib,".predict"][tts;bestModel]
+   get[".automl.models",string[mdlLib],".predict"][tts;bestModel]
    }
 
 // @kind function
@@ -81,7 +81,6 @@ optimizeModels.paramSearch:{[mdls;modelName;tts;scoreFunc;cfg]
   yTrain:tts`ytrain;
   mdlFunc:first exec minit from mdls where model=modelName;
   scoreCalc:cfg[`prf]mdlFunc;
-
   // Extract HP dictionary
   hyperDict:hyperParams`hyperDict;
   txtPath:utils.txtParse[;"/code/customization/"];
@@ -90,11 +89,9 @@ optimizeModels.paramSearch:{[mdls;modelName;tts;scoreFunc;cfg]
   hyperFunc:cfg[hyperTyp]0;
   splitCnt:optimizeModels.i.splitCount[hyperFunc;numFolds;tts;cfg];
   hyperDict:optimizeModels.i.updDict[modelName;hyperTyp;splitCnt;hyperDict;cfg];
-  
   // Final parameter required for result ordering and function definition
   orderFunc:get string first txtPath[`score]scoreFunc;
   params:`val`ord`scf!(cfg`hld;orderFunc;scoreFunc);
-
   // Perform HP search and extract best HP set based on scoring function
   results:get[hyperFunc][numFolds;numReps;xTrain;yTrain;scoreCalc;hyperDict;params];
   bestHPs:first key first results;
@@ -119,7 +116,8 @@ optimizeModels.confMatrix:{[pred;tts;modelName;cfg]
     yTest:`long$yTest
     ];
   -1"\nConfusion matrix for testing set:\n";
-  show confMatrix:optimizeModels.i.confTab[pred;yTest];
+  confMatrix:.ml.confmat[pred;yTest];
+  show optimizeModels.i.confTab[confMatrix];
   confMatrix
   }
 
@@ -139,7 +137,7 @@ optimizeModels.impactDict:{[mdlLib;hyperSearch;modelName;tts;cfg;scoreFunc;mdls]
   countCols:count first tts`xtest;
   scores:optimizeModels.i.predShuffle[mdlLib;bestModel;modelName;tts;scoreFunc;cfg`seed;mdls]each til countCols;
   ordFunc:get string first utils.txtParse[`score;"/code/customization/"]scoreFunc;
-  optimizeModels.i.impact[scores;countCols;ordFunc];
+  optimizeModels.i.impact[scores;countCols;ordFunc]
   }
 
 // @kind function
@@ -153,7 +151,7 @@ optimizeModels.residuals:{[hyperSearch;tts;cfg]
   if[`class~cfg`problemType;()!()];
   true:tts`ytest;
   pred:hyperSearch`predictions;
-  `resids`true!(true-pred;true)
+  `residuals`preds!(true-pred;pred)
   }
   
 // @kind function

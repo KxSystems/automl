@@ -48,7 +48,8 @@ runModels.xValSeed:{[tts;cfg;mdl]
     // Grid search required to incorporate the random state definition
     [gsFunc:utils.qpyFuncSearch cfg[`gs]0;
      numFolds:cfg[`gs]1;
-     first value gsFunc[numFolds;numReps;xTrain;yTrain;scoreFunc;seed;0]
+     val:enlist[`val]!enlist 0;
+     first value gsFunc[numFolds;numReps;xTrain;yTrain;scoreFunc;seed;val]
      ];
     // Otherwise a vanilla cross validation is performed
     [xvFunc:utils.qpyFuncSearch cfg[`xv]0;
@@ -125,21 +126,4 @@ runModels.createMeta:{[holdoutRun;scores;scoreFunc;xValTime;mdls;modelName]
   metaKeys:`holdoutScore`modelScores`metric`xValTime`holdoutTime`modelLib`mdlType;
   metaVals:(holdoutRun`score;scores;scoreFunc;xValTime;holdoutRun`holdoutTime;modelLib;mdlType);
   metaKeys!metaVals
-  }
-
-// @kind function
-// @category runModels
-// @fileoverview Defaulted fitting and prediction functions for automl cross-validation 
-//  and grid search, both models fit on a training set and return the predicted scores based 
-//  on supplied scoring function.
-// @param func {<} Function taking in parameters and data as input, returns appropriate score
-// @param hyperParam {dict} hyperparameters on which to complete hyperparameter search
-// @data {float[]} data as a ((xtrn;ytrn);(xval;yval)), this structure is defined from the data
-// @return {(bool[];float[])} Value predicted on the validation set and the true value 
-runModels.fitPredict:{[func;hyperParam;data]
-  predicts:$[0h~type hyperParam;
-    func[data;hyperParam 0;hyperParam 1];
-    @[.[func[][hyperParam]`:fit;data 0]`:predict;data[1]0]`
-    ];
-  (predicts;data[1]1)
   }

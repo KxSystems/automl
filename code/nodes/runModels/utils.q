@@ -41,7 +41,7 @@ runModels.i.customModel:{[bestModel;tts;mdls;scoreFunc;cfg]
   customStr:".automl.models.",sv[".";string modelDef],".";
   model:get[customStr,"model"][tts;cfg`seed];
   modelFit:get[customStr,"fit"][tts;model];
-  modelPred:get[customStr,"predict"][tts;fitModel];
+  modelPred:get[customStr,"predict"][tts;modelFit];
   score:scoreFunc[modelPred;tts`ytest];
   `model`score!(modelFit;score)
   }

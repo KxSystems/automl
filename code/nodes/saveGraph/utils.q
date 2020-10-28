@@ -9,7 +9,7 @@
 // @param savePath  {int} Path to where plots are to be saved
 // @return {null} Target distribution plot saved to appropriate location
 saveGraph.i.regTargetPlot:{[params;savePath]
-  target:raze params[`tts;`ytrain`ytest];
+  target:raze params[`ttsObject;`ytrain`ytest];
   utils.plt[`:figure][];
   utils.plt[`:hist][target;`bins pykw 10;`ec pykw"black"];
   saveGraph.i.targetPlot[utils.plt;savePath]
@@ -23,7 +23,7 @@ saveGraph.i.regTargetPlot:{[params;savePath]
 // @param savePath  {int} Path to where plots are to be saved
 // @return {null} Target distribution plot saved to appropriate location
 saveGraph.i.classTargetPlot:{[params;savePath]
-  target:raze params[`tts;`ytrain`ytest];
+  target:raze params[`ttsObject;`ytrain`ytest];
   symMap:params[`symMap];
   countGroup:count each group "i"$target;
   reorderGroup:countGroup til count countGroup;
@@ -132,7 +132,7 @@ saveGraph.i.plotImpact:{[impact;modelName;savePath]
 // @param savePath  {int} Path to where plots are to be saved
 // @return {null} Residual plot saved to appropriate location
 saveGraph.i.plotResiduals:{[residDict;tts;modelName;savePath]
-  resids:residDict[`resids];
+  resids:residDict[`residuals];
   preds :residDict[`preds];
   true  :tts`ytest;
   utils.plt[`:style.use]["seaborn-darkgrid"];

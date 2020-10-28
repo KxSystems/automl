@@ -9,17 +9,18 @@
 //  be consolidated for report/graph generation
 // @param bestModel     {<} The best model fitted 
 // @param hyperParmams  {dict} Hyperparameters used for model (if any)
+// @param modelName     {str} Name of best model
 // @param testScore     {float} Score of model on testing data
 // @param modelMetaData {dict} Meta data from finding best model
 // @return {dict} Consolidated parameters to be passed to generate reports/graphs 
-predictParams.node.function:{[bestModel;hyperParams;testScore;predictions;modelMetaData]
+predictParams.node.function:{[bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData]
   predictParams.printScore[testScore];
-  returnKeys:`bestModel`hyperParams`testScore`analyzeModels`modelMetaData;
-  returnKeys!(bestModel;hyperParams;testScore;analyzeModels;modelMetaData)
+  returnKeys:`bestModel`hyperParams`modelName`testScore`analyzeModel`modelMetaData;
+  returnKeys!(bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData)
   }
 
 // Input information
-predictParams.node.inputs  :`bestModel`hyperParams`testScore`analyzeModel`modelMetaData!"<!f!!"
+predictParams.node.inputs  :`bestModel`hyperParams`modelName`testScore`analyzeModel`modelMetaData!"<!sf!!"
 
 // Output information
 predictParams.node.outputs :"!"

@@ -99,6 +99,7 @@ graph:.ml.connectEdge[graph;`trainTestSplit     ;`output         ;`preprocParams
 
 // Predict_Params
 graph:.ml.connectEdge[graph;`optimizeModels;`bestModel   ;`predictParams;`bestModel]
+graph:.ml.connectEdge[graph;`optimizeModels;`modelName   ;`predictParams;`modelName]
 graph:.ml.connectEdge[graph;`optimizeModels;`testScore   ;`predictParams;`testScore]
 graph:.ml.connectEdge[graph;`optimizeModels;`hyperParams ;`predictParams;`hyperParams]
 graph:.ml.connectEdge[graph;`optimizeModels;`analyzeModel;`predictParams;`analyzeModel]

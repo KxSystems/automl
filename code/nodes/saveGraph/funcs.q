@@ -52,7 +52,7 @@ saveGraph.confusionMatrix:{[params;savePath]
 saveGraph.residualPlot:{[params;savePath]
   residuals:params[`analyzeModel;`residuals];
   modelName:params`modelName;
-  tts      :params`tts;
+  tts      :params`ttsObject;
   saveGraph.i.plotResiduals[residuals;tts;modelName;savePath]
   }
 

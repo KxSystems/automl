@@ -14,7 +14,6 @@
 // @param tts       {dict} Feature and target data split into training and testing set 
 // @return {dict} Score, prediction and best model
 optimizeModels.node.function:{[cfg;mdls;bestModel;modelName;tts]
-  // update when tts gets merged in 
   scoreFunc:cfg[`scf]cfg`problemType;
   mdlLib   :first exec lib from mdls where model=modelName;
   hyperSearch :optimizeModels.hyperSearch[mdlLib;mdls;bestModel;modelName;tts;scoreFunc;cfg];
@@ -25,7 +24,7 @@ optimizeModels.node.function:{[cfg;mdls;bestModel;modelName;tts]
   }
 
 // Input information
-optimizeModels.node.inputs  :`config`models`bestModel`bestScoringName`ttsObject!"!+<s "
+optimizeModels.node.inputs  :`config`models`bestModel`bestScoringName`ttsObject!"!+<s!"
 
 // Output information
-optimizeModels.node.outputs :`bestModel`hyperParams`testScore`analyzeModel!"<!f!"
+optimizeModels.node.outputs :`bestModel`hyperParams`modelName`testScore`analyzeModel!"<!sf!"

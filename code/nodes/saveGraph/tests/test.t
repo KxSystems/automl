@@ -50,7 +50,7 @@ impactDict:colIndex!impactVals
 true:asc 20?10f
 preds:asc 20?10f
 resids:true-preds
-residDict:`preds`resids!(preds;resids)
+residDict:`preds`residuals!(preds;resids)
 
 // Generate analyzeModel dictionary
 analyzeModel:`confMatrix`impact`residuals!(confMatrix;impactDict;residDict)
@@ -67,7 +67,7 @@ symMapNull:()!()
 symMap    :`a`b!0 1
 
 // Generate config dictionaries
-configSave  :enlist[`imagesSavePath]!enlist savePath
+configSave  :enlist[`imagesSavePath]!enlist(savePath;())
 configClass0:configSave,`problemType`saveopt!(`class;0)
 configClass1:configSave,`problemType`saveopt!(`class;1)
 configClass2:configSave,`problemType`saveopt!(`class;2)
@@ -79,12 +79,13 @@ paramDictKeys:`modelName`analyzeModel`sigFeats
 paramDictVals:(modelName;analyzeModel;sigFeats)
 paramDict    :paramDictKeys!paramDictVals
 
-paramDictConfig0   :paramDict,`config`tts`symMap!(configClass0;ttsClass;symMapNull)
-paramDictConfig1   :paramDict,`config`tts`symMap!(configClass1;ttsClass;symMap)
-paramDictConfig2   :paramDict,`config`tts`symMap!(configClass2;ttsClass;symMapNull)
-paramDictConfigReg0:paramDict,`config`tts`symMap!(configReg1  ;ttsReg;symMapNull)
-paramDictConfigReg1:paramDict,`config`tts`symMap!(configReg0  ;ttsReg;symMapNull)
-paramDictConfigReg2:paramDict,`config`tts`symMap!(configReg2  ;ttsReg;symMapNull)
+paramKeys          :`config`ttsObject`symMap
+paramDictConfig0   :paramDict,paramKeys!(configClass0;ttsClass;symMapNull)
+paramDictConfig1   :paramDict,paramKeys!(configClass1;ttsClass;symMap)
+paramDictConfig2   :paramDict,paramKeys!(configClass2;ttsClass;symMapNull)
+paramDictConfigReg0:paramDict,paramKeys!(configReg1  ;ttsReg;symMapNull)
+paramDictConfigReg1:paramDict,paramKeys!(configReg0  ;ttsReg;symMapNull)
+paramDictConfigReg2:paramDict,paramKeys!(configReg2  ;ttsReg;symMapNull)
 
 -1"\nTesting appropriate classification inputs for saveGraph";
 

@@ -125,15 +125,12 @@ dataCheck.i.paramParse:{[fileName;filePath]
 // @return the file paths relevant for saving reports/config etc to file, both as full path format 
 //   and truncated for use in outputs to terminal
 dataCheck.i.pathConstruct:{[cfg]
-  names:`configSavePath`modelsSavePath;
-  if[cfg[`saveopt]=2;names:names,`imagesSavePath`reportSavePath];
+  names:`config`models;
+  if[cfg[`saveopt]=2;names:names,`images`report];
   pname:path,"/",ssr["outputs/",string[cfg`startDate],"/run_",string[cfg`startTime],"/";":";"."];
   paths:pname,/:string[names],\:"/";
-  if[all b:names in key hsym`$pname;
-    paths:dataCheck.i.ssrWindows each paths;
-    // Generate folders in which to place saved information
-    {[fnm;b]$[not b;system"mkdir",$[.z.o like "w*";" ";" -p "],fnm;]}'[paths;b]];
-  names!flip(paths;{count[path]_x}each paths)
+  dictNames:`$string[names],\:"SavePath";
+  dictNames!flip(paths;{count[path]_x}each paths)
   }
 
 // @kind function

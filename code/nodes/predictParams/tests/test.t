@@ -39,6 +39,7 @@ ttsClass:ttsFeat,`ytrain`ytest!(80#tgtClass;-20#tgtClass)
 // Random Forest best model
 randomForestFit:{[mdl;train;test].p.import[`sklearn.ensemble][mdl][][`:fit][train;test]}
 randomForestMdl:randomForestFit[`:RandomForestClassifier;;] . ttsClass`xtrain`ytrain
+modelName      :`RandomForestClassifier
 
 // Generate hyperParams
 hyperParams:`feat1`feat2`feat3!1 2 3
@@ -57,23 +58,22 @@ modelMetaVals:(1?100f;`mdl1`mdl2`mdl3!3?100f;`accuracy;1?1t;1?1t)
 modelMetaData:modelMetaKeys!modelMetaVals
 
 // Generate function to check type of returned objects
-predictParamsTyp:{[bestModel;hyperParams;testScore;analyzeModels;modelMetaData]
-   predParams:.automl.predictParams.node.function[bestModel;hyperParams;testScore;analyzeModels;modelMetaData];
+predictParamsTyp:{[bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData]
+   predParams:.automl.predictParams.node.function[bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData];
    value type each predParams
    }
 
 
 // Generate function to run check return keys of dictionary
-predictParamsKeys:{[bestModel;hyperParams;testScore;analyzeModels;modelMetaData]
-   predParams:.automl.predictParams.node.function[bestModel;hyperParams;testScore;analyzeModels;modelMetaData];
+predictParamsKeys:{[bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData]
+   predParams:.automl.predictParams.node.function[bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData];
    key predParams
    }
 
 // Appropriate returns for tests
-typReturn :105 99 -9 99 99h
-keysReturn:`bestModel`hyperParams`testScore`analyzeModels`modelMetaData
+typReturn :105 99 -11 -9 99 99h
+keysReturn:`bestModel`hyperParams`modelName`testScore`analyzeModel`modelMetaData
 
 -1"\nTesting appropriate inputs for predictParams";
-passingTest[predictParamsTyp ;(randomForestMdl;hyperParams;testScore;analyzeDict;modelMetaData);0b;typReturn]
-passingTest[predictParamsKeys;(randomForestMdl;hyperParams;testScore;analyzeDict;modelMetaData);0b;keysReturn]
-
+passingTest[predictParamsTyp ;(randomForestMdl;hyperParams;modelName;testScore;analyzeDict;modelMetaData);0b;typReturn]
+passingTest[predictParamsKeys;(randomForestMdl;hyperParams;modelName;testScore;analyzeDict;modelMetaData);0b;keysReturn]

@@ -96,8 +96,8 @@ optimizeFunc:{[cfg;mdls;bmdl;bname;tts]
  type each .automl.optimizeModels.node.function[cfg;mdls;bmdl;bname;tts]
   }
 
-classReturn:`bestModel`hyperParams`testScore`analyzeModel!105 99 -9 99h
-regReturn  :`bestModel`hyperParams`testScore`analyzeModel!105 99 -9 99h
+classReturn:`bestModel`hyperParams`modelName`testScore`analyzeModel!105 99 -11 -9 99h
+regReturn  :`bestModel`hyperParams`modelName`testScore`analyzeModel!105 99 -11 -9 99h
 
 -1"\nTesting appropriate optimization inputs for Random forest models";
 
