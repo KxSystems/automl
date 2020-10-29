@@ -166,7 +166,7 @@ featureCreation.nlp.word2vec:{[tokens;cfg;savedModel;filePath]
   gensimModel:.p.import`gensim.models;
   args:`size`window`sg`seed`workers!(size;window;cfg`w2v;cfg`seed;1);
   model:$[savedModel;
-    gensimModel[`:load]utils.ssrwin filePath,"/w2v.model";
+    gensimModel[`:load]utils.ssrWindows filePath,"/w2v.model";
     @[gensimModel[`:Word2Vec] .;(tokens;pykwargs args);{'"\nGensim returned the following error\n",x,
       "\nPlease review your input NLP data\n"}]
     ];

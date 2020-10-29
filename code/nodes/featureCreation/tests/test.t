@@ -14,15 +14,15 @@ nlpData      :([]n?nlpList;n?n;n?1f)
 nlpMultiData :([]n?nlpList;n?nlpList;n?n;n?1f)
 nlpErrData   :([]string each n?`5;n?n;n?1f)
 normData     :([]n?100;n?1f;n?10;n?10f)
-normBulkData :.automl.featureCreation.normal.bulktransform normData
+normBulkData :.automl.featureCreation.normal.bulkTransform normData
 normTruncData:.automl.featureCreation.normal.truncSingleDecomp normData
 
 // Configuration Dictionaries
 cfgKey:`featExtractType`funcs
 freshCfg       :(cfgKey,`aggcols)!`fresh`.ml.fresh.params`x
-nlpCfg         :(cfgKey,`w2v`seed)!`nlp`.automl.featureCreation.normal.default,0,1234
+nlpCfg         :(cfgKey,`w2v`seed)!`nlp`.automl.featureCreation.normal.default,0,42
 normCfg        :cfgKey!`normal`.automl.featureCreation.normal.default
-normBulkCfg    :cfgKey!`normal`.automl.featureCreation.normal.bulktransform
+normBulkCfg    :cfgKey!`normal`.automl.featureCreation.normal.bulkTransform
 normTruncCfg   :cfgKey!`normal`.automl.featureCreation.normal.truncSingleDecomp
 normPandasCfg  :cfgKey!`normal`.automl.pandasFeat
 inappropCfgTyp :cfgKey!`newFeatType`.automl.extractNewFeats

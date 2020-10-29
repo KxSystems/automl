@@ -52,7 +52,7 @@ predictionStoreDict:predictionStoreKeys!predictionStoreVals
 dirCheck:{[preProcParams;predictionStore;saveOpt]
   .automl.pathConstruct.node.function[preProcParams;predictionStore];
   outputDir:.automl.path,"/outputs/2000.01.02/run_00.00.00.00",saveOpt;
-  outputDir:.automl.utils.ssrwin outputDir;
+  outputDir:.automl.utils.ssrWindows outputDir;
   @[{`$system $[.z.o like "w*";"dir ";"ls "],x};outputDir;{`}]
   }
 
@@ -85,5 +85,5 @@ passingTest[pathConstructFunc;(preProcDict2;predictionStoreDict);0b;paramReturn]
 -1"\nRemoving any directories created";
 
 // Remove any folders created
-rmPath:.automl.utils.ssrwin .automl.path,"/outputs/2000.01.02/";
+rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/2000.01.02/";
 system $[.z.o like "w*";"rmdir ",rmPath," /s";"rm -r ",rmPath];

@@ -12,7 +12,7 @@ modelName:`randomForestRegressor
 -1"\nCreating output directory";
 
 // Generate a path to save images to
-savePath:.automl.utils.ssrwin .automl.path,"/outputs/testing/images/"
+savePath:.automl.utils.ssrWindows .automl.path,"/outputs/testing/images/"
 system"mkdir",$[.z.o like "w*";" ";" -p "],savePath;
 
 // Generate confusion matrix
@@ -81,5 +81,5 @@ passingTest[.automl.saveGraph.node.function;paramDictConfigReg2;1b;paramDictConf
 -1"\nRemoving any directories created";
 
 // Remove any directories made
-rmPath:.automl.utils.ssrwin .automl.path,"/outputs/testing/";
+rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/testing/";
 system $[.z.o like "w*";"rmdir ",rmPath," /s";"rm -r ",rmPath];

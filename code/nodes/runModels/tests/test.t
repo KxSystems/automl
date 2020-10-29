@@ -4,7 +4,7 @@
 
 // Default configuration dictionaries
 configKeys   :`seed`tts`gs`xv`prf`scf`hld
-configVals   :(1234;`.ml.traintestsplit;(`.automl.gs.kfshuff;5);(`.automl.xv.kfshuff;5);`.automl.utils.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);.2)
+configVals   :(42;`.ml.traintestsplit;(`.automl.gs.kfshuff;5);(`.ml.xv.kfshuff;5);`.automl.utils.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);.2)
 configDefault:configKeys!configVals
 
 /S 42
@@ -65,20 +65,31 @@ xValDict:{[config;tts;mdl]
   }
 
 // Generate sklearn model tables
-// Custom models not generated because not installed for travis/appveypr
 binarySkl:first select from binaryModelTab where lib=`sklearn
 multiSkl :first select from multiModelTab where lib=`sklearn
 regSkl   :first select from regModelTab where lib=`sklearn
+
+// Generate keras model
+binaryKeras:first select from binaryModelTab where lib=`keras
+multiKeras :first select from multiModelTab where lib=`keras
+regKeras   :first select from regModelTab where lib=`keras
+
 
 // Return dictionaries for each problem type
 binaryDict:`shape`typ!(5 2 16;1h)
 multiDict :`shape`typ!(5 2 16;7h)
 regDict   :`shape`typ!(5 2 16;9h)
 
-// Test appropriate input values for xValSeed
+// Test appropriate sklearn input values for xValSeed
 passingTest[xValDict;(configDefault;ttsClass     ;binarySkl);0b;binaryDict]
 passingTest[xValDict;(configDefault;ttsMultiClass;multiSkl );0b;multiDict]
 passingTest[xValDict;(configDefault;ttsReg       ;regSkl    );0b;regDict]
+
+// Test appropriate keras input values for xValSeed
+regDict[`typ]:8h
+passingTest[xValDict;(configDefault;ttsClass     ;binaryKeras);0b;binaryDict]
+passingTest[xValDict;(configDefault;ttsMultiClass;multiKeras );0b;multiDict]
+passingTest[xValDict;(configDefault;ttsReg       ;regKeras   );0b;regDict]
 
 
 -1"\nTesting appropriate input values for extracting the scoring function";
@@ -94,14 +105,16 @@ passingTest[.automl.runModels.scoringFunc;(configDefault;regModelTab   );0b;`.ml
 // Generate function to get keys of dictionary returned from orderModels
 keyOrderModels:{[tab;score;preds]key .automl.runModels.orderModels[tab;score;preds]}
 
+\S 42
+
 // Generated predicted values
 binaryPreds:5 1 2 16#160?0b
 multiPreds:6 1 2 16#192?0b
 regPreds:8 1 2 16#256?1f
 
-binaryReturn:`LinearSVC`GaussianNB`LogisticRegression`SVC`binarykeras
-multiReturn:`multikeras`RandomForestClassifier`AdaBoostClassifier`MLPClassifier`KNeighborsClassifier`GradientBoostingClassifier
-regReturn:`RandomForestRegressor`LinearRegression`AdaBoostRegressor`MLPRegressor`Lasso`KNeighborsRegressor`regkeras`GradientBoostingRegressor
+binaryReturn:`SVC`LogisticRegression`GaussianNB`LinearSVC`binarykeras
+multiReturn:`MLPClassifier`KNeighborsClassifier`AdaBoostClassifier`multikeras`RandomForestClassifier`GradientBoostingClassifier
+regReturn  :`Lasso`LinearRegression`regkeras`AdaBoostRegressor`GradientBoostingRegressor`MLPRegressor`RandomForestRegressor`KNeighborsRegressor
 
 // Test appropriate inputs values to orderModels
 passingTest[keyOrderModels;(binaryModelTab;`.ml.accuracy;binaryPreds);0b;binaryReturn]

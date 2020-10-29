@@ -16,7 +16,7 @@ pathConstruct.constructPath:{[preProcParams]
   if[saveOpt=2;fileNames,:`images`report];
   pathNames:pathConstruct.pathName[cfg`startTime;cfg`startDate]each string fileNames;
   pathName:path,/:pathNames;
-  pathName:utils.ssrwin each pathName;
+  pathName:utils.ssrWindows each pathName;
   pathConstruct.createFile each pathName;
   }
 

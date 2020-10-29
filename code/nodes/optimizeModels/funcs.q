@@ -6,7 +6,7 @@
 // @category optimizeModels
 // @fileoverview Optimize models using hyperparmeter search procedures if appropriate, 
 //   otherwise predict on test data
-// @param mdlLib    {sym}  Python library model belongs to
+// @param mdlDict   {dict}  Library and function for best model
 // @param mdls      {tab} Information about models applied to the data
 // @param bestModel {<} Fitted best model
 // @param modelName {sym} Name of best model
@@ -14,11 +14,11 @@
 // @param scoreFunc {func} Scoring function
 // @param cfg       {dict} Configuration information relating to the current run of AutoML
 // @return {dict} Score, prediction and best model
-optimizeModels.hyperSearch:{[mdlLib;mdls;bestModel;modelName;tts;scoreFunc;cfg]
-  custom :mdlLib in key models;
+optimizeModels.hyperSearch:{[mdlDict;mdls;bestModel;modelName;tts;scoreFunc;cfg]
+  custom :mdlDict[`mdlLib] in key models;
   exclude:modelName in utils.excludeList; 
   predDict:$[custom|exclude;
-    optimizeModels.scorePred[custom;mdlLib;bestModel;tts];
+    optimizeModels.scorePred[custom;mdlDict;bestModel;tts];
     optimizeModels.paramSearch[mdls;modelName;tts;scoreFunc;cfg]
     ];
   score:get[scoreFunc][predDict`predictions;tts`ytest];
@@ -29,13 +29,13 @@ optimizeModels.hyperSearch:{[mdlLib;mdls;bestModel;modelName;tts;scoreFunc;cfg]
 // @category optimizeModels
 // @fileoverview Predict sklearn and custom models on test data
 // @param custom     {bool} Whether it is a custom model or not
-// @param mdlLib     {sym}  Python library model belongs to
+// @param mdlDict    {dict}  Library and function for best model
 // @param bestModel  {<} Fitted best model
 // @param tts        {dict} Feature and target data split into training and testing set
 // @return {(float[];bool[];int[])} Predicted values  
-optimizeModels.scorePred:{[custom;mdlLib;bestModel;tts]
+optimizeModels.scorePred:{[custom;mdlDict;bestModel;tts]
   pred:$[custom;
-    optimizeModels.scoreCustom[mdlLib];
+    optimizeModels.scoreCustom[mdlDict];
     optimizeModels.scoreSklearn
     ][bestModel;tts];
   `bestModel`hyperParams`predictions!(bestModel;()!();pred)
@@ -44,12 +44,13 @@ optimizeModels.scorePred:{[custom;mdlLib;bestModel;tts]
 // @kind function
 // @category optimizeModels
 // @fileoverview Predict custom models on test data
-// @param mdlLib     {sym}  Python library model belongs to
-// @param bestModel  {<} Fitted best model
-// @param tts        {dict} Feature and target data split into training and testing set
+// @param mdlDict   {dict}  Library and function for best model
+// @param bestModel {<} Fitted best model
+// @param tts       {dict} Feature and target data split into training and testing set
 // @return {(float[];bool[];int[])} Predicted values  
-optimizeModels.scoreCustom:{[mdlLib;bestModel;tts]
-   get[".automl.models",string[mdlLib],".predict"][tts;bestModel]
+optimizeModels.scoreCustom:{[mdlDict;bestModel;tts]
+   customName:"." sv string value mdlDict;
+   get[".automl.models.",customName,".predict"][tts;bestModel]
    }
 
 // @kind function
@@ -79,7 +80,7 @@ optimizeModels.paramSearch:{[mdls;modelName;tts;scoreFunc;cfg]
   numReps:1;
   xTrain:tts`xtrain;
   yTrain:tts`ytrain;
-  mdlFunc:first exec minit from mdls where model=modelName;
+  mdlFunc:utils.bestModelDef[mdls;modelName;`minit];
   scoreCalc:cfg[`prf]mdlFunc;
   // Extract HP dictionary
   hyperDict:hyperParams`hyperDict;
@@ -124,7 +125,7 @@ optimizeModels.confMatrix:{[pred;tts;modelName;cfg]
 // @kind function
 // @category optimizeModels
 // @fileoverview Create impact dictionary
-// @param mdlLib      {sym}  Python library model belongs to
+// @param mdlDict     {dict}  Library and function for best model
 // @param hyperSearch {dict} Values returned from hyperParameter search
 // @param modelName   {str} Name of best model
 // @param tts         {dict} Feature and target data split into training and testing set
@@ -132,10 +133,10 @@ optimizeModels.confMatrix:{[pred;tts;modelName;cfg]
 // @param scoreFunc   {func} Scoring function
 // @param mdls        {tab} Information about models applied to the data
 // return {dict} Impact of each column in the data set 
-optimizeModels.impactDict:{[mdlLib;hyperSearch;modelName;tts;cfg;scoreFunc;mdls]
+optimizeModels.impactDict:{[mdlDict;hyperSearch;modelName;tts;cfg;scoreFunc;mdls]
   bestModel:hyperSearch`bestModel;
   countCols:count first tts`xtest;
-  scores:optimizeModels.i.predShuffle[mdlLib;bestModel;modelName;tts;scoreFunc;cfg`seed;mdls]each til countCols;
+  scores:optimizeModels.i.predShuffle[mdlDict;bestModel;tts;scoreFunc;cfg`seed]each til countCols;
   ordFunc:get string first utils.txtParse[`score;"/code/customization/"]scoreFunc;
   optimizeModels.i.impact[scores;countCols;ordFunc]
   }

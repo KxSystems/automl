@@ -80,7 +80,7 @@ utils.loadNLP:{
 // @fileoverview Used throughout the library to convert linux/mac file names to windows equivalent
 // @param path {str} the linux 'like' path
 // @retutn {str} path modified to be suitable for windows systems
-utils.ssrwin:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
+utils.ssrWindows:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
 
 
 // Python plot functionality
@@ -93,3 +93,26 @@ utils.plt:.p.import`matplotlib.pyplot;
 // @param path {str} the linux 'like' path
 // @retutn {str} path modified to be suitable for windows systems
 utils.ssrsv:{[path] ssr[path;"\\";"/"]}
+
+
+// @kind function
+// @category Utility
+// @fileoverview Split data into train and testing set without shuffling
+// @param feat {tab}   The feature data as a table 
+// @param tgt  {num[]} Numerical vector containing target data
+// @param size {float} Proportion of data to be left as testing
+// @retutn {dict}  Data separated into training and testing sets
+utils.ttsNonShuff:{[feat;tgt;size]
+   `xtrain`ytrain`xtest`ytest!raze(feat;tgt)@\:/:(0,floor n*1-size)_til n:count feat
+    }
+
+// @kind function
+// @category Utility
+// @fileoverview Return column value based on best model
+// @param mdls      {tab}  Models to be applied to feature data
+// @param modelName {sym} The name of the model
+// @param col       {sym} Column to search
+// @return {sym} Column value
+utils.bestModelDef:{[mdls;modelName;col]
+  first?[mdls;enlist(=;`model;enlist modelName);();col]
+  }

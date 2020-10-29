@@ -44,7 +44,7 @@ featureCreation.normal.default:{[feat]
 //  combinations of such columns
 // @param feat {tab} The feature data as a table
 // return {tab} bulk transformtions applied to appropriate columns
-featureCreation.normal.bulktransform:{[feat]
+featureCreation.normal.bulkTransform:{[feat]
   bulkCols:.ml.i.fndcols[feat;"hij"];
   stringFunc:("_multi";"_sum";"_div";"_sub");
   // Name the columns based on the unique combinations

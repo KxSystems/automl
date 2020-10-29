@@ -4,6 +4,8 @@
 
 -1"\nTesting functionality for generation of symbol encoding schema";
 
+\S 42
+
 // Tables for the testing of covering all encoding combinations
 noEncodeTab          :([]10?1f;10?1f;10?5)
 oheEncodeTab         :([]10?1f;10?`a`b`c;10?1f)

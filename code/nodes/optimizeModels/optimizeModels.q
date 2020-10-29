@@ -15,10 +15,10 @@
 // @return {dict} Score, prediction and best model
 optimizeModels.node.function:{[cfg;mdls;bestModel;modelName;tts]
   scoreFunc:cfg[`scf]cfg`problemType;
-  mdlLib   :first exec lib from mdls where model=modelName;
-  hyperSearch :optimizeModels.hyperSearch[mdlLib;mdls;bestModel;modelName;tts;scoreFunc;cfg];
+  mdlDict  :`mdlLib`mdlFunc!utils.bestModelDef[mdls;modelName]each`lib`fnc;
+  hyperSearch :optimizeModels.hyperSearch[mdlDict;mdls;bestModel;modelName;tts;scoreFunc;cfg];
   confMatrix  :optimizeModels.confMatrix[hyperSearch`predictions;tts;modelName;cfg];
-  impactReport:optimizeModels.impactDict[mdlLib;hyperSearch;modelName;tts;cfg;scoreFunc;mdls];
+  impactReport:optimizeModels.impactDict[mdlDict;hyperSearch;modelName;tts;cfg;scoreFunc;mdls];
   residuals   :optimizeModels.residuals[hyperSearch;tts;cfg];
   optimizeModels.consolidateParams[hyperSearch;confMatrix;impactReport;residuals] 
   }

@@ -1,28 +1,6 @@
 \l automl.q
 .automl.loadfile`:init.q
-
-// The following utilities are used to test that a function is returning the expected
-// error message or data, these functions will likely be provided in some form within
-// the test.q script provided as standard for the testing of q and embedPy code
-
-// @kind function
-// @category tests
-// @fileoverview Ensure that a test that is expected to pass, 
-//   does so with an appropriate return
-// @param function {(func;proj)} The function or projection to be tested
-// @param data {any} The data to be applied to the function as an individual item for
-//   unary functions or a list of variables for multivariant functions
-// @param applyType {boolean} Is the function to be applied unary(1b) or multivariant(0b)
-// @param expectedReturn {string} The data expected to be returned on 
-//   execution of the function with the supplied data
-// @return {boolean} Function returned the appropriate output (1b), function failed 
-//   or executed with incorrect output (0b)
-passingTest:{[function;data;applyType;expectedReturn]
-  // Is function to be applied unary or multivariant
-  applyType:$[applyType;@;.];
-  functionReturn:applyType[function;data];
-  expectedReturn~functionReturn
-  }
+.automl.loadfile`:code/tests/utils.q
 
 // Generate input models to be saved 
 
@@ -30,7 +8,7 @@ passingTest:{[function;data;applyType;expectedReturn]
 
 // Generate a path to save images to
 filePath:"/outputs/testing/models/"
-savePath:.automl.utils.ssrwin .automl.path,filePath
+savePath:.automl.utils.ssrWindows .automl.path,filePath
 system"mkdir",$[.z.o like"w*";" ";" -p "],savePath;
 
 // Generate model meta data
@@ -94,5 +72,5 @@ passingTest[.automl.saveModels.node.function;paramNlp2;1b;(::)]
 -1"\nRemoving any directories created";
 
 // Remove any directories made
-rmPath:.automl.utils.ssrwin .automl.path,"/outputs/testing/";
+rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/testing/";
 system"rm -r ",rmPath;

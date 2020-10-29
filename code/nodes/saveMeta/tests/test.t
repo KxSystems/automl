@@ -7,7 +7,7 @@
 -1"\nCreating output directory";
 // Generate a path to save images to
 filePath:"/outputs/testing/configs"
-savePath:.automl.utils.ssrwin .automl.path,filePath
+savePath:.automl.utils.ssrWindows .automl.path,filePath
 system"mkdir",$[.z.o like"w*";" ";" -p "],savePath;
 
 // Generate model meta data
@@ -38,5 +38,5 @@ passingTest[metaCheck;(paramDict2;savePath);0b;raze paramDict2]
 -1"\nRemoving any directories created";
 
 // Remove any directories made
-rmPath:.automl.utils.ssrwin .automl.path,"/outputs/testing/";
+rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/testing/";
 system"rm -r ",rmPath;

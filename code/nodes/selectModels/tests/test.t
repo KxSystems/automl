@@ -2,10 +2,6 @@
 .automl.loadfile`:init.q
 .automl.loadfile`:code/tests/utils.q
 
--1"\nTesting that keras models are removed when not appropriate to use";
-
--1"\nThe below tests assume that keras is not installed in the given environment";
-
 // Suitable configuration for testing of configuration update
 configReg     :enlist[`problemType]!enlist`reg
 configClass   :enlist[`problemType]!enlist`class
@@ -33,14 +29,15 @@ ttsClass     :`ytrain`ytest!(80#tgtClass     ;-20#tgtClass)
 ttsMultiClass:`ytrain`ytest!(80#tgtMultiClass;-20#tgtMultiClass)
 ttsUnbalanced:`ytrain`ytest!(80#tgtUnbalanced;-20#tgtUnbalanced)
 
-// Return model tables
-regModelReturn   :delete from regModelTab where lib=`keras
-binaryModelReturn:delete from binaryModelTab where lib=`keras
+-1"\nTesting that appropriate models are returned";
+
+// Return value for unbalanced dataset
 multiModelReturn :delete from multiModelTab where lib=`keras
 
-passingTest[.automl.selectModels.targetKeras;(regModelTab   ;ttsReg       ;tgtReg       );0b;regModelReturn]
-passingTest[.automl.selectModels.targetKeras;(binaryModelTab;ttsClass     ;tgtClass     );0b;binaryModelReturn]
-passingTest[.automl.selectModels.targetKeras;(multiModelTab ;ttsMultiClass;tgtMultiClass);0b;multiModelReturn]
+// These tests assume that keras is installed in the environment
+passingTest[.automl.selectModels.targetKeras;(regModelTab   ;ttsReg       ;tgtReg       );0b;regModelTab]
+passingTest[.automl.selectModels.targetKeras;(binaryModelTab;ttsClass     ;tgtClass     );0b;binaryModelTab]
+passingTest[.automl.selectModels.targetKeras;(multiModelTab ;ttsMultiClass;tgtMultiClass);0b;multiModelTab]
 passingTest[.automl.selectModels.targetKeras;(multiModelTab ;ttsUnbalanced;tgtUnbalanced);0b;multiModelReturn]
 
 -1"\nTesting that the number of target values < 10000 does not update the model table";

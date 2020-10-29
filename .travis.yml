@@ -27,7 +27,10 @@ install:
   - if [[ "x$QLIC_KC" != "x" ]]; then
       echo -n $QLIC_KC |base64 --decode > q/kc.lic;
       pip -q install -r requirements.txt;
+      pip install keras;
+      pip install pytorch;
       pip install gensim;
+      pip install sobol-seq;
     fi
 beforescript:
   - IMPLEMENTATION=$(if [[ "x$TRAVIS_TAG" == "x" ]]; then echo $TRAVIS_BRANCH-$TRAVIS_COMMIT; else echo $TRAVIS_TAG; fi;)
@@ -36,6 +39,9 @@ beforescript:
 script:
 - echo "Preparing version $TRAVIS_BRANCH-$TRAVIS_COMMIT"
 - git clone https://github.com/KxSystems/ml.git
+- git clone https://github.com/KxSystems/nlp.git
+- pip -q install -r nlp/requirements.txt
+- python -m spacy download en
 - tar czf automl_$TRAVIS_OS_NAME-$TRAVIS_BRANCH.tgz *.q code/ requirements.txt LICENSE README.md
 - echo "Packaged as automl_$TRAVIS_OS_NAME-$TRAVIS_BRANCH.zip"
 -  if [[ "x$QLIC_KC" != "x" ]]; then

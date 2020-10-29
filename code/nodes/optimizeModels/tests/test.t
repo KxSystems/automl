@@ -35,18 +35,29 @@ regModelTab  :update minit:.automl.modelGeneration.mdlFunc .'flip(lib;fnc;model)
 classModelTab:update minit:.automl.modelGeneration.mdlFunc .'flip(lib;fnc;model)from classModelTab;
 
 // Random Forest best model
-randomForestFit      :{[mdl;train;test].p.import[`sklearn.ensemble][mdl][][`:fit][train;test]}
-randomForestClassMdl :randomForestFit[`:RandomForestClassifier;;] . ttsClass`xtrain`ytrain
-randomForestRegMdl   :randomForestFit[`:RandomForestRegressor ;;] . ttsReg`xtrain`ytrain
+randomForestMdl      :{[mdl;train;test].p.import[`sklearn.ensemble][mdl][][`:fit][train;test]}
+randomForestClassFit :randomForestMdl[`:RandomForestClassifier;;] . ttsClass`xtrain`ytrain
+randomForestRegFit   :randomForestMdl[`:RandomForestRegressor ;;] . ttsReg`xtrain`ytrain
 randomForestClassName:`RandomForestClassifier
 randomForestRegName  :`RandomForestRegressor
 
 // Knn best model
-knnFit      :{[mdl;train;test].p.import[`sklearn.neighbors][mdl][][`:fit][train;test]}
-knnClassMdl :knnFit[`:KNeighborsClassifier;;] . ttsClass`xtrain`ytrain
-knnRegMdl   :knnFit[`:KNeighborsRegressor ;;] . ttsReg`xtrain`ytrain
+knnMdl      :{[mdl;train;test].p.import[`sklearn.neighbors][mdl][][`:fit][train;test]}
+knnClassFit :knnMdl[`:KNeighborsClassifier;;] . ttsClass`xtrain`ytrain
+knnRegFit   :knnMdl[`:KNeighborsRegressor ;;] . ttsReg`xtrain`ytrain
 knnClassName:`KNeighborsClassifier
 knnRegName  :`KNeighborsRegressor
+
+// Keras best model
+kerasClass    :.automl.models.keras.binary
+kerasReg      :.automl.models.keras.reg
+kerasClassMdl :kerasClass[`model][ttsClass;1234]
+kerasRegMdl   :kerasReg[`model][ttsReg;1234]
+kerasClassFit :kerasClass[`fit][ttsClass;kerasClassMdl]
+kerasRegFit   :kerasReg[`fit][ttsReg;kerasRegMdl]
+kerasClassName:`binarykeras
+kerasRegName  :`regkeras
+
 
 // Generate function to check the types of element returned in the dictionary
 optimizeFunc:{[cfg;mdls;bmdl;bname;tts]
@@ -59,22 +70,32 @@ regReturn  :`bestModel`hyperParams`modelName`testScore`analyzeModel!105 99 -11 -
 -1"\nTesting appropriate optimization inputs for Random forest models";
 
 // Test appropriate inputs for reg and class problems
-passingTest[optimizeFunc;(configReg,configGrid    ;regModelTab  ;randomForestRegMdl  ;randomForestRegName  ;ttsReg  );0b;regReturn]
-passingTest[optimizeFunc;(configReg,configRandom  ;regModelTab  ;randomForestRegMdl  ;randomForestRegName  ;ttsReg  );0b;regReturn]
-passingTest[optimizeFunc;(configReg,configSobol   ;regModelTab  ;randomForestRegMdl  ;randomForestRegName  ;ttsReg  );0b;regReturn]
-passingTest[optimizeFunc;(configClass,configGrid  ;classModelTab;randomForestClassMdl;randomForestClassName;ttsClass);0b;classReturn]
-passingTest[optimizeFunc;(configClass,configRandom;classModelTab;randomForestClassMdl;randomForestClassName;ttsClass);0b;classReturn]
-passingTest[optimizeFunc;(configClass,configSobol ;classModelTab;randomForestClassMdl;randomForestClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configReg,configGrid    ;regModelTab  ;randomForestRegFit  ;randomForestRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configReg,configRandom  ;regModelTab  ;randomForestRegFit  ;randomForestRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configReg,configSobol   ;regModelTab  ;randomForestRegFit  ;randomForestRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configClass,configGrid  ;classModelTab;randomForestClassFit;randomForestClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configClass,configRandom;classModelTab;randomForestClassFit;randomForestClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configClass,configSobol ;classModelTab;randomForestClassFit;randomForestClassName;ttsClass);0b;classReturn]
 
 -1"\nTesting appropriate optimization inputs for Knearest neighbor models";
 
 // Test appropriate inputs for reg and class problems
-passingTest[optimizeFunc;(configReg,configGrid    ;regModelTab  ;knnRegMdl  ;knnRegName  ;ttsReg  );0b;regReturn]
-passingTest[optimizeFunc;(configReg,configRandom  ;regModelTab  ;knnRegMdl  ;knnRegName  ;ttsReg  );0b;regReturn]
-passingTest[optimizeFunc;(configReg,configSobol   ;regModelTab  ;knnRegMdl  ;knnRegName  ;ttsReg  );0b;regReturn]
-passingTest[optimizeFunc;(configClass,configGrid  ;classModelTab;knnClassMdl;knnClassName;ttsClass);0b;classReturn]
-passingTest[optimizeFunc;(configClass,configRandom;classModelTab;knnClassMdl;knnClassName;ttsClass);0b;classReturn]
-passingTest[optimizeFunc;(configClass,configSobol ;classModelTab;knnClassMdl;knnClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configReg,configGrid    ;regModelTab  ;knnRegFit  ;knnRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configReg,configRandom  ;regModelTab  ;knnRegFit  ;knnRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configReg,configSobol   ;regModelTab  ;knnRegFit  ;knnRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configClass,configGrid  ;classModelTab;knnClassFit;knnClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configClass,configRandom;classModelTab;knnClassFit;knnClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configClass,configSobol ;classModelTab;knnClassFit;knnClassName;ttsClass);0b;classReturn]
+
+-1"\nTesting appropriate optimization inputs for Keras models";
+
+// Test appropriate inputs for reg and class problems, assuming that keras is installed in the environment
+passingTest[optimizeFunc;(configReg,configGrid    ;regModelTab  ;kerasRegFit  ;kerasRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configReg,configRandom  ;regModelTab  ;kerasRegFit  ;kerasRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configReg,configSobol   ;regModelTab  ;kerasRegFit  ;kerasRegName  ;ttsReg  );0b;regReturn]
+passingTest[optimizeFunc;(configClass,configGrid  ;classModelTab;kerasClassFit;kerasClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configClass,configRandom;classModelTab;kerasClassFit;kerasClassName;ttsClass);0b;classReturn]
+passingTest[optimizeFunc;(configClass,configSobol ;classModelTab;kerasClassFit;kerasClassName;ttsClass);0b;classReturn]
 
 -1"\nTesting inappropriate optimization inputs";
 
@@ -84,4 +105,4 @@ inappConfig:configDefault,enlist[`hp]!enlist `inappType
 // Expected return error
 errReturn:"Unsupported hyperparameter generation method";
 
-failingTest[optimizeFunc;(configReg,inappConfig;regModelTab;randomForestRegMdl;randomForestRegName;ttsReg);0b;errReturn]
+failingTest[optimizeFunc;(configReg,inappConfig;regModelTab;randomForestRegFit;randomForestRegName;ttsReg);0b;errReturn]
