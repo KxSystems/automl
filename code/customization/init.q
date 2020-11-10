@@ -9,3 +9,4 @@ models.init:()
 // Attempt to load keras/pytorch functionality
 check.loadkeras[]
 check.loadtorch[]
+check.loadlatex[]

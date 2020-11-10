@@ -68,7 +68,7 @@ runModels.xValSeed:{[tts;cfg;mdl]
 runModels.scoringFunc:{[cfg;mdls]
   problemType:$[`reg in distinct mdls`typ;`reg;`class];
   scoreFunc:cfg[`scf]problemType;
-  -1"\nScores for all models, using ",string scoreFunc;
+  -1"\nScores for all models using ",string[scoreFunc],":";
   scoreFunc
   }
 
@@ -98,7 +98,7 @@ runModels.orderModels:{[mdls;scoreFunc;predicts]
 runModels.bestModelFit:{[scores;tts;mdls;scoreFunc;cfg]
   holdoutTimeStart:.z.T;
   bestModel:first key scores;
-  -1"\nBest scoring model = ",string bestModel;
+  -1"\nBest scoring model = ",string[bestModel],"\n";
   modelLib:first exec lib from mdls where model=bestModel;
   fitScore:$[modelLib in key models;
     runModels.i.customModel[bestModel;tts;mdls;scoreFunc;cfg];
@@ -122,7 +122,7 @@ runModels.bestModelFit:{[scores;tts;mdls;scoreFunc;cfg]
 // @return {dict} Metadata to be contained within the end reports
 runModels.createMeta:{[holdoutRun;scores;scoreFunc;xValTime;mdls;modelName]
   modelLib:first exec lib from mdls where model=modelName;
-  mdlType  :first exec typ from mdls where model=modelName;
+  mdlType :first exec typ from mdls where model=modelName;
   metaKeys:`holdoutScore`modelScores`metric`xValTime`holdoutTime`modelLib`mdlType;
   metaVals:(holdoutRun`score;scores;scoreFunc;xValTime;holdoutRun`holdoutTime;modelLib;mdlType);
   metaKeys!metaVals

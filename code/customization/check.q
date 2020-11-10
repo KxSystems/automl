@@ -23,3 +23,13 @@ check.loadtorch:{
      "PyTorch models will be excluded from model evaluation.";]
   ]
   }
+
+check.loadlatex:{
+  $[0~checkimport[2];
+    [loadfile`:code/nodes/saveReport/latex/latex.p;
+     loadfile`:code/nodes/saveReport/latex/latex.q
+    ];
+    [-1"Requirements for Latex report generation not satisfied. ",
+     "Reports will be generated using reportlab.";]
+  ]
+  }

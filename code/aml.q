@@ -43,9 +43,3 @@ run:{[graph;xdata;ydata;ftype;ptype;params]
   .ml.execPipeline .ml.createPipeline[graph];
   automlConfig`startDate`startTime
   }[graph]
-
-
-// currently required in order to pass data check  
-prep.i.default:{x}
-xv.fitpredict:{x}
-.ml.ttsnonshuff:{x}

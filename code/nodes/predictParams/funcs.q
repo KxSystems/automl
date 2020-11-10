@@ -8,5 +8,5 @@
 // @param score {float} Score of model on testing data
 // return {null} Print score of model
 predictParams.printScore:{[score]
-  -1"\nBest model fitting now complete - final score on testing set = ",string score;
+  -1"\nBest model fitting now complete - final score on testing set = ",string[score],"\n";
   }

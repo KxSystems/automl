@@ -14,7 +14,6 @@ utils.txtParse:{[nameMap;filePath]
   utils.readFile each(!).("S*";"|")0:hsym fileName
   }
 
-
 // @kind function
 // @category utility
 // @fileoverview Extraction of data from a file
@@ -23,7 +22,6 @@ utils.txtParse:{[nameMap;filePath]
 utils.readFile:{[filePath]
   key(!).("S=;")0:filePath
   }
-
 
 // @kind function
 // @category utility
@@ -34,7 +32,6 @@ utils.files:`class`reg`score!("models/modelConfig/classmodels.txt";"models/model
 // @category utility
 //List of models to exclude
 utils.excludeList:`GaussianNB`LinearRegression;
-
 
 // @kind function
 // @category Utility
@@ -80,8 +77,9 @@ utils.loadNLP:{
 // @fileoverview Used throughout the library to convert linux/mac file names to windows equivalent
 // @param path {str} the linux 'like' path
 // @retutn {str} path modified to be suitable for windows systems
-utils.ssrWindows:{[path]$[.z.o like "w*";ssr[path;"/";"\\"];path]}
-
+utils.ssrWindows:{[path]
+  $[.z.o like "w*";ssr[path;"/";"\\"];path]
+  }
 
 // Python plot functionality
 utils.plt:.p.import`matplotlib.pyplot;
@@ -92,8 +90,9 @@ utils.plt:.p.import`matplotlib.pyplot;
 //  this is to keep linux/windows consistent
 // @param path {str} the linux 'like' path
 // @retutn {str} path modified to be suitable for windows systems
-utils.ssrsv:{[path] ssr[path;"\\";"/"]}
-
+utils.ssrsv:{[path]
+  ssr[path;"\\";"/"]
+  }
 
 // @kind function
 // @category Utility
@@ -103,8 +102,8 @@ utils.ssrsv:{[path] ssr[path;"\\";"/"]}
 // @param size {float} Proportion of data to be left as testing
 // @retutn {dict}  Data separated into training and testing sets
 utils.ttsNonShuff:{[feat;tgt;size]
-   `xtrain`ytrain`xtest`ytest!raze(feat;tgt)@\:/:(0,floor n*1-size)_til n:count feat
-    }
+  `xtrain`ytrain`xtest`ytest!raze(feat;tgt)@\:/:(0,floor n*1-size)_til n:count feat
+  }
 
 // @kind function
 // @category Utility

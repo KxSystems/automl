@@ -14,6 +14,7 @@ saveGraph.node.function:{[params]
   saveGraph.targetPlot[params;savePath];
   saveGraph.resultPlot[params;savePath]
   saveGraph.impactPlot[params;savePath];
+  saveGraph.dataSplitPlot[params;savePath];
   params
   }
 
