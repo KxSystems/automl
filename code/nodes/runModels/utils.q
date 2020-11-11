@@ -35,7 +35,7 @@ runModels.i.customModel:{[bestModel;tts;mdls;scoreFunc;cfg]
   modelLib:first exec lib from mdls where model=bestModel;
   mdlType  :first exec typ from mdls where model=bestModel;
   if[(`keras~modelLib)&`multi~mdlType;
-    tts[`ytrain`ytest]:runModels.i.prepMultiTarget tts
+    tts[`ytrain]:runModels.i.prepMultiTarget tts
     ];
   modelDef:utils.bestModelDef[mdls;bestModel]each`lib`fnc;
   customStr:".automl.models.",sv[".";string modelDef],".";
@@ -52,7 +52,7 @@ runModels.i.customModel:{[bestModel;tts;mdls;scoreFunc;cfg]
 // @param tts       {dict} Feature and target data split into training and testing set
 // @return {dict} Preprocessed target values
 runModels.i.prepMultiTarget:{[tts]
-  models.i.npArray flip@'value@'.ml.i.onehot1 each tts`ytrain`ytest
+  models.i.npArray flip value .ml.i.onehot1 tts`ytrain
   }
 
 
