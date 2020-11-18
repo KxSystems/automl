@@ -9,7 +9,7 @@
 // @return {dict} Image filenames for report generation
 saveReport.reportDict:{[params]
   config:params`config;
-  saveImage:config[`imagesSavePath][0];
+  saveImage:config`imagesSavePath;
   savedPlots:saveImage,/:string key hsym`$saveImage;
   plotNames:$[`class~config`problemType;`conf`data`impact;`data`impact`reg],`target;
   savedPlots:enlist[`savedPlots]!enlist plotNames!savedPlots;
@@ -22,7 +22,7 @@ saveReport.reportDict:{[params]
 // @param params {dict} All data generated during the process
 // @return {null} Report saved to appropriate location 
 saveReport.saveReport:{[params]
-  savePath :params[`config;`reportSavePath]0;
+  savePath :params[`config;`reportSavePath];
   modelName:params`modelName;
   filePath:savePath,"Report_",string modelName;
   -1"\nSaving down procedure report to ",savePath;

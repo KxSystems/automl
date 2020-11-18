@@ -11,7 +11,7 @@
 saveModels.node.function:{[params]
   saveOpt:params[`config]`saveopt;
   if[0~saveOpt;:(::)];
-  savePath:params[`config;`modelsSavePath]0;
+  savePath:params[`config;`modelsSavePath];
   saveModels.saveModel[params;savePath];
   saveModels.saveW2V[params;savePath];
   }

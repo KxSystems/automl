@@ -6,10 +6,21 @@
 
 // Generate data for preProc params 
 
+// Generate saved paths for models
+savePath:.automl.path,"/outputs/testing/"
+fileNames1:`config`models
+fileNames2:fileNames1,`images`report
+savePath1:(savePath,/:string[fileNames1],\:"/")
+savePath2:(savePath,/:string[fileNames2],\:"/")
+
 // Generate Configuration dictionaries
-configSave0:`saveopt`startTime`startDate!(0;"t"$0;"d"$1)
-configSave1:`saveopt`startTime`startDate!(1;"t"$1;"d"$1)
-configSave2:`saveopt`startTime`startDate!(2;"t"$2;"d"$1)
+configKeys0:enlist[`saveopt]
+configKeys1:`$string[fileNames1],\:"SavePath"
+configKeys2:`$string[fileNames2],\:"SavePath"
+
+configSave0:configKeys0!enlist 0 
+configSave1:(configKeys0!enlist[1]),configKeys1!savePath1
+configSave2:(configKeys0!enlist[2]),configKeys2!savePath2
 
 // Generate preProcParams dictionary
 preProcKeys:`dataDescription`symMap`creationTime`sigFeats`featModel
@@ -51,9 +62,11 @@ predictionStoreDict:predictionStoreKeys!predictionStoreVals
 // Generate function to check that all directories are created 
 dirCheck:{[preProcParams;predictionStore;saveOpt]
   .automl.pathConstruct.node.function[preProcParams;predictionStore];
-  outputDir:.automl.path,"/outputs/2000.01.02/run_00.00.00.00",saveOpt;
-  outputDir:.automl.utils.ssrWindows outputDir;
-  @[{`$system $[.z.o like "w*";"dir ";"ls "],x};outputDir;{`}]
+  outputDir:.automl.path,"/outputs/testing/";
+  returns:key hsym `$outputDir;
+  if[0~count returns;returns:`];
+  if[0<>saveOpt;@[{system$[.z.o like "w*";"rmdir ",x," /s";"rm -r ",x]};outputDir;{`}]];
+  returns
   }
 
 returnDir0:`
@@ -61,9 +74,9 @@ returnDir1:`config`models
 returnDir2:`config`images`models`report
 
 // Testing all appropriate directories were created
-passingTest[dirCheck;(preProcDict0;predictionStoreDict;"0");0b;`]
-passingTest[dirCheck;(preProcDict1;predictionStoreDict;"1");0b;returnDir1]
-passingTest[dirCheck;(preProcDict2;predictionStoreDict;"2");0b;returnDir2]
+passingTest[dirCheck;(preProcDict0;predictionStoreDict;0);0b;`]
+passingTest[dirCheck;(preProcDict1;predictionStoreDict;1);0b;returnDir1]
+passingTest[dirCheck;(preProcDict2;predictionStoreDict;2);0b;returnDir2]
 
 -1"\nTesting appropriate inputs for pathConstruct";
 
@@ -85,5 +98,5 @@ passingTest[pathConstructFunc;(preProcDict2;predictionStoreDict);0b;paramReturn]
 -1"\nRemoving any directories created";
 
 // Remove any folders created
-rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/2000.01.02/";
+rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/testing/";
 system $[.z.o like "w*";"rmdir ",rmPath," /s";"rm -r ",rmPath];

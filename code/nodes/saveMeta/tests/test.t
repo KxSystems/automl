@@ -14,7 +14,7 @@ system"mkdir",$[.z.o like"w*";" ";" -p "],savePath;
 mdlMetaData:`modelLib`mdlType!`sklearn`class
 
 // Generate config data
-configSave :enlist[`configSavePath]!enlist(savePath;0)
+configSave :enlist[`configSavePath]!enlist savePath
 configDict0:configSave,`saveopt`featExtractType`problemType!(0;`normal;`reg)
 configDict1:configSave,`saveopt`featExtractType`problemType!(1;`fresh ;`class)
 configDict2:configSave,`saveopt`featExtractType`problemType!(2;`nlp   ;`reg)

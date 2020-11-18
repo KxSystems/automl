@@ -48,9 +48,9 @@ dataCheck.i.getDict:{[fileName]
 // @category dataCheckUtility
 // @fileoverview retrieve default parameters and update with custom information
 // @param cfg  {dict} Configuration information assigned by the user and related to the current run
-// @param feat {tab} The feature data as a table
-// @param ptyp {sym} problem type being solved (`nlp/`normal/`fresh)
-/. returns > configuration dictionary modified with any custom information
+// @param feat {tab}  The feature data as a table
+// @param ptyp {sym}  problem type being solved (`nlp/`normal/`fresh)
+// @return     {dict} configuration dictionary modified with any custom information
 dataCheck.i.getCustomConfig:{[feat;cfg;ptyp]
   d:$[ptyp=`fresh ;dataCheck.i.freshDefault[];
       ptyp=`normal;dataCheck.i.normalDefault[];
@@ -79,30 +79,30 @@ dataCheck.i.getCustomConfig:{[feat;cfg;ptyp]
 // @category dataCheckUtility
 // @fileoverview default parameters used in the application of 'FRESH' AutoML
 // @return {dict} default dictionary which will be used if no user updates are supplied
-dataCheck.i.freshDefault:{`aggcols`funcs`xv`gs`rs`hp`trials`prf`scf`seed`saveopt`hld`tts`sz`sigFeats!
+dataCheck.i.freshDefault:{`aggcols`funcs`xv`gs`rs`hp`trials`prf`scf`seed`saveopt`hld`tts`sz`sigFeats`saveModelName!
   ({first cols x};`.ml.fresh.params;(`.ml.xv.kfshuff;5);(`.automl.gs.kfshuff;5);
   (`.automl.rs.kfshuff;5);`grid;256;`.automl.utils.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);`rand_val;2;
-   0.2;`.automl.utils.ttsNonShuff;0.2;`.automl.featureSignificance.significance)
+   0.2;`.automl.utils.ttsNonShuff;0.2;`.automl.featureSignificance.significance;`)
   }
 
 // @kind function
 // @category dataCheckUtility
 // @fileoverview default parameters used in the application of 'normal' AutoML 
 // @return {dict} default dictionary which will be used if no user updates are supplied
-dataCheck.i.normalDefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats!
+dataCheck.i.normalDefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats`saveModelName!
   ((`.ml.xv.kfshuff;5);(`.automl.gs.kfshuff;5);(`.automl.rs.kfshuff;5);`grid;256;`.automl.featureCreation.normal.default;
    `.automl.utils.fitPredict; `class`reg!(`.ml.accuracy;`.ml.mse);
-   `rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.featureSignificance.significance)
+   `rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.featureSignificance.significance;`)
   }
 
 // @kind function
 // @category dataCheckUtility
 // @fileoverview default parameters used in the application of 'NLP' AutoML
 // @return {dict} default dictionary which will be used if no user updates are supplied
-dataCheck.i.nlpDefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats`w2v!
+dataCheck.i.nlpDefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`sz`sigFeats`w2v`saveModelName!
   ((`.ml.xv.kfshuff;5);(`.automl.gs.kfshuff;5);(`.automl.rs.kfshuff;5);`grid;256;`.automl.featureCreation.normal.default;
    `.automl.utils.fitPredict;`class`reg!(`.ml.accuracy;`.ml.mse);
-   `rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.featureSignificance.significance;0)
+   `rand_val;2;0.2;`.ml.traintestsplit;0.2;`.automl.featureSignificance.significance;0;`)
   }
 
 // @kind function
@@ -110,7 +110,7 @@ dataCheck.i.nlpDefault:{`xv`gs`rs`hp`trials`funcs`prf`scf`seed`saveopt`hld`tts`s
 // @fileoverview parse the hyperparameter flat file
 // @param fileName {char[]} name of the file to be parsed
 // @param filePath {char[]} file path to the hyperparmeter file relative to `.automl.path`
-/. returns  > dictionary mapping model name to possible hyper parameters 
+// @returns  > dictionary mapping model name to possible hyper parameters 
 dataCheck.i.paramParse:{[fileName;filePath]
   key[k]!(value@){(!).("S=;")0:x}each k:(!).("S*";"|")0:hsym`$.automl.path,filePath,fileName
   }
@@ -127,9 +127,36 @@ dataCheck.i.paramParse:{[fileName;filePath]
 dataCheck.i.pathConstruct:{[cfg]
   names:`config`models;
   if[cfg[`saveopt]=2;names:names,`images`report];
-  pname:path,"/",ssr["outputs/",string[cfg`startDate],"/run_",string[cfg`startTime],"/";":";"."];
+  pname:$[`~cfg`saveModelName;dataCheck.i.dateTimePath;dataCheck.i.customPath]cfg;
   paths:pname,/:string[names],\:"/";
   dictNames:`$string[names],\:"SavePath";
-  dictNames!flip(paths;{count[path]_x}each paths)
+  dictNames!paths
+  }
+
+// @kind function
+// @category dataCheckUtility
+// @fileoverview Construct save path using date and time of the run
+// @param cfg {dict} Configuration information assigned by the user and related to the current run
+// @return {str} Path constructed based on run date and time 
+dataCheck.i.dateTimePath:{[cfg]
+  date:string cfg`startDate;
+  time:string cfg`startTime;
+  path,"/",ssr["outputs/",date,"/run_",time,"/";":";"."]
+  }
+
+// @kind function
+// @category dataCheckUtility
+// @fileoverview Construct save path using custom model name
+// @param cfg {dict} Configuration information assigned by the user and related to the current run
+// @return {str} Path constructed based on user defined custom model name
+dataCheck.i.customPath:{[cfg]
+  modelName:cfg[`saveModelName];
+  modelName:$[10h=type modelName;modelName;
+   -11h=type modelName;string modelName;
+   '"unsupported input type, model name must be a symbol atom or string"];
+  filePath:path,"/outputs/namedModels/",modelName,"/";
+  if[count key hsym`$filePath;
+    '"This save path already exists, please choose another model name"];
+  filePath
   }
 

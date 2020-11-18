@@ -46,7 +46,7 @@ symMapNull:()!()
 symMap    :`a`b!0 1
 
 // Generate config dictionaries
-configSave  :`imagesSavePath`sz!((savePath;());0.2)
+configSave  :`imagesSavePath`sz!(savePath;0.2)
 configClass0:configSave,`problemType`saveopt!(`class;0)
 configClass1:configSave,`problemType`saveopt!(`class;1)
 configClass2:configSave,`problemType`saveopt!(`class;2)

@@ -16,8 +16,8 @@ genCfg:{[start;feat;ftype;ptype]
   out:"/outputs/testing/";
   cfg:start,`featExtractType`problemType!(ftype;ptype);
   cfg:.automl.dataCheck.updateConfig[feat;cfg];  
-  cfg[`reportSavePath]:(.automl.path,rep;rep:out,"report/");
-  cfg[`imagesSavePath]:(.automl.path,img;img:"/code/nodes/saveReport/tests/images/");
+  cfg[`reportSavePath]:(.automl.path,out,"report/");
+  cfg[`imagesSavePath]:(.automl.path,"/code/nodes/saveReport/tests/images/");
   cfg  
   }[start]
   

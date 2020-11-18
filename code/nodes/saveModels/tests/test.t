@@ -15,7 +15,7 @@ system"mkdir",$[.z.o like"w*";" ";" -p "],savePath;
 mdlMetaData:enlist[`modelLib]!enlist `sklearn
 
 // Gnerate normal feature extraction config
-configSave :enlist[`modelsSavePath]!enlist(savePath;())
+configSave :enlist[`modelsSavePath]!enlist savePath
 configNormal0:configSave,`featExtractType`saveopt!(`normal;0)
 configNormal1:configSave,`featExtractType`saveopt!(`normal;1)
 configNormal2:configSave,`featExtractType`saveopt!(`normal;2)
