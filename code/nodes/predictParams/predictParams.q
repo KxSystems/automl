@@ -14,7 +14,6 @@
 // @param modelMetaData {dict} Meta data from finding best model
 // @return {dict} Consolidated parameters to be passed to generate reports/graphs 
 predictParams.node.function:{[bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData]
-  predictParams.printScore[testScore];
   returnKeys:`bestModel`hyperParams`modelName`testScore`analyzeModel`modelMetaData;
   returnKeys!(bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData)
   }

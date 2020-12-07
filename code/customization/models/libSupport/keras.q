@@ -127,6 +127,10 @@ models.i.tf:.p.import[`tensorflow];
 models.i.tfType:$[2>"I"$first models.i.tf[`:__version__]`;`:set_random_seed;`:random.set_seed];
 models.i.tensorflowSeed:models.i.tf models.i.tfType;
 
+p)def tfWarnings(warn):
+  import os
+  os.environ['TF_CPP_MIN_LOG_LEVEL'] = warn
+
 // allow multiprocess
 .ml.loadfile`:util/mproc.q
 if[0>system"s";

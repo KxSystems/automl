@@ -11,7 +11,7 @@ targMulti:asc 100?`a`b`c
 targReg  :asc 100?1f
 
 // Configuration
-cfg:enlist[`sigFeats]!enlist`.automl.featureSignificance.significance
+cfg:enlist[`significantFeatures]!enlist`.automl.featureSignificance.significance
 
 // Main node function
 

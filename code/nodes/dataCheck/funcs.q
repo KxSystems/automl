@@ -13,24 +13,32 @@
 //   containing relevant information for the update of augmented with start date/time,
 // @return     {dict} full configuration info needed augmenting cfg with any default information
 dataCheck.updateConfig:{[feat;cfg]
-  typ:cfg`featExtractType;
+  typ:cfg`featureExtractionType;
   // Retrieve boiler plate additions at run start s.t. they must be ignored in custom additions
-  standardCfg:`startDate`startTime`featExtractType`problemType # cfg;
+  standardCfg:`startDate`startTime`featureExtractionType`problemType # cfg;
   // Retrieve any custom configuration information used to update default parameters
   customCfg:$[`configPath in key cfg;
               cfg`configPath;
-              `startDate`startTime`featExtractType`problemType _ cfg
+              `startDate`startTime`featureExtractionType`problemType _ cfg
             ];
   // Retrieve default parameters and replace defaults with any custom configuration defined
   updateCfg:$[typ in `normal`nlp`fresh;
-              dataCheck.i.getCustomConfig[feat;customCfg;typ];
+              dataCheck.i.getCustomConfig[feat;customCfg;cfg;typ];
               '`$"Inappropriate feature extraction type"
             ];
   config:standardCfg,updateCfg;
   // If applicable add save path information to configuration dictionary
-  savePaths:$[0<config`saveopt;dataCheck.i.pathConstruct[config];()!()];
-  if[`rand_val~config[`seed];config[`seed]:"j"$.z.t];
-  config,savePaths
+  config,:$[0<config`saveOption;dataCheck.i.pathConstruct[config];()!()];
+  if[.automl.utils.logging;config:dataCheck.i.logging config];
+  if[all not .automl.utils[`printing`logging],config`saveOption;
+     -1"\nIf saveOption is 0, logging or printing to screen must be enabled. Defaulting to .automl.printing:1b\n";
+     changePrinting[]];
+  config[`logFunc]:.automl.utils.printFunction[config`printFile;;1;1];
+  .p.import[`warnings][`:filterwarnings]$[config`pythonWarning;`module;`ignore];
+  if[not config`tensorFlow;.p.get[`tfWarnings]$[config`pythonWarning;`0;`2]];
+  savedWord2Vec:enlist[`savedWord2Vec]!enlist 0b;
+  if[0W~config[`seed];config[`seed]:"j"$.z.t];
+  config,savedWord2Vec
   }
 
 
@@ -44,11 +52,13 @@ dataCheck.updateConfig:{[feat;cfg]
 // @return    {(Null;err)} error indicating invalid fuctions otherwise generic null on success
 dataCheck.functions:{[cfg]
   // List of possible objects where user may input a custom function
-  function:raze cfg[`funcs`prf`tts`sigFeats],value[cfg`scf],first each cfg`xv`gs;
+  funcs:raze cfg[`functions`predictionFunction`trainTestSplit`significantFeatures,
+                 `scoringFunctionClassification`scoringFunctionRegression,
+                 `gridSearchFunction`randomSearchFunction`crossValidationFunction];
   // Ensure the custom inputs are suitably typed
-  locs:@[{$[not type[utils.qpyFuncSearch x]in(99h;100h;104h;105h);'err;0b]};;{[err]err;1b}]each function;
+  locs:@[{$[not type[utils.qpyFuncSearch x]in(99h;100h;104h;105h);'err;0b]};;{[err]err;1b}]each funcs;
   if[0<cnt:sum locs;
-     functionList:{$[2>x;" ",raze[y]," is";"s ",sv[", ";y]," are"]}[cnt]string function where locs;
+     functionList:{$[2>x;" ",raze[y]," is";"s ",sv[", ";y]," are"]}[cnt]string funcs where locs;
     '`$"The function",/functionList," not defined in your process\n"
   ]
   }
@@ -59,7 +69,7 @@ dataCheck.functions:{[cfg]
 // @param cfg {dict} configuration information relating to the current run of AutoML
 // @return    {(Null;err)} error indicating unsufficient requirements on issue otherwise generic null
 dataCheck.NLPLoad:{[cfg]
-  if[not `nlp~cfg`featExtractType;:()];
+  if[not `nlp~cfg`featureExtractionType;:()];
   if[not (0~checkimport[3]) & ((::)~@[{system"l ",x};"nlp/nlp.q";{0b}]);
     '"User attempting to run NLP models with insufficient requirements, see documentation"];
   if[""~getenv`PYTHONHASHSEED;
@@ -76,7 +86,7 @@ dataCheck.NLPLoad:{[cfg]
 // @param feat {tab} the feature data as a table
 // @return     {(Null;err)} error indicating inappropriate data or generic null on success
 dataCheck.NLPSchema:{[cfg;feat]
-  if[not `nlp~cfg`featExtractType;:()];
+  if[not `nlp~cfg`featureExtractionType;:()];
   if[0~count .ml.i.fndcols[feat;"C"];
     '`$"User wishing to apply nlp functionality must pass a table containing a character column."];
   }
@@ -88,14 +98,14 @@ dataCheck.NLPSchema:{[cfg;feat]
 // @param cfg  {dict} configuration information relating to the current run of AutoML
 // @return     {tab}  feature dataset with inappropriate columns removed and highlighted to user
 dataCheck.featureTypes:{[feat;cfg]
-  typ:cfg`featExtractType;
+  typ:cfg`featureExtractionType;
   $[typ in `tseries`normal;
     [fCols:.ml.i.fndcols[feat;"sfihjbepmdznuvt"];
      tab:flip fCols!feat fCols
     ];
     typ=`fresh;
     // ignore the aggregating columns for FRESH as these can be of any type
-    [apprCols:flip(aggCols:cfg[`aggcols])_ flip feat;
+    [apprCols:flip(aggCols:cfg[`aggregationColumns])_ flip feat;
       cls:.ml.i.fndcols[apprCols;"sfiehjb"];
       // restore the aggregating columns
       tab:flip(aggCols!feat aggCols,:()),cls!feat cls;
@@ -117,12 +127,14 @@ dataCheck.featureTypes:{[feat;cfg]
 // @param cfg  {dict} configuration information relating to the current run of AutoML
 // @return     {(Null;err)} error on length check between target and feature otherwise generic null
 dataCheck.length:{[feat;tgt;cfg]
-  typ:cfg`featExtractType;
+  typ:cfg`featureExtractionType;
   $[-11h=type typ;
     $[`fresh=typ;
       // Check that the number of unique aggregating sets is the same as number of targets
-      if[count[tgt]<>count distinct $[1=count cfg`aggcols;feat[cfg`aggcols];(,'/)feat cfg`aggcols];
-         '`$"Target count must equal count of unique agg values for fresh"
+      [aggcols:cfg`aggregationColumns;
+        if[count[tgt]<>count distinct$[1=count aggcols;feat aggcols;(,'/)feat aggcols];
+          '`$"Target count must equal count of unique agg values for fresh"
+          ];
       ];
       typ in`normal`nlp;
       if[count[tgt]<>count feat;'"Must have the same number of targets as values in table"];
@@ -148,5 +160,5 @@ dataCheck.target:{[tgt]
 // @param cfg  {dict} configuration information relating to the current run of AutoML
 // @return {(Null;err)} error on unsuitable target otherwise generic null
 dataCheck.ttsSize:{[cfg]
-  if[(sz<0.)|(sz>1.)|-9h<>type sz:cfg`sz;'"Testing size must be in range 0-1"]
+  if[(sz<0.)|(sz>1.)|-9h<>type sz:cfg`testingSize;'"Testing size must be in range 0-1"]
   }

@@ -3,10 +3,10 @@
 .automl.loadfile`:code/tests/utils.q
 
 // Generate Congifs for grid and random search
-configDefault:`scf`prf`seed`trials`hld!((`class`reg!`.ml.accuracy`.ml.mse);`.automl.utils.fitPredict;1234;8;0.2)
-configGrid  :configDefault,`gs`hp!((`.automl.gs.kfshuff;2);`grid)
-configRandom:configDefault,`rs`hp!((`.automl.rs.kfshuff;2);`random)
-configSobol :configDefault,`rs`hp!((`.automl.rs.kfshuff;5);`sobol)
+configDefault:`scoringFunctionClassification`scoringFunctionRegression`predictionFunction`seed`numberTrials`holdoutSize!(`.ml.accuracy;`.ml.mse;`.automl.utils.fitPredict;1234;8;0.2)
+configGrid  :configDefault,`gridSearchFunction`gridSearchArgument`hyperparameterSearchType!(`.automl.gs.kfshuff;2;`grid)
+configRandom:configDefault,`randomSearchFunction`randomSearchArgument`hyperparameterSearchType!(`.automl.rs.kfshuff;2;`random)
+configSobol :configDefault,`randomSearchFunction`randomSearchArgument`hyperparameterSearchType!(`.automl.rs.kfshuff;5;`sobol)
 
 // Suitable configuration for testing of configuration update
 configReg     :enlist[`problemType]!enlist`reg
@@ -100,7 +100,7 @@ passingTest[optimizeFunc;(configClass,configSobol ;classModelTab;kerasClassFit;k
 -1"\nTesting inappropriate optimization inputs";
 
 // Generate inappropriate config
-inappConfig:configDefault,enlist[`hp]!enlist `inappType
+inappConfig:configDefault,enlist[`hyperparameterSearchType]!enlist `inappType
 
 // Expected return error
 errReturn:"Unsupported hyperparameter generation method";

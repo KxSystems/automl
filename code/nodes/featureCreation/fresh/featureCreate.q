@@ -7,8 +7,12 @@
 // @param cfg  {dict} Configuration information assigned by the user and related to the current run
 // @return {tab} features created in accordance with the FRESH feature creation procedure.
 featureCreation.fresh.create:{[feat;cfg]
-  aggCols:cfg`aggcols;
-  params:get cfg`funcs;
+  aggCols:cfg`aggregationColumns;
+  problemFunctions:cfg`functions;
+  params:$[type[problemFunctions]in -11 11h;get;
+    99h=type problemFunctions;;
+    '"Inappropriate type for FRESH parameter data"
+    ]problemFunctions;
   // Feature extraction should be performed on all columns that are non aggregate
   cols2use:cols[feat]except aggCols;
   featExtractStart:.z.T;

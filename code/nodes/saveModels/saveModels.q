@@ -9,7 +9,7 @@
 //  prediction stages
 // @return {null} All models saved to appropriate location
 saveModels.node.function:{[params]
-  saveOpt:params[`config]`saveopt;
+  saveOpt:params[`config]`saveOption;
   if[0~saveOpt;:(::)];
   savePath:params[`config;`modelsSavePath];
   saveModels.saveModel[params;savePath];

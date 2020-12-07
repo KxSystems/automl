@@ -13,6 +13,7 @@
 // @return      {dict}  List of significant features and the feature data post feature extraction
 featureSignificance.node.function:{[cfg;feats;tgt]
   sigFeats:featureSignificance.applySigFunc[cfg;feats;tgt];
+  cfg[`logFunc]utils.printDict[`totalFeat],string count sigFeats;
   sigFeats:featureSignificance.correlationCols[sigFeats#feats];
   `sigFeats`features!(sigFeats;feats)
   }

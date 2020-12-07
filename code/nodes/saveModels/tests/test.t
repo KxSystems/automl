@@ -16,13 +16,13 @@ mdlMetaData:enlist[`modelLib]!enlist `sklearn
 
 // Gnerate normal feature extraction config
 configSave :enlist[`modelsSavePath]!enlist savePath
-configNormal0:configSave,`featExtractType`saveopt!(`normal;0)
-configNormal1:configSave,`featExtractType`saveopt!(`normal;1)
-configNormal2:configSave,`featExtractType`saveopt!(`normal;2)
+configNormal0:configSave,`featureExtractionType`saveOption!(`normal;0)
+configNormal1:configSave,`featureExtractionType`saveOption!(`normal;1)
+configNormal2:configSave,`featureExtractionType`saveOption!(`normal;2)
 
-configNlp0:configSave,`featExtractType`saveopt!(`nlp;0)
-configNlp1:configSave,`featExtractType`saveopt!(`nlp;1)
-configNlp2:configSave,`featExtractType`saveopt!(`nlp;2)
+configNlp0:configSave,`featureExtractionType`saveOption!(`nlp;0)
+configNlp1:configSave,`featureExtractionType`saveOption!(`nlp;1)
+configNlp2:configSave,`featureExtractionType`saveOption!(`nlp;2)
 
 // Generate Random Forest Regressor model
 

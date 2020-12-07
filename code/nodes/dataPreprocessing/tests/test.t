@@ -3,8 +3,8 @@
 .automl.loadfile`:code/tests/utils.q
 
 // Any configuration information required to run the function
-nonFreshConfig:enlist[`featExtractType]!enlist`normal
-freshConfig   :`featExtractType`aggcol!`fresh`freshIdx
+nonFreshConfig:enlist[`featureExtractionType]!enlist`normal
+freshConfig   :`featureExtractionType`aggregationColumns!`fresh`freshIdx
 
 -1"\nTesting appropriate sym encoding data preprocessing";
 
@@ -60,7 +60,7 @@ passingTest[.automl.dataPreprocessing.symEncoding;(freshOheFreqEncodeTab;freshCo
 -1"\nTesting appropriate feature preprocessing";
 
 // Nlp configuration
-nlpConfig:enlist[`featExtractType]!enlist`nlp
+nlpConfig:enlist[`featureExtractionType]!enlist`nlp
 
 // Constant, null and infinity input data
 infList:2 1 2 0w 0w 0w 1 2 0 0

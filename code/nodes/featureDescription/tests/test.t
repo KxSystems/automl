@@ -23,8 +23,8 @@ freqEncodeReturn   :`freq`ohe!(enlist `x;`$())
 oheFreqEncodeReturn:`freq`ohe!(enlist `x1;enlist`x2)
 
 // Any configuration information required to run the function
-nonFreshConfig:enlist[`featExtractType]!enlist`normal
-freshConfig   :enlist[`featExtractType]!enlist`fresh
+nonFreshConfig:enlist[`featureExtractionType]!enlist`normal
+freshConfig   :enlist[`featureExtractionType]!enlist`fresh
 
 // Generate data lists for testing
 nonFreshTabList:(noEncodeTab;oheEncodeTab;freqEncodeTab;oheFreqEncodeTab)

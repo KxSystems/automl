@@ -9,11 +9,10 @@
 // @fileoverview Create table of appropriate models for the problem type being solved
 // @param cfg  {dict} Configuration information assigned by the user and related to the current run
 // @param tgt  {(num[];sym[])} numerical or symbol vector containing the target dataset
-// @return     {dict} Table with all information needed for appropriate models to be applied to data
+// @return     {tab} Table with all information needed for appropriate models to be applied to data
 modelGeneration.node.function:{[cfg;tgt]
-  modelGeneration.filesCheck[cfg];
-  mdlDict:modelGeneration.txtParse[cfg;"/code/customization/"];
-  modelGeneration.modelPrep[cfg;mdlDict;tgt]
+  modelTable:modelGeneration.jsonParse cfg;
+  modelGeneration.modelPrep[cfg;modelTable;tgt]
   }
 
 // Input information

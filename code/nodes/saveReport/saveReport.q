@@ -8,7 +8,7 @@
 //  prediction stages
 // @return {null} Report saved to a location defined by run date and time
 saveReport.node.function:{[params]
-  if[2<>params[`config]`saveopt;:()];
+  if[2<>params[`config]`saveOption;:()];
   params:saveReport.reportDict params;
   saveReport.saveReport params
   }

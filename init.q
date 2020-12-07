@@ -9,6 +9,8 @@ nodelist:`configuration`featureData`targetData`dataCheck`modelGeneration`feature
          `runModels`selectModels`optimizeModels`preprocParams`predictParams`pathConstruct,
          `saveGraph`saveMeta`saveReport`saveModels
 
+loadfile`:code/commandLine/utils.q
+loadfile`:code/commandLine/cli.q
 {loadfile hsym `$"code/nodes/",string[x],"/init.q"}each nodelist;
 loadfile`:code/customization/init.q
 loadfile`:code/graph.q
@@ -18,3 +20,5 @@ loadfile`:code/utils.q
 \d .nlp
 .automl.utils.loadNLP[]
 \d .automl
+
+-1"\nDocumentation can be found at https://code.kx.com/q/ml/automl/";

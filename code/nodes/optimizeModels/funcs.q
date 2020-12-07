@@ -12,16 +12,19 @@
 // @param modelName {sym} Name of best model
 // @param tts       {dict} Feature and target data split into training and testing set 
 // @param scoreFunc {func} Scoring function
+// @param orderFunc {func} Ordering function
 // @param cfg       {dict} Configuration information relating to the current run of AutoML
 // @return {dict} Score, prediction and best model
-optimizeModels.hyperSearch:{[mdlDict;mdls;bestModel;modelName;tts;scoreFunc;cfg]
+optimizeModels.hyperSearch:{[mdlDict;mdls;bestModel;modelName;tts;scoreFunc;orderFunc;cfg]
   custom :mdlDict[`mdlLib] in key models;
   exclude:modelName in utils.excludeList; 
   predDict:$[custom|exclude;
-    optimizeModels.scorePred[custom;mdlDict;bestModel;tts];
-    optimizeModels.paramSearch[mdls;modelName;tts;scoreFunc;cfg]
+    optimizeModels.scorePred[custom;mdlDict;bestModel;tts;cfg];
+    optimizeModels.paramSearch[mdls;modelName;tts;scoreFunc;orderFunc;cfg]
     ];
   score:get[scoreFunc][predDict`predictions;tts`ytest];
+  printScore:utils.printDict[`score],string score;
+  cfg[`logFunc]printScore;
   predDict,`modelName`testScore!(modelName;score)
   }
 
@@ -32,8 +35,10 @@ optimizeModels.hyperSearch:{[mdlDict;mdls;bestModel;modelName;tts;scoreFunc;cfg]
 // @param mdlDict    {dict}  Library and function for best model
 // @param bestModel  {<} Fitted best model
 // @param tts        {dict} Feature and target data split into training and testing set
+// @param cfg       {dict} Configuration information relating to the current run of AutoML
 // @return {(float[];bool[];int[])} Predicted values  
-optimizeModels.scorePred:{[custom;mdlDict;bestModel;tts]
+optimizeModels.scorePred:{[custom;mdlDict;bestModel;tts;cfg]
+  cfg[`logFunc] utils.printDict`modelFit;
   pred:$[custom;
     optimizeModels.scoreCustom[mdlDict];
     optimizeModels.scoreSklearn
@@ -70,29 +75,28 @@ optimizeModels.scoreSklearn:{[bestModel;tts]
 // @param modelName  {sym} Name of best model
 // @param tts        {dict} Feature and target data split into training and testing set
 // @param scoreFunc  {func} Scoring function
+// @param orderFunc  {func} Order function
 // @param cfg        {dict} Configuration information relating to the current run of AutoML
 // @return {(float[];bool[];int[])} Predicted values 
-optimizeModels.paramSearch:{[mdls;modelName;tts;scoreFunc;cfg]
+optimizeModels.paramSearch:{[mdls;modelName;tts;scoreFunc;orderFunc;cfg]
+  cfg[`logFunc]utils.printDict`hyperParam;
   // Hyperparameter (HP) search inputs
   hyperParams:optimizeModels.i.extractdict[modelName;cfg];
-  hyperTyp:hyperParams`hyperTyp;
-  numFolds:cfg[hyperTyp]1;
+  hyperTyp:$[`gs=hyperParams`hyperTyp;"gridSearch";"randomSearch"];
+  numFolds:cfg`$hyperTyp,"Argument";
   numReps:1;
   xTrain:tts`xtrain;
   yTrain:tts`ytrain;
   mdlFunc:utils.bestModelDef[mdls;modelName;`minit];
-  scoreCalc:cfg[`prf]mdlFunc;
+  scoreCalc:get[cfg`predictionFunction]mdlFunc;
   // Extract HP dictionary
   hyperDict:hyperParams`hyperDict;
-  txtPath:utils.txtParse[;"/code/customization/"];
-  module:` sv 2#txtPath[cfg`problemType]modelName;
-  embedPyMdl:.p.import[module]hsym modelName;
-  hyperFunc:cfg[hyperTyp]0;
+  embedPyMdl:(exec first minit from mdls where model=modelName)[];
+  hyperFunc:cfg`$hyperTyp,"Function";
   splitCnt:optimizeModels.i.splitCount[hyperFunc;numFolds;tts;cfg];
-  hyperDict:optimizeModels.i.updDict[modelName;hyperTyp;splitCnt;hyperDict;cfg];
+  hyperDict:optimizeModels.i.updDict[modelName;hyperParams`hyperTyp;splitCnt;hyperDict;cfg];
   // Final parameter required for result ordering and function definition
-  orderFunc:get string first txtPath[`score]scoreFunc;
-  params:`val`ord`scf!(cfg`hld;orderFunc;scoreFunc);
+  params:`val`ord`scf!(cfg`holdoutSize;orderFunc;scoreFunc);
   // Perform HP search and extract best HP set based on scoring function
   results:get[hyperFunc][numFolds;numReps;xTrain;yTrain;scoreCalc;hyperDict;params];
   bestHPs:first key first results;
@@ -116,9 +120,9 @@ optimizeModels.confMatrix:{[pred;tts;modelName;cfg]
     pred :`long$pred;
     yTest:`long$yTest
     ];
-  -1"\nConfusion matrix for testing set:\n";
   confMatrix:.ml.confmat[pred;yTest];
-  show optimizeModels.i.confTab[confMatrix];
+  confTable:optimizeModels.i.confTab[confMatrix];
+  cfg[`logFunc]each (utils.printDict`confMatrix;confTable);
   confMatrix
   }
 
@@ -131,14 +135,14 @@ optimizeModels.confMatrix:{[pred;tts;modelName;cfg]
 // @param tts         {dict} Feature and target data split into training and testing set
 // @param cfg         {dict} Configuration information relating to the current run of AutoML
 // @param scoreFunc   {func} Scoring function
+// @param orderFunc   {func} Ordering function
 // @param mdls        {tab} Information about models applied to the data
 // return {dict} Impact of each column in the data set 
-optimizeModels.impactDict:{[mdlDict;hyperSearch;modelName;tts;cfg;scoreFunc;mdls]
+optimizeModels.impactDict:{[mdlDict;hyperSearch;modelName;tts;cfg;scoreFunc;orderFunc;mdls]
   bestModel:hyperSearch`bestModel;
   countCols:count first tts`xtest;
   scores:optimizeModels.i.predShuffle[mdlDict;bestModel;tts;scoreFunc;cfg`seed]each til countCols;
-  ordFunc:get string first utils.txtParse[`score;"/code/customization/"]scoreFunc;
-  optimizeModels.i.impact[scores;countCols;ordFunc]
+  optimizeModels.i.impact[scores;countCols;orderFunc]
   }
 
 // @kind function

@@ -5,67 +5,45 @@
 // Suitable feature data and configuration for testing of configuration update
 featData:([]100?1f;100?1f)
 startDateTime:`startDate`startTime!(.z.D;.z.T)
-configNLPReg     :startDateTime,`featExtractType`problemType!`nlp`reg
-configNLPClass   :startDateTime,`featExtractType`problemType!`nlp`class
-configFRESHReg   :startDateTime,`featExtractType`problemType!`fresh`reg
-configFRESHClass :startDateTime,`featExtractType`problemType!`fresh`class
-configNormalReg  :startDateTime,`featExtractType`problemType!`normal`reg
-configNormalClass:startDateTime,`featExtractType`problemType!`normal`class
 
-// list of input configurations
-configList:(configNLPReg;configNLPClass;configFRESHReg;
-            configFRESHClass;configNormalReg;configNormalClass)
+configNLPReg     :startDateTime,`featureExtractionType`problemType!`nlp`reg
+configNLPClass   :startDateTime,`featureExtractionType`problemType!`nlp`class
+configFRESHReg   :startDateTime,`featureExtractionType`problemType!`fresh`reg
+configFRESHClass :startDateTime,`featureExtractionType`problemType!`fresh`class
+configNormalReg  :startDateTime,`featureExtractionType`problemType!`normal`reg
+configNormalClass:startDateTime,`featureExtractionType`problemType!`normal`class
+configList:(configNLPReg;configNLPClass;configFRESHReg;configFRESHClass;configNormalReg;configNormalClass)
 
+parseCols:`model`lib`fnc`seed`typ`apply
 
--1"\nTesting inappropriate problem type to build models";
+-1"Testing appropriate configurations passed to .automl.modelGeneration.jsonParse";
+all passingTest[type .automl.modelGeneration.jsonParse::;;1b;98h      ]each configList
+all passingTest[cols .automl.modelGeneration.jsonParse::;;1b;parseCols]each configList
 
-// Inappropriate config problem type
-inapprConfig:configNormalClass,enlist[`problemType]!enlist`failTest
+// Generate model tables 
+regModelTab  :.automl.modelGeneration.jsonParse configNormalReg
+classModelTab:.automl.modelGeneration.jsonParse configNormalClass
 
-// inappropriate file error
-fileError:"text file not found"
-
-// Testing inappropriate problem type
-failingTest[.automl.modelGeneration.filesCheck;inapprConfig;1b;fileError]
-
-
--1"\nTesting appropriate problem type to build models";
-
-// Testing all appropriate problem types
-all passingTest[.automl.modelGeneration.filesCheck;;1b;(::)]each configList
-
-
--1"\nTesting appropriate inputs to extract desired model dictionary";
-
-// Appropriate configurations should return a dictionary
-parsePathGen:.automl.modelGeneration.txtParse[;"/code/customization/"]
-all 99h=/:type each parsePathGen each configList
-
-
--1"\nTesting appropriate input to extract correct models based on problem type";
-
-// generate model dictionaries 
-modelDict     :.automl.modelGeneration.txtParse[;"/code/customization/"]
-regModelDict  :modelDict configNormalReg
-classModelDict:modelDict configNormalClass
-
-// target values
+// Target values
 tgtReg       :100?1f
 tgtClass     :100?0b
 tgtMultiClass:100?3
 
-// Testing that all problem types return a table
-98h~type .automl.modelGeneration.modelPrep[configNormalReg  ;regModelDict  ;tgtReg       ]
-98h~type .automl.modelGeneration.modelPrep[configNormalClass;classModelDict;tgtClass     ]
-98h~type .automl.modelGeneration.modelPrep[configNormalClass;classModelDict;tgtMultiClass]
+modelCols:`model`lib`fnc`seed`typ`apply`minit
 
+-1"Testing appropriate configurations passed to .automl.modelGeneration.modelPrep";
+passingTest[type .automl.modelGeneration.modelPrep::;(configNormalReg;regModelTab;tgtReg)           ;0b;98h      ]
+passingTest[type .automl.modelGeneration.modelPrep::;(configNormalClass;classModelTab;tgtClass)     ;0b;98h      ]
+passingTest[type .automl.modelGeneration.modelPrep::;(configNormalClass;classModelTab;tgtMultiClass);0b;98h      ]
+passingTest[cols .automl.modelGeneration.modelPrep::;(configNormalReg;regModelTab;tgtReg)           ;0b;modelCols]
+passingTest[cols .automl.modelGeneration.modelPrep::;(configNormalClass;classModelTab;tgtClass)     ;0b;modelCols]
+passingTest[cols .automl.modelGeneration.modelPrep::;(configNormalClass;classModelTab;tgtMultiClass);0b;modelCols]
 
--1"\nTesting appropriate inputs to build up the model based on naming convention";
-
-// Generate model table
-regModelTab  :flip`model`lib`fnc`seed`typ!flip key[regModelDict  ],'value regModelDict
-classModelTab:flip`model`lib`fnc`seed`typ!flip key[classModelDict],'value classModelDict
-
-// Test that all inputs return a lambda or projection type
-all (type each .automl.modelGeneration.mdlFunc .'flip regModelTab`lib`fnc`model  )in 100 104h 
-all (type each .automl.modelGeneration.mdlFunc .'flip classModelTab`lib`fnc`model)in 100 104h
+// Check models are returned as projection
+projFunc:{[cfg;mdls;tgt]
+  minit:.automl.modelGeneration.modelPrep[cfg;mdls;tgt]`minit;
+  all{type[x]in 100 104h}each minit
+  }
+passingTest[projFunc;(configNormalReg;regModelTab;tgtReg)           ;0b;1b]
+passingTest[projFunc;(configNormalClass;classModelTab;tgtClass)     ;0b;1b]
+passingTest[projFunc;(configNormalClass;classModelTab;tgtMultiClass);0b;1b]

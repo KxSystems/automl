@@ -15,13 +15,14 @@ mdlMetaData:`modelLib`mdlType!`sklearn`class
 
 // Generate config data
 configSave :enlist[`configSavePath]!enlist savePath
-configDict0:configSave,`saveopt`featExtractType`problemType!(0;`normal;`reg)
-configDict1:configSave,`saveopt`featExtractType`problemType!(1;`fresh ;`class)
-configDict2:configSave,`saveopt`featExtractType`problemType!(2;`nlp   ;`reg)
+modelInfo  :`modelName`symEncode`sigFeats!("testingName";`freq`ohe!``;`x)
+configDict0:configSave,`saveOption`featureExtractionType`problemType!(0;`normal;`reg)
+configDict1:configSave,`saveOption`featureExtractionType`problemType!(1;`fresh ;`class)
+configDict2:configSave,`saveOption`featureExtractionType`problemType!(2;`nlp   ;`reg)
 
-paramDict0:`modelMetaData`config!(mdlMetaData;configDict0)
-paramDict1:`modelMetaData`config!(mdlMetaData;configDict1)
-paramDict2:`modelMetaData`config!(mdlMetaData;configDict2)
+paramDict0:(`modelMetaData`config!(mdlMetaData;configDict0)),modelInfo
+paramDict1:(`modelMetaData`config!(mdlMetaData;configDict1)),modelInfo
+paramDict2:(`modelMetaData`config!(mdlMetaData;configDict2)),modelInfo
 
 -1"\nTesting appropriate inputs to saveMeta";
 
@@ -32,8 +33,8 @@ metaCheck:{[params;savePath]
   }
 
 passingTest[metaCheck;(paramDict0;savePath);0b;"No metadata"]
-passingTest[metaCheck;(paramDict1;savePath);0b;raze paramDict1]
-passingTest[metaCheck;(paramDict2;savePath);0b;raze paramDict2]
+passingTest[metaCheck;(paramDict1;savePath);0b;mdlMetaData,configDict1,modelInfo]
+passingTest[metaCheck;(paramDict2;savePath);0b;mdlMetaData,configDict2,modelInfo]
 
 -1"\nRemoving any directories created";
 

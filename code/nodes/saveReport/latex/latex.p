@@ -65,16 +65,16 @@ def python_latex(dict,paths,dscrb,score,grid,exclude):
     createImage(doc,''.join(paths['target']),'Distribution of input target data.')
   
   with doc.create(Section('Pre-processing Breakdown')):
-    doc.append(configDict['featExtractType'].capitalize() + ' feature extraction was performed with a total of ' + str(len(dict['sigFeats'])) + ' features produced\n')
+    doc.append(configDict['featureExtractionType'].capitalize() + ' feature extraction was performed with a total of ' + str(len(dict['sigFeats'])) + ' features produced\n')
     doc.append('Feature extraction took a total time of ' +dict['creationTime'] + '.\n')
  
   with doc.create(Section('Initial Scores')):
     # Check how cross validation was completed and tailor output appropriately
-    if(configDict['xv'][0] in ['.ml.xv.mcsplit','.ml.xv.pcsplit']):
-      doc.append('Percentage based cross validation, '+ configDict['xv'][0] + ', was performed with a testing set created from ' + str(100*int(configDict['xv'][1])))
+    if(configDict['crossValidationFunction'] in ['.ml.xv.mcsplit','.ml.xv.pcsplit']):
+      doc.append('Percentage based cross validation, '+ configDict['crossValidationFunction'] + ', was performed with a testing set created from ' + str(100*int(configDict['crossValidationArgument'])))
       doc.append('% of the training data.\n')
     else:
-      doc.append(configDict['xv'][1] + '-fold cross validation was performed on the training set using ' + configDict['xv'][0] + '.\n')
+      doc.append(configDict['crossValidationArgument'] + '-fold cross validation was performed on the training set using ' + configDict['crossValidationFunction'] + '.\n')
     createImage(doc,''.join(paths['data']),'The data split used within this run of AutoML, with data split into training, holdout and testing sets')
     doc.append('The total time taken to carry out cross validation for each model on the training set was ' + metaDict['xValTime'])
     doc.append('\nwhere models were scored and optimized using ' + metaDict['metric'] + '.\n\n')
@@ -84,30 +84,37 @@ def python_latex(dict,paths,dscrb,score,grid,exclude):
   
   with doc.create(Section('Model selection summary')):
     doc.append('Best scoring model = ' + dict['modelName'] + '\n\n')
-    doc.append('The score on the holdout set for this model was = ' + configDict['hld'] + '\n\n')
+    doc.append('The score on the holdout set for this model was = ' + configDict['holdoutSize'] + '\n\n')
     doc.append('The total time to complete the running of this model on the holdout set was: ' + metaDict['xValTime'])
   
   # Check for hyperparameter search type
   typ_upper = ''
   typ_lower = ''
   typ_key = ''
-  if configDict['hp']=='sobol':
+  hyperParamType = configDict['hyperparameterSearchType']
+  if hyperParamType=='sobol':
       typ_upper = 'Sobol'
+      typ_lower = 'sobol'
       typ_key = 'rs'
-  elif configDict['hp']=='random':
+      typ_key_long = 'random'
+  elif hyperParamType=='random':
       typ_upper = 'Random'
+      typ_lower = 'random'
       typ_key = 'rs'
+      typ_key_long = 'random'
   else:
       typ_upper = 'Grid'
+      typ_lower = 'grid'
       typ_key = 'gs'
+      typ_key_long = 'grid'
     
   # If appropriate return the output from a completed hyperparameter search
   if(not dict['modelName'] in exclude):
     with doc.create(Section(typ_upper + ' search for a ' + dict['modelName'] + ' model.')):
-      if(configDict[typ_key][0] in ['.ml.gs.mcsplit','.ml.gs.pcsplit']):
-        doc.append('The hyperparameter search was completed using '+ configDict['hp'][0] + ' with a percentage of '+ configDict['hp'][1] + '% of training data used for validation\n')
+      if(configDict[typ_key_long+'SearchFunction'] in ['.ml.gs.mcsplit','.ml.gs.pcsplit']):
+        doc.append('The hyperparameter search was completed using '+ configDict[typ_key_long+'SearchFunction'] + ' with a percentage of '+ configDict[typ_key_long+'SearchArgument'] + '% of training data used for validation\n')
       else:
-        doc.append('A ' + configDict[typ_key][1] + '-fold ' + configDict['hp'] + ' search was performed on the training set to find the best model using ' + configDict[typ_key][0] + '.\n')
+        doc.append('A ' + configDict[typ_key_long+'SearchArgument'] + '-fold ' + configDict['hyperparameterSearchType'] + ' search was performed on the training set to find the best model using ' + configDict[typ_key_long+'SearchFunction'] + '.\n')
       doc.append('The following are the hyper parameters which have been deemed optimal for the model.\n')
       createTable(doc,grid,'cc')
       doc.append('The score for the best model fit on the entire training set and scored on the testing set was = ' + dict['testScore'])

@@ -8,11 +8,9 @@
 //   It covers sentiment analysis, named entity recognition, word2vec and stop word analysis
 // @param feat       {tab} The feature data as a table 
 // @param cfg        {dict} Configuration information assigned by the user and related to the current run
-// @param savedModel {<} use a saved model or not (required to differentiate new/run logic)
-// @param filePath   {str} file path to the location where the word2vec model is saved for a specified run
 // @return {dict} with the updated table with NLP created features included along with the string
 //  columns and word2vec model
-featureCreation.nlp.proc:{[feat;cfg;savedModel;filePath]
+featureCreation.nlp.proc:{[feat;cfg]
   stringCols:.ml.i.fndcols[feat;"C"];
   spacyLoad:.p.import[`spacy;`:load]"en_core_web_sm";
   args:(spacyLoad;feat stringCols);
@@ -30,7 +28,7 @@ featureCreation.nlp.proc:{[feat;cfg;savedModel;filePath]
   numTab        :featureCreation.nlp.boolTab[corpus]colsCheck"likeNumber*";
   countTokens   :flip enlist[`countTokens]!enlist count each corpus`tokens;
   tokens        :string(,'/)corpus colsCheck"tokens*";
-  w2vTab        :featureCreation.nlp.word2vec[tokens;cfg;savedModel;filePath];
+  w2vTab        :featureCreation.nlp.word2vec[tokens;cfg];
   nlpTabList    :(uniposTab;sentimentTab;w2vTab 0;namedEntityTab;regexTab;stopTab;numTab;countTokens);
   nlpTab        :(,'/)nlpTabList;
   nlpKeys       :`feat`stringCols`model;
@@ -156,20 +154,19 @@ featureCreation.nlp.regexTab:{[feat;stringCols;fields]
 // provide context to the meaning of a sentence.
 // @param tokens     {tab} The feature data as a table 
 // @param cfg        {dict} Configuration information assigned by the user and related to the current run
-// @param savedModel {<} use a saved model or not (required to differentiate new/run logic)
-// @param filePath   {str} file path to the location where the word2vec model is saved for a specified run
 // @return {tab} word2vec applied to the string column
-featureCreation.nlp.word2vec:{[tokens;cfg;savedModel;filePath]
+featureCreation.nlp.word2vec:{[tokens;cfg]
   size:300&count raze distinct tokens;
   tokenCount:avg count each tokens;
   window:$[30<tokenCount;10;10<tokenCount;5;2];
-  gensimModel:.p.import`gensim.models;
+  gensimWord2Vec:.p.import[`gensim.models][`:Word2Vec];
   args:`size`window`sg`seed`workers!(size;window;cfg`w2v;cfg`seed;1);
-  model:$[savedModel;
-    gensimModel[`:load]utils.ssrWindows filePath,"/w2v.model";
-    @[gensimModel[`:Word2Vec] .;(tokens;pykwargs args);{'"\nGensim returned the following error\n",x,
+  model:$[cfg`savedWord2Vec;
+    gensimWord2Vec[`:load]utils.ssrWindows cfg[`modelsSavePath],"/w2v.model";
+    @[gensimWord2Vec .;(tokens;pykwargs args);{'"\nGensim returned the following error\n",x,
       "\nPlease review your input NLP data\n"}]
     ];
+  if[cfg`savedWord2Vec;size:model[`:vector_size]`];
   w2vIndex:where each tokens in model[`:wv.index2word]`;
   sentenceVector:featureCreation.nlp.i.w2vTokens[tokens]'[til count w2vIndex;w2vIndex]; 
   avgVector:avg each featureCreation.nlp.i.w2vItem[model]each sentenceVector;

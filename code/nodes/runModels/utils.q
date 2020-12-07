@@ -4,17 +4,6 @@
 
 // @kind function
 // @category runModelsUtility
-// @fileoverview Extraction of an appropriately valued dictionary from a non complex flat file
-// @param nameMap  {sym} Name mapping to appropriate text file
-// @param filePath {str} File path relative to .automl.path
-// @return {dict} Parsed from an appropriate flat file
-runModels.i.txtParse:{[nameMap;filePath]
-  fileName:`$path,filePath,runModels.i.files nameMap;
-  runModels.i.readFile each(!).("S*";"|")0:hsym fileName
-  }
-
-// @kind function
-// @category runModelsUtility
 // @fileoverview Extraction of data from a file
 // @param filePath {str} File path from which to extract the data from 
 // @return {dict} parsed from file

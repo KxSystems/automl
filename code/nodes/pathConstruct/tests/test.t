@@ -14,7 +14,7 @@ savePath1:(savePath,/:string[fileNames1],\:"/")
 savePath2:(savePath,/:string[fileNames2],\:"/")
 
 // Generate Configuration dictionaries
-configKeys0:enlist[`saveopt]
+configKeys0:enlist[`saveOption]
 configKeys1:`$string[fileNames1],\:"SavePath"
 configKeys2:`$string[fileNames2],\:"SavePath"
 

@@ -45,7 +45,7 @@ saveReport.reportlabGenerate:{[params;filePath]
   f:saveReport.i.text[pdf;f;30;"Breakdown of Pre-Processing";"Helvetica-Bold";13];
 
   numSig:count params`sigFeats;
-  f:saveReport.i.text[pdf;f;30;@[string config`featExtractType;0;upper],
+  f:saveReport.i.text[pdf;f;30;@[string config`featureExtractionType;0;upper],
     " feature extraction and selection was performed with a total of ",string[numSig],
     " feature",$[1~numSig;;"s",]" produced.";"Helvetica";11];
   f:saveReport.i.text[pdf;f;30;"Feature extraction took ",string[params`creationTime],
@@ -54,8 +54,8 @@ saveReport.reportlabGenerate:{[params;filePath]
   // Cross validation
   f:saveReport.i.text[pdf;f;30;"Initial Scores";"Helvetica-Bold";13];
 
-  xvalFunc:string config[`xv]0;
-  xvalSize:config[`xv]1;
+  xvalFunc:string config[`crossValidationFunction];
+  xvalSize:config[`crossValidationArgument];
   xvalType:`$last"."vs xvalFunc;
   xval:$[xvalType in`mcsplit`pcsplit;
     "Percentage based cross validation, ",xvalFunc,
@@ -91,11 +91,10 @@ saveReport.reportlabGenerate:{[params;filePath]
     " model on the holdout set was: ",string[modelMeta`holdoutTime],".";"Helvetica";11];
 
   // Hyperparameter search
-  hptyp:@[;0;upper]string srch:config`hp;
-  hptyp:enlist[hptyp],$[srch=`grid;`gs;srch in`random`sobol;`rs];
-  hpStr:string config hptyp 1;
-  hpFunc:hpStr 0;
-  hpSize:hpStr 1;
+  srch:config`hyperparameterSearchType;
+  hptyp:$[srch=`grid;"grid";srch in`random`sobol;"random";'"inappropriate type"];
+  hpFunc:string config`$hptyp,"SearchFunction";
+  hpSize:string config`$hptyp,"SearchArgument";
   hpMethod:`$last"."vs hpFunc;
 
   f:saveReport.i.text[pdf;f;30;"Best Model";"Helvetica-Bold";13];
@@ -104,7 +103,7 @@ saveReport.reportlabGenerate:{[params;filePath]
     f:saveReport.i.text[pdf;f;30;;"Helvetica";11]$[hpMethod in`mcsplit`pcsplit;
       "The hyperparameter search was completed using ",hpFunc,
       " with a percentage of ",hpSize,"% of training data used for validation";
-      "A ",hpSize,"-fold ",lower[hptyp 0]," search was performed on the",
+      "A ",hpSize,"-fold ",lower[hptyp]," search was performed on the",
       " training set to find the best model using, ",hpFunc,"."];
     f:saveReport.i.text[pdf;f;30;"The following are the hyperparameters",
       " which have been deemed optimal for the model:";"Helvetica";11];

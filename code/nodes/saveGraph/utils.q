@@ -37,7 +37,7 @@ saveGraph.i.classTargetPlot:{[params;savePath]
 // @kind function
 // @category saveGraphUtility
 // @fileoverview Save target plot locally
-// @param pltObj    {<} EmpedPy matplotlib object
+// @param pltObj    {<} EmbedPy matplotlib object
 // @param savePath  {str} Path to where plots are to be saved
 // @return {null} Target distribution plot saved to appropriate location
 saveGraph.i.targetPlot:{[pltObj;savePath]
@@ -166,7 +166,7 @@ saveGraph.i.plotResiduals:{[residDict;tts;modelName;savePath]
 // @param fileName {str}  Filename to save plot under
 // @return {null} Data split plot saved to appropriate location
 saveGraph.i.dataSplit:{[config;fileName]
-  trn:(trnHld:1.-config`sz)*1-config`sz;
+  trn:(trnHld:1.-config`testingSize)*1-config`testingSize;
   sz:1.;
   white :3#255;
   blue  :153 204 255;
@@ -175,12 +175,12 @@ saveGraph.i.dataSplit:{[config;fileName]
   {x[`:barh][.4;y;`color pykw z%255;`edgecolor pykw`black;`linewidth pykw 3];
     }[utils.plt]'[(sz;trnHld;trn);(white;blue;kxBlue)];
   utils.plt[`:title]["Data split";`fontsize pykw 20];
-  utils.plt[`:text][trnHld+config[`sz]%3;.4;"Test";`fontsize pykw 25];
+  utils.plt[`:text][trnHld+config[`testingSize]%3;.4;"Test";`fontsize pykw 25];
   utils.plt[`:text][trn+(trnHld-trn)%4;.4;"Holdout";`fontsize pykw 25];
   utils.plt[`:text][trn%3;.4;"Train";`fontsize pykw 25];
   utils.plt[`:xticks][`fontsize pykw 20];
-  utils.plt[`:xlim]0 1;
-  utils.plt[`:ylim]0 .8;
+  utils.plt[`:xlim][0.1;1.0];
+  utils.plt[`:ylim][0.;0.8];
   utils.plt[`:xlabel][`Percentage;`fontsize pykw 20];
   utils.plt[`:yticks]();
   utils.plt[`:savefig][fileName;`bbox_inches pykw"tight"];

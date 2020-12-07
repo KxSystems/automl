@@ -21,13 +21,13 @@ wrongKeyTTS:{[x;y;sz]
   }
 
 // Config
-cfg13      :`tts`sz!(`.ml.traintestsplit;.13)
-cfg20      :`tts`sz!(`.ml.traintestsplit;.2)
-cfg40      :`tts`sz!(`.ml.traintestsplit;.4)
-cfgNeg1    :`tts`sz!(`.ml.traintestsplit;-1)
-cfgMatrix  :`tts`sz!(`matrixTTS  ;.2)
-cfgWrongKey:`tts`sz!(`wrongKeyTTS;.2)
-cfgPy      :`tts`sz!(`python_train_test_split;.2)
+cfg13      :`trainTestSplit`testingSize!(`.ml.traintestsplit;.13)
+cfg20      :`trainTestSplit`testingSize!(`.ml.traintestsplit;.2)
+cfg40      :`trainTestSplit`testingSize!(`.ml.traintestsplit;.4)
+cfgNeg1    :`trainTestSplit`testingSize!(`.ml.traintestsplit;-1)
+cfgMatrix  :`trainTestSplit`testingSize!(`matrixTTS  ;.2)
+cfgWrongKey:`trainTestSplit`testingSize!(`wrongKeyTTS;.2)
+cfgPy      :`trainTestSplit`testingSize!(`python_train_test_split;.2)
 
 // Expected output
 keyTTSOut:`xtest`xtrain`ytest`ytrain

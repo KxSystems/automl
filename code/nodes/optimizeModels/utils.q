@@ -10,7 +10,7 @@
 //   by the user and related to the current run
 // @return {dict} The hyperparameters appropriate for the model being used
 optimizeModels.i.extractdict:{[bestModel;cfg]
-  hyperParam:cfg`hp;
+  hyperParam:cfg`hyperparameterSearchType;
   // Get grid/random hyperparameter file name
   hyperTyp:$[`grid=hyperParam;`gs;
     hyperParam in`random`sobol;`rs;
@@ -73,7 +73,7 @@ optimizeModels.i.splitCount:{[hyperFunc;numFolds;tts;cfg]
  $[hyperFunc in`mcsplit`pcsplit;
    1-numFolds;
    (numFolds-1)%numFolds
-   ]*count[tts`xtrain]*1-cfg`hld
+   ]*count[tts`xtrain]*1-cfg`holdoutSize
   }
 
 // @kind function
@@ -100,7 +100,7 @@ optimizeModels.i.updDict:{[modelName;hyperTyp;splitCnt;hyperDict;cfg]
         hyperDict[`n_neighbors;2]:"j"$splitCnt
         ]
       ];
-    hyperDict:`typ`random_state`n`p!(cfg`hp;cfg`seed;cfg`trials;hyperDict)
+    hyperDict:`typ`random_state`n`p!(cfg`hyperparameterSearchType;cfg`seed;cfg`numberTrials;hyperDict)
     ];
   hyperDict
   }

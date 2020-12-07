@@ -10,9 +10,9 @@
 // @return {dict} File path where paths/graphs are to be saved
 pathConstruct.constructPath:{[preProcParams]
   cfg:preProcParams`config;
-  saveOpt:cfg`saveopt;
+  saveOpt:cfg`saveOption;
   if[saveOpt=0;:()!()];
-  pathName:value[cfg]where key[cfg] like "*SavePath";
+  pathName:-1_value[cfg]where key[cfg]like"*SavePath";
   pathName:utils.ssrWindows each pathName;
   pathConstruct.createFile each pathName;
   }
@@ -25,6 +25,6 @@ pathConstruct.constructPath:{[preProcParams]
 // @param pathName {str} Name of paths that are to be created
 // @return {null} File paths are created
 pathConstruct.createFile:{[pathName]
-  windowsChk:$[.z.o like "w*";" ";" -p "];
+  windowsChk:$[.z.o like"w*";" ";" -p "];
   system"mkdir",windowsChk,pathName
   }

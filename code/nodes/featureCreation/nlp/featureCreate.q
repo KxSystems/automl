@@ -12,7 +12,7 @@
 featureCreation.nlp.create:{[feat;cfg] 
   featExtractStart:.z.T;
   // Preprocess the character data
-  charPrep:featureCreation.nlp.proc[feat;cfg;0b;(::)];
+  charPrep:featureCreation.nlp.proc[feat;cfg];
   // Table returned with NLP feature creation, any constant columns are dropped
   featNLP:charPrep`feat;
   featNLP:.ml.dropconstant featNLP;

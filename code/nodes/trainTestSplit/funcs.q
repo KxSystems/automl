@@ -15,8 +15,8 @@
 // @return         {dict}  Data separated into training and testing sets
 trainTestSplit.applyTTS:{[cfg;feats;tgt;sigFeats]
   data:flip feats sigFeats;
-  ttsFunc:utils.qpyFuncSearch cfg`tts;
-  ttsFunc[data;tgt;cfg`sz]
+  ttsFunc:utils.qpyFuncSearch cfg`trainTestSplit;
+  ttsFunc[data;tgt;cfg`testingSize]
   }
 
 // @kind function

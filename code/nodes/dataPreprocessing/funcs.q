@@ -9,12 +9,12 @@
 // @param cfg    {dict} configuration information relating to the current run of AutoML
 // @return {tab} the feature table encoded appropriately for the task
 dataPreprocessing.symEncoding:{[feat;cfg;symEncode]
-  typ:cfg`featExtractType;
+  typ:cfg`featureExtractionType;
   // if no symbol columns return table or empty encoding schema
   if[all {not ` in x}each value symEncode;
     if[count symEncode`freq;
       feat:$[`fresh~typ;
-            raze .ml.freqencode[;symEncode`freq]each flip each 0!cfg[`aggcol] xgroup feat;
+            raze .ml.freqencode[;symEncode`freq]each flip each 0!cfg[`aggregationColumns] xgroup feat;
             .ml.freqencode[feat;symEncode`freq]
             ]; 
       ];
@@ -33,19 +33,20 @@ dataPreprocessing.symEncoding:{[feat;cfg;symEncode]
 // @param cfg     {dict} configuration information relating to the current run of AutoML
 // @return {tab} the feature table with appropriate feature preprocessing applied
 dataPreprocessing.featPreprocess:{[feat;cfg]
-  typ:cfg`featExtractType;
+  typ:cfg`featureExtractionType;
   // For FRESH the aggregate columns need to be excluded from the preprocessing
   // steps, this ensures that encoding is not performed on the aggregate columns
   // if this is a symbol and or if this column is constant in the case of new data
   if[`fresh=typ;
-    aggData:(cfg[`aggcols],())#flip feat;
-    feat:flip (cols[feat]except cfg[`aggcols])#flip feat
+    aggData:(cfg[`aggregationColumns],())#flip feat;
+    feat:flip (cols[feat]except cfg[`aggregationColumns])#flip feat
     ];
   featTable:$[not typ in`nlp;
              dataPreprocessing.nonTextPreprocess[feat];
              dataPreprocessing.textPreprocess[feat]
              ];
   // rejoin the separated aggregate columns for FRESH
+  cfg[`logFunc] utils.printDict`preproc;
   $[`fresh=typ;flip[aggData],';]featTable
   }
 

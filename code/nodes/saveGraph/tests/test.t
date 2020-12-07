@@ -46,13 +46,13 @@ symMapNull:()!()
 symMap    :`a`b!0 1
 
 // Generate config dictionaries
-configSave  :`imagesSavePath`sz!(savePath;0.2)
-configClass0:configSave,`problemType`saveopt!(`class;0)
-configClass1:configSave,`problemType`saveopt!(`class;1)
-configClass2:configSave,`problemType`saveopt!(`class;2)
-configReg0  :configSave,`problemType`saveopt!(`reg  ;0)
-configReg1  :configSave,`problemType`saveopt!(`reg  ;1)
-configReg2  :configSave,`problemType`saveopt!(`reg  ;2)
+configSave  :`imagesSavePath`testingSize!(savePath;0.2)
+configClass0:configSave,`problemType`saveOption!(`class;0)
+configClass1:configSave,`problemType`saveOption!(`class;1)
+configClass2:configSave,`problemType`saveOption!(`class;2)
+configReg0  :configSave,`problemType`saveOption!(`reg  ;0)
+configReg1  :configSave,`problemType`saveOption!(`reg  ;1)
+configReg2  :configSave,`problemType`saveOption!(`reg  ;2)
 
 paramDictKeys:`modelName`analyzeModel`sigFeats
 paramDictVals:(modelName;analyzeModel;sigFeats)

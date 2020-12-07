@@ -4,6 +4,17 @@
 
 // @kind function
 // @category runModels
+// @fileoverview Extraction of an appropriately valued dictionary from a json file
+// @param scoreFunc {sym} function used to score models run
+// @return {func} order function chosen from json file for specific scoring function
+runModels.jsonParse:{[scoreFunc]
+  jsonPath:hsym`$.automl.path,"/code/customization/scoring/scoringFunctions.json";
+  funcs:.j.k raze read0 jsonPath;
+  get first value funcs scoreFunc
+  }
+
+// @kind function
+// @category runModels
 // @fileoverview Set value of random seed for reproducability
 // @param cfg {dict} configuration information relating to the current run of AutoML
 // @return {Null} Value of seed is set
@@ -18,8 +29,8 @@ runModels.setSeed:{[cfg]
 // @param tts  {dict} Feature and target data split into training and testing set
 // @return {dict} Training and holdout split of data
 runModels.holdoutSplit:{[cfg;tts]
-  ttsFunc:utils.qpyFuncSearch cfg`tts;
-  ttsFunc[tts`xtrain;tts`ytrain;cfg`hld]
+  ttsFunc:utils.qpyFuncSearch cfg`trainTestSplit;
+  ttsFunc[tts`xtrain;tts`ytrain;cfg`holdoutSize]
   }
 
 // @kind function
@@ -34,7 +45,7 @@ runModels.xValSeed:{[tts;cfg;mdl]
   xTrain:tts`xtrain;
   yTrain:tts`ytrain;
   numReps:1;
-  scoreFunc:cfg[`prf]mdl`minit;
+  scoreFunc:get[cfg[`predictionFunction]]mdl`minit;
   seedModel:`seed~mdl`seed;
   isSklearn:`sklearn~mdl`lib;
   // Seed handled differently for sklearn and keras  
@@ -42,18 +53,18 @@ runModels.xValSeed:{[tts;cfg;mdl]
     ::;
     isSklearn;
       enlist[`random_state]!enlist cfg`seed;
-      (cfg`seed;mdl`typ)
+      (cfg`seed;mdl`fnc)
       ];
   $[seedModel&isSklearn;
     // Grid search required to incorporate the random state definition
-    [gsFunc:utils.qpyFuncSearch cfg[`gs]0;
-     numFolds:cfg[`gs]1;
+    [gsFunc:utils.qpyFuncSearch cfg`gridSearchFunction;
+     numFolds:cfg`gridSearchArgument;
      val:enlist[`val]!enlist 0;
      first value gsFunc[numFolds;numReps;xTrain;yTrain;scoreFunc;seed;val]
      ];
     // Otherwise a vanilla cross validation is performed
-    [xvFunc:utils.qpyFuncSearch cfg[`xv]0;
-     numFolds:cfg[`xv]1;
+    [xvFunc:utils.qpyFuncSearch cfg`crossValidationFunction;
+     numFolds:cfg`crossValidationArgument;
      xvFunc[numFolds;numReps;xTrain;yTrain;scoreFunc seed]
      ]
     ]
@@ -66,9 +77,10 @@ runModels.xValSeed:{[tts;cfg;mdl]
 // @param mdls  {tab}  Models to be applied to feature data
 // @return {<} Scoring function appropriate to the problem being solved
 runModels.scoringFunc:{[cfg;mdls]
-  problemType:$[`reg in distinct mdls`typ;`reg;`class];
-  scoreFunc:cfg[`scf]problemType;
-  -1"\nScores for all models using ",string[scoreFunc],":";
+  problemType:$[`reg in distinct mdls`typ;"Regression";"Classification"];
+  scoreFunc:cfg`$"scoringFunction",problemType;
+  printScore:utils.printDict[`scoreFunc],string scoreFunc;
+  cfg[`logFunc]printScore;
   scoreFunc
   }
 
@@ -77,10 +89,10 @@ runModels.scoringFunc:{[cfg;mdls]
 // @fileoverview Order average predictions returned by models
 // @param mdls        {tab}  Models to be applied to feature data
 // @param scoreFunc   {<} Scoring function applied to predictions
+// @param orderFunc   {<} Ordering function applied to scores
 // @param predictions {(bool[];float[])} Predictions made by model
 // @return {dict} Scores returned by each model in appropriate order 
-runModels.orderModels:{[mdls;scoreFunc;predicts]
-  orderFunc:get string first runModels.i.txtParse[`score;"/code/customization/"]scoreFunc;
+runModels.orderModels:{[mdls;scoreFunc;orderFunc;predicts]
   avgScore:avg each scoreFunc .''predicts;
   scoreDict:mdls[`model]!avgScore;
   orderFunc scoreDict
@@ -96,9 +108,11 @@ runModels.orderModels:{[mdls;scoreFunc;predicts]
 // @param cfg       {dict} Configuration information assigned by the user and related to the current run
 // @return {dict} Fitted model and scores along with time taken 
 runModels.bestModelFit:{[scores;tts;mdls;scoreFunc;cfg]
+  cfg[`logFunc]scores;
   holdoutTimeStart:.z.T;
   bestModel:first key scores;
-  -1"\nBest scoring model = ",string[bestModel],"\n";
+  printModel:utils.printDict[`bestModel],string bestModel;
+  cfg[`logFunc]printModel;
   modelLib:first exec lib from mdls where model=bestModel;
   fitScore:$[modelLib in key models;
     runModels.i.customModel[bestModel;tts;mdls;scoreFunc;cfg];
@@ -122,8 +136,8 @@ runModels.bestModelFit:{[scores;tts;mdls;scoreFunc;cfg]
 // @return {dict} Metadata to be contained within the end reports
 runModels.createMeta:{[holdoutRun;scores;scoreFunc;xValTime;mdls;modelName]
   modelLib:first exec lib from mdls where model=modelName;
-  mdlType :first exec typ from mdls where model=modelName;
-  metaKeys:`holdoutScore`modelScores`metric`xValTime`holdoutTime`modelLib`mdlType;
-  metaVals:(holdoutRun`score;scores;scoreFunc;xValTime;holdoutRun`holdoutTime;modelLib;mdlType);
+  mdlFunc :first exec fnc from mdls where model=modelName;
+  metaKeys:`holdoutScore`modelScores`metric`xValTime`holdoutTime`modelLib`mdlFunc;
+  metaVals:(holdoutRun`score;scores;scoreFunc;xValTime;holdoutRun`holdoutTime;modelLib;mdlFunc);
   metaKeys!metaVals
   }

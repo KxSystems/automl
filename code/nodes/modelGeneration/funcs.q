@@ -2,42 +2,39 @@
 
 // Definitions of the main callable functions used in the application of modelGeneration
 
-/ @kind function
-// @category modelGeneration
-// @fileoverview Check that the text file exists for the given problem type
-// @param cfg {dict} configuration information relating to the current run of AutoML
-// @return    {(Null;err)} error indicating that the text file does not exist
-modelGeneration.filesCheck:{[cfg]
-  if[not cfg[`problemType]in key modelGeneration.files;'`$"text file not found"]
-  }
-
 // @kind function
 // @category modelGeneration
-// @fileoverview Extraction of an appropriately valued dictionary from a non complex flat file
+// @fileoverview Extraction of an appropriately valued dictionary from a json file
 // @param cfg {dict} configuration information relating to the current run of AutoML
-// @param fp  {char} file path to directory containing text files 
-// @return    {dict} dictionary of models extracted from text file
-modelGeneration.txtParse:{[cfg;fp]
-  modelDict:utils.txtParse[;fp]cfg[`problemType];
-  if[1b~cfg`tf;
-    apprModels:key[modelDict]where `keras<>value modelDict[;0];
-    modelDict:apprModels!modelDict apprModels
-   ];
-  modelDict
+// @return    {table} table of models extracted from json file
+modelGeneration.jsonParse:{[cfg]
+  typ:$[`class~cfg`problemType;`classification;`regression];
+  jsonPath:hsym`$.automl.path,"/code/customization/models/modelConfig/models.json";
+  // Read in JSON file and select models based on problem type
+  mdlTab:.j.k[raze read0 jsonPath]typ;
+  // Convert to desired structure and convert all values to symbols
+  mdlTab:`model`lib`fnc`seed`typ`apply xcol([]model:key mdlTab),'value mdlTab;
+  // Convert to seed to either `seed or (::)
+  seed:mdlTab`seed;
+  toSeed:{@[x;y;:;z]}/[count[seed]#();(where;where not::)@\:seed;(`seed;::)];
+  mdlTab:update seed:toSeed from mdlTab;
+  // Convert rest of table to symbol values
+  mdlTab:{![x;();0b;enlist[y]!enlist($;enlist`;y)]}/[mdlTab;`lib`fnc`typ];
+  // Select valid models to apply
+  if[1b~cfg`tensorFlow;mdlTab:select from mdlTab where lib<>`keras];
+  select from mdlTab where apply
   }
 
 // @kind function
 // @category modelGeneration
 // @fileoverview Extract appropriate models based on the problem type
-// @param cfg     {dict} configuration information relating to the current run of AutoML
-// @param mdlDict {dict} dictionary containing information on applicable models based on
+// @param cfg    {dict} configuration information relating to the current run of AutoML
+// @param mdlTab {dict} table containing information on applicable models based on
 // problem type
-// @param tgt     {(num[];sym[])} numerical or symbol vector containing the target dataset
-// @return        {tab} table containing appropriate models that can be used  based on 
+// @param tgt    {(num[];sym[])} numerical or symbol vector containing the target dataset
+// @return       {tab} table containing appropriate models that can be used  based on 
 //  target and problem type
-modelGeneration.modelPrep:{[cfg;mdlDict;tgt]
-  // Convert a parsed dictionary from flat file to an approprate tabular representation
-  mdlTab:flip`model`lib`fnc`seed`typ!flip key[mdlDict],'value mdlDict;
+modelGeneration.modelPrep:{[cfg;mdlTab;tgt]
   if[`class=cfg`problemType;
     // For classification tasks remove inappropriate classification models
     mdlTab:$[2<count distinct tgt;
@@ -46,8 +43,7 @@ modelGeneration.modelPrep:{[cfg;mdlDict;tgt]
        ]
     ];
   // Add a column with appropriate initialized models for each row
-  mdlTab:update minit:.automl.modelGeneration.mdlFunc .'flip(lib;fnc;model)from mdlTab;
-  mdlTab
+  update minit:.automl.modelGeneration.mdlFunc .'flip(lib;fnc;model)from mdlTab
   }
 
 // @kind function
@@ -65,6 +61,3 @@ modelGeneration.mdlFunc:{[lib;fnc;mdl]
     {[x;y;z].p.import[x]y}[` sv lib,fnc;hsym mdl]
     ]
   }
-
-// Text files that can be parsed from within the models folder
-modelGeneration.files:`class`reg!("classmodels.txt";"regmodels.txt")

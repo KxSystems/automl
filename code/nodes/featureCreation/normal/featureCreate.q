@@ -16,7 +16,7 @@ featureCreation.normal.create:{[feat;cfg]
   timeCols:.ml.i.fndcols[feat;"dmntvupz"];
   featTable:(cols[feat]except timeCols)#feat;
   // apply user defined functions to the table
-  featTable:featureCreation.normal.applyFunc/[featTable;cfg`funcs];
+  featTable:featureCreation.normal.applyFunc/[featTable;cfg`functions];
   featTable:dataPreprocessing.infreplace featTable;
   featTable:dataPreprocessing.nullEncode[featTable;med];
   featTable:.ml.dropconstant featTable;

@@ -8,12 +8,19 @@
 // Suitable feature data and configuration for testing of configuration update
 featData:([]100?1f;100?1f)
 startDateTime:`startDate`startTime!(.z.D;.z.T)
-configNLPReg     :startDateTime,`featExtractType`problemType!`nlp`reg
-configNLPClass   :startDateTime,`featExtractType`problemType!`nlp`class
-configFRESHReg   :startDateTime,`featExtractType`problemType!`fresh`reg
-configFRESHClass :startDateTime,`featExtractType`problemType!`fresh`class
-configNormalReg  :startDateTime,`featExtractType`problemType!`normal`reg
-configNormalClass:startDateTime,`featExtractType`problemType!`normal`class
+
+// Retrieve default values defined at startup by .automl.paramDict
+modelName:enlist[`saveModelName]!enlist`
+normalDefault:.automl.paramDict[`general],.automl.paramDict[`normal],modelName;
+freshDefault :.automl.paramDict[`general],.automl.paramDict[`fresh] ,modelName;
+nlpDefault   :.automl.paramDict[`general],.automl.paramDict[`nlp]   ,modelName;
+
+configNLPReg     :nlpDefault,startDateTime,`featureExtractionType`problemType!`nlp`reg
+configNLPClass   :nlpDefault,startDateTime,`featureExtractionType`problemType!`nlp`class
+configFRESHReg   :freshDefault,startDateTime,`featureExtractionType`problemType!`fresh`reg
+configFRESHClass :freshDefault,startDateTime,`featureExtractionType`problemType!`fresh`class
+configNormalReg  :normalDefault,startDateTime,`featureExtractionType`problemType!`normal`reg
+configNormalClass:normalDefault,startDateTime,`featureExtractionType`problemType!`normal`class
 
 // Projection shortcut for generation of relevant config
 configGen:.automl.dataCheck.updateConfig[featData]
@@ -21,7 +28,7 @@ configGen:.automl.dataCheck.updateConfig[featData]
 -1"\nTesting inappropriate configuration updates";
 
 // unimplemented form of feature extraction
-inapprFeatType:configNormalReg,enlist[`featExtractType]!enlist `NYI
+inapprFeatType:configNormalReg,enlist[`featureExtractionType]!enlist `NYI
 featExtractError:"Inappropriate feature extraction type"
 failingTest[.automl.dataCheck.updateConfig;(featData;inapprFeatType);0b;featExtractError]
 
@@ -51,9 +58,9 @@ nlpConfig   :configGen configNLPReg
 inapprTypeFunc:{"The function",x," not defined in your process\n"}
 
 // inappropriate function inputs and associated error message
-inapprTTS         :normalConfig,enlist[`tts]!enlist`notafunc
+inapprTTS         :normalConfig,enlist[`trainTestSplit]!enlist`notafunc
 inapprTTSPrint    :inapprTypeFunc[" notafunc is"]
-inapprFuncPrf     :normalConfig,`funcs`prf!`notafunc1`notafunc2
+inapprFuncPrf     :normalConfig,`functions`predictionFunction!`notafunc1`notafunc2
 inapprFuncPrfPrint:inapprTypeFunc["s notafunc1, notafunc2 are"]
 
 // Testing of all inappropriately function inputs
@@ -64,11 +71,11 @@ failingTest[.automl.dataCheck.functions;inapprFuncPrf;1b;inapprFuncPrfPrint]
 -1"\nTesting appropriate function inputs to overwrite default behaviour";
 
 // appropriate function inputs
-apprFunc   :normalConfig,enlist[`xv]!enlist (`.ml.xv.pcsplit;0.2)
-apprFuncs  :normalConfig,`xv`gs!((`.ml.xv.pcsplit;0.2);(`.ml.gs.mcsplit;0.2))
-apprPyFuncs:normalConfig,`tts`sz!(`python_train_test_split;.2)
+apprFunc   :normalConfig,`crossValidationFunction`crossValidationArgument!(`.ml.xv.pcsplit;0.2)
+apprFuncs  :normalConfig,`crossValidationFunction`crossValidationArgument`gridSearchFunction`gridSearchArgument!(`.ml.xv.pcsplit;0.2;`.ml.gs.mcsplit;0.2)
+apprPyFuncs:normalConfig,`trainTestSplit`testingSize!(`python_train_test_split;.2)
 .automl.newSigfeat:{.ml.fresh.significantfeatures[x;y;.ml.fresh.ksigfeat 2]}
-apprSigFeat:normalConfig,enlist[`sigfeats]!enlist `.automl.newsigfeat
+apprSigFeat:normalConfig,enlist[`significantFeatures]!enlist `.automl.newSigfeat
 
 // Testing of appropriate function inputs
 passingTest[.automl.dataCheck.functions;apprFunc   ;1b;(::)]
@@ -118,20 +125,20 @@ failingTest[.automl.dataCheck.length;(normNLPTab;inapprTarget;normalConfig);0b;n
 failingTest[.automl.dataCheck.length;(normNLPTab;inapprTarget;nlpConfig)   ;0b;normNLPError]
 
 // Update FRESH config to retrieve the correct columns
-updFreshConfig:freshConfig,enlist[`aggcols]!enlist `x
+updFreshConfig:freshConfig,enlist[`aggregationColumns]!enlist `x
 
 // Testing of all inappropriate FRESH target lengths
 failingTest[.automl.dataCheck.length;(freshTab  ;inapprTarget;updFreshConfig);0b;freshError]
 
 // Provide an inappropriate feature extraction type
-updConfigType:normalConfig,enlist[`featExtractType]!enlist `NYI
+updConfigType:normalConfig,enlist[`featureExtractionType]!enlist `NYI
 nyiError:"Input for typ must be a supported type"
 
 // Testing of inappropriate feature extraction type
 failingTest[.automl.dataCheck.length;(normNLPTab;inapprTarget;updConfigType);0b;nyiError]
 
 // Provide an inappropriate type in feature extraction for config
-updConfigType:normalConfig,enlist[`featExtractType]!enlist 1f
+updConfigType:normalConfig,enlist[`featureExtractionType]!enlist 1f
 typError:"Input for typ must be a supported symbol"
 
 // Testing of inappropriate type in config feature extraction

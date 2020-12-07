@@ -12,19 +12,21 @@
 // @param bestModel {<} Fitted best model
 // @param modelName {sym} Name of best model
 // @param tts       {dict} Feature and target data split into training and testing set 
+// @param orderFunc {func} Function used to order scores
 // @return {dict} Score, prediction and best model
-optimizeModels.node.function:{[cfg;mdls;bestModel;modelName;tts]
-  scoreFunc:cfg[`scf]cfg`problemType;
+optimizeModels.node.function:{[cfg;mdls;bestModel;modelName;tts;orderFunc]
+  ptype:$[`reg=cfg`problemType;"Regression";"Classification"];
+  scoreFunc:cfg`$"scoringFunction",ptype;
   mdlDict  :`mdlLib`mdlFunc!utils.bestModelDef[mdls;modelName]each`lib`fnc;
-  hyperSearch :optimizeModels.hyperSearch[mdlDict;mdls;bestModel;modelName;tts;scoreFunc;cfg];
+  hyperSearch :optimizeModels.hyperSearch[mdlDict;mdls;bestModel;modelName;tts;scoreFunc;orderFunc;cfg];
   confMatrix  :optimizeModels.confMatrix[hyperSearch`predictions;tts;modelName;cfg];
-  impactReport:optimizeModels.impactDict[mdlDict;hyperSearch;modelName;tts;cfg;scoreFunc;mdls];
+  impactReport:optimizeModels.impactDict[mdlDict;hyperSearch;modelName;tts;cfg;scoreFunc;orderFunc;mdls];
   residuals   :optimizeModels.residuals[hyperSearch;tts;cfg];
   optimizeModels.consolidateParams[hyperSearch;confMatrix;impactReport;residuals] 
   }
 
 // Input information
-optimizeModels.node.inputs  :`config`models`bestModel`bestScoringName`ttsObject!"!+<s!"
+optimizeModels.node.inputs  :`config`models`bestModel`bestScoringName`ttsObject`orderFunc!"!+<s!<"
 
 // Output information
 optimizeModels.node.outputs :`bestModel`hyperParams`modelName`testScore`analyzeModel!"<!sf!"
