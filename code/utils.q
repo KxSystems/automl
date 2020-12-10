@@ -117,27 +117,6 @@ utils.bestModelDef:{[mdls;modelName;col]
   }
 
 // @kind function
-// @category Utility
-// @fileoverview Dictionary with mappings for console printing to reduce clutter
-utils.printDict:(!) . flip(
-  (`describe  ;"The following is a breakdown of information for each of the relevant columns in the dataset");
-  (`preproc   ;"Data preprocessing complete, starting feature creation");
-  (`sigFeat   ;"Feature creation and significance testing complete");
-  (`totalFeat ;"Total number of significant features being passed to the models = ");
-  (`select    ;"Starting initial model selection - allow ample time for large datasets");
-  (`scoreFunc ;"Scores for all models using ");
-  (`bestModel ;"Best scoring model = ");
-  (`modelFit  ;"Continuing to final model fitting on testing set");
-  (`hyperParam;"Continuing to hyperparameter search and final model fitting on testing set");
-  (`score     ;"Best model fitting now complete - final score on testing set = ");
-  (`confMatrix;"Confusion matrix for testing set:");
-  (`graph     ;"Saving down graphs to ");
-  (`report    ;"Saving down procedure report to ");
-  (`meta      ;"Saving down model parameters to ");
-  (`model     ;"Saving down model to "))
-
-
-// @kind function
 // @category automl
 // @fileoverview Retrieve the feature and target data from a user defined
 //   json file containing data retrieval information.
@@ -175,9 +154,12 @@ utils.getCommandLineData:{[method]
 // @param feats  {tab}   Feature data based on which predictions are to be made.
 // @returns      {num[]} Predictions
 utils.generatePredict:{[config;feats]
+  original_print:utils.printing;
+  utils.printing:0b;
   bestModel:config`bestModel;
   feats:utils.featureCreation[config;feats];
   modelLibrary:config`modelLib;
+  utils.printing:original_print;
   $[`sklearn~modelLibrary;
     bestModel[`:predict;<]feats;
     modelLibrary in`keras`torch;
@@ -279,7 +261,57 @@ utils.extractModelMeta:{[modelDetails;pathToMeta]
 //   in order for a dataset not to be loaded twice (assumes tabular return under equivalence)
 utils.dataType:`ipc`binary`csv!(`port`select;`directory`fileName;`directory`fileName)
 
-// Printing and logging functionality
+// @kind function
+// @category Utility
+// @fileoverview Dictionary with mappings for console printing to reduce clutter
+utils.printDict:(!) . flip(
+  (`describe  ;"The following is a breakdown of information for each of the relevant columns in the dataset");
+  (`errColumns;"The following columns were removed due to type restrictions for ");
+  (`preproc   ;"Data preprocessing complete, starting feature creation");
+  (`sigFeat   ;"Feature creation and significance testing complete");
+  (`totalFeat ;"Total number of significant features being passed to the models = ");
+  (`select    ;"Starting initial model selection - allow ample time for large datasets");
+  (`scoreFunc ;"Scores for all models using ");
+  (`bestModel ;"Best scoring model = ");
+  (`modelFit  ;"Continuing to final model fitting on testing set");
+  (`hyperParam;"Continuing to hyperparameter search and final model fitting on testing set");
+  (`score     ;"Best model fitting now complete - final score on testing set = ");
+  (`confMatrix;"Confusion matrix for testing set:");
+  (`graph     ;"Saving down graphs to ");
+  (`report    ;"Saving down procedure report to ");
+  (`meta      ;"Saving down model parameters to ");
+  (`model     ;"Saving down model to "))
+
+// @kind function
+// @category Utility
+// @fileoverview Dictionary of warning print statements that can be turned on/off.
+//  If two elements are within a key,first element is the warning given when ignoreWarnings=2,
+//  the second is the warning given when ignoreWarnings=1
+utils.printWarnings:(!) . flip(
+  (`configExists     ;("A configuration file of this name already exists, this run will be exited";
+                       "A configuration file of this name already exists and will be overwritten"));
+  (`savePathExists   ;("The savePath chosen already exists, this run will be exited";
+                       "The savePath chosen already exists and will be overwritten"));
+  (`loggingPathExists;("The logging path chosen already exists, this run will be overwritten";
+                       "The logging path chosen already exists and will be overwritten"));
+  (`printDefault     ;"If saveOption is 0, logging or printing to screen must be enabled. Defaulting to .automl.utils.printing:1b");
+  (`pythonHashSeed   ;"For full reproducibility between q processes of the NLP word2vec implementation,",
+                      " the PYTHONHASHSEED environment variable must be set upon initialization of q. See ",
+                      "https://code.kx.com/q/ml/automl/ug/options/#seed for details.");
+  (`neuralNetWarning ;("Limiting the models being applied. No longer running neural networks or SVMs.",
+                       " Upper limit for number of targets set to: ";
+                       "It is advised to remove any neural network or SVM based models from model evaluation.",
+                       " Currently running with in a number of datapoings in excess of: "))
+  )
+
+
+// @kind function
+// @category Utility
+// @fileoverview Decide how warning statements should be handles.
+//   0=No warning or action taken
+//   1=Warning given but no action taken.
+//   2=Warning given and appropriate action taken.
+utils.ignoreWarnings:2
 
 // @kind function
 // @category Utility
@@ -289,11 +321,13 @@ utils.logging:0b
 
 // @kind function
 // @category api
-// @fileoverview
+// @fileoverview Print statements to screen and/or to a logging script depending on user configuration
+//  upon initialization
 // @param filename {sym} Name of the file which can be used to save a log of outputs to file
 // @param val      {str} Item that is to be displayed to standard out of any type
 // @param nline1   {int} Number of new line breaks before the text that are needed to 'pretty print' the display
 // @param nline2   {int} Number of new line breaks after the text that are needed to 'pretty print' the display
+// @return {null} String is printed to terminal or logged to a script
 utils.printFunction:{[filename;val;nline1;nline2]
   if[not 10h~type val;val:.Q.s[val]];
   newLine1:nline1#"\n";

@@ -14,7 +14,7 @@
 selectModels.node.function:{[tts;target;mdls;cfg]
   cfg[`logFunc] utils.printDict`select;
   models:selectModels.targetKeras[mdls;tts;target];
-  selectModels.targetLimit[models;target]
+  selectModels.targetLimit[models;target;cfg]
   }
 
 // Input information

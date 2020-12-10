@@ -82,4 +82,4 @@ passingTest[.automl.saveGraph.node.function;paramDictConfigReg2;1b;paramDictConf
 
 // Remove any directories made
 rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/testing/";
-system $[.z.o like "w*";"rmdir ",rmPath," /s";"rm -r ",rmPath];
+system "rm -r ",rmPath

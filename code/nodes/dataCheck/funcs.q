@@ -30,10 +30,12 @@ dataCheck.updateConfig:{[feat;cfg]
   // If applicable add save path information to configuration dictionary
   config,:$[0<config`saveOption;dataCheck.i.pathConstruct[config];()!()];
   if[.automl.utils.logging;config:dataCheck.i.logging config];
-  if[all not .automl.utils[`printing`logging],config`saveOption;
-     -1"\nIf saveOption is 0, logging or printing to screen must be enabled. Defaulting to .automl.printing:1b\n";
-     changePrinting[]];
   config[`logFunc]:.automl.utils.printFunction[config`printFile;;1;1];
+  if[all not .automl.utils[`printing`logging`ignoreWarnings],config`saveOption;
+     updatePrinting[];
+     config[`logFunc] utils.printWarnings`printDefault];
+  // Check that no log/save path created already exists
+  dataCheck.i.fileNameCheck[config];
   .p.import[`warnings][`:filterwarnings]$[config`pythonWarning;`module;`ignore];
   if[not config`tensorFlow;.p.get[`tfWarnings]$[config`pythonWarning;`0;`2]];
   savedWord2Vec:enlist[`savedWord2Vec]!enlist 0b;
@@ -72,11 +74,7 @@ dataCheck.NLPLoad:{[cfg]
   if[not `nlp~cfg`featureExtractionType;:()];
   if[not (0~checkimport[3]) & ((::)~@[{system"l ",x};"nlp/nlp.q";{0b}]);
     '"User attempting to run NLP models with insufficient requirements, see documentation"];
-  if[""~getenv`PYTHONHASHSEED;
-    -1"For full reproducibility between q processes of the NLP word2vec implementation,",
-    " the PYTHONHASHSEED environment variable must be set upon initialization of q. See ",
-    "https://code.kx.com/q/ml/automl/ug/options/#seed for details.";
-    ];
+  if[(""~getenv`PYTHONHASHSEED)&utils.ignoreWarnings>0;cfg[`logFunc] utils.printWarnings`pythonHashSeed];
   }
 
 // @kind function
@@ -115,7 +113,7 @@ dataCheck.featureTypes:{[feat;cfg]
     [fCols:.ml.i.fndcols[feat;"sfihjbepmdznuvtC"];
      tab:flip fCols!feat fCols];
     '`$"This form of feature extraction is not currently supported"];
-  dataCheck.i.errColumns[cols feat;fCols;typ];
+  dataCheck.i.errColumns[cols feat;fCols;typ;cfg];
   tab
   }
 

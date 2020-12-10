@@ -90,7 +90,10 @@ newConfig:{[fileName]
     '`$"fileName must be string, symbol or hsym"];
   fileName:raze[path],"/code/customization/configuration/customConfig/",fileName;
   filePath:hsym`$utils.ssrWindows fileName;
-  if[not ()~key filePath;'"A configuration of this name already exists at:",fileName];
+  if[not ()~key filePath;
+    ignore:utils.ignoreWarnings;
+    $[ignore=2;{'x};ignore=1;-1;]utils.printWarnings[`configExists]ignore
+    ];
   defaultConfig:read0 `$path,"/code/customization/configuration/default.json";
   h:hopen filePath;
   {x y,"\n"}[h]each defaultConfig;
@@ -119,9 +122,24 @@ runCommandLine:{[]
   fit[;;ftype;ptype;::]. data`features`target;
   }
 
+// @kind function
+// @category Utility
+// @fileoverview Update print warning severity level
+// @param warningLevel {long} 0, 1 or 2 long denoting how severely warnings are
+//   to be handled.
+//   - 0 = Ignore warnings completely and continue evaluation
+//   - 1 = Highlight to a user that a warning was being flagged but continue
+//   - 2 = Exit evaluation of AutoML highlighting to the user why this happened
+// @return {null} update the global .automl.utils.ignoreWarnings with new level
+updateIgnoreWarnings:{[warningLevel]
+  if[not warningLevel in til 3;'"Warning severity level must a long 0, 1 or 2."];
+  utils.ignoreWarnings::warningLevel
+  }
 
 // @kind function
 // @category Utility
 // @fileoverview Update logging and printing states
+// @return {null} Change the boolean representation of .automl.utils.logging
+//   and .automl.utils.printing respectively
 updateLogging :{utils.logging ::not utils.logging}
 updatePrinting:{utils.printing::not utils.printing}

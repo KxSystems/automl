@@ -65,7 +65,7 @@ dirCheck:{[preProcParams;predictionStore;saveOpt]
   outputDir:.automl.path,"/outputs/testing/";
   returns:key hsym `$outputDir;
   if[0~count returns;returns:`];
-  if[0<>saveOpt;@[{system$[.z.o like "w*";"rmdir ",x," /s";"rm -r ",x]};outputDir;{`}]];
+  if[0<>saveOpt;@[{system "rm -r ",x};outputDir;{`}]];
   returns
   }
 
@@ -99,4 +99,4 @@ passingTest[pathConstructFunc;(preProcDict2;predictionStoreDict);0b;paramReturn]
 
 // Remove any folders created
 rmPath:.automl.utils.ssrWindows .automl.path,"/outputs/testing/";
-system $[.z.o like "w*";"rmdir ",rmPath," /s";"rm -r ",rmPath];
+system "rm -r ",rmPath
