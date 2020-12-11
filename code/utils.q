@@ -253,7 +253,8 @@ utils.modelPath:{[dict]
 // @param pathToMeta {hsym} Path to previous model meta data
 // @returns Either returns extracted model meta data or errors out
 utils.extractModelMeta:{[modelDetails;pathToMeta]
-  errFunc:{[modelDetails;err]'"Model ",sv[" - ";string value modelDetails]," does not exist\n"}modelDetails;
+  modelName:$[10h=type raze value modelDetails;;{sv[" - ";string x]}]raze modelDetails;
+  errFunc:{[modelName;err]'"Model ",modelName," does not exist\n"}modelName;
   @[get;pathToMeta;errFunc]
   }
 

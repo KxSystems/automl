@@ -11,5 +11,6 @@ if defined QLIC_KC (
 	echo getting test.q from embedpy
         curl -fsSL -o test.q https://github.com/KxSystems/embedpy/raw/master/test.q
 	env:PYTHONHASHSEED=0
-        q test.q -q
+        call "code\tests\testFiles.bat"
+
 )
