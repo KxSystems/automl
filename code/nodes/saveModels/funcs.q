@@ -14,7 +14,7 @@ saveModels.saveModel:{[params;savePath]
   modelName:string params`modelName;
   filePath:savePath,"/",modelName;
   joblib:.p.import`joblib;
-  $[`sklearn~modelLib;
+  $[modelLib in`sklearn`theano;
        joblib[`:dump][bestModel;filePath];
     `keras~modelLib;
        bestModel[`:save][filePath,".h5"];

@@ -38,7 +38,7 @@ models.keras.binary.fit:models.keras.reg.fit:models.keras.multi.fit:{[data;mdl]
 // @return      {<} the compiled keras models
 models.keras.binary.model:{[data;seed]
   models.i.numpySeed[seed];
-  models.i.tensorflowSeed[seed];
+  if[models.i.tensorflowBackend;models.i.tensorflowSeed[seed]];
   mdl:models.i.kerasSeq[];
   mdl[`:add]models.i.kerasDense[32;`activation pykw"relu";`input_dim pykw count first data`xtrain];
   mdl[`:add]models.i.kerasDense[1;`activation pykw "sigmoid"];
@@ -67,7 +67,7 @@ models.keras.binary.predict:{[data;mdl]
 // @return      {<} the compiled keras models
 models.keras.reg.model:{[data;seed]
   models.i.numpySeed[seed];
-  models.i.tensorflowSeed[seed];
+  if[models.i.tensorflowBackend;models.i.tensorflowSeed[seed]];
   mdl:models.i.kerasSeq[];
   mdl[`:add]models.i.kerasDense[32;`activation pykw "relu";`input_dim pykw count first data`xtrain];
   mdl[`:add]models.i.kerasDense[1 ;`activation pykw "relu"];
@@ -96,7 +96,7 @@ models.keras.reg.predict:{[data;mdl]
 // @return      {<} the compiled keras models
 models.keras.multi.model:{[data;seed]
   models.i.numpySeed[seed];
-  models.i.tensorflowSeed[seed];
+  if[models.i.tensorflowBackend;models.i.tensorflowSeed[seed]];
   mdl:models.i.kerasSeq[];
   mdl[`:add]models.i.kerasDense[32;`activation pykw "relu";`input_dim pykw count first data`xtrain];
   mdl[`:add]models.i.kerasDense[count distinct data[`ytrain]`;`activation pykw "softmax"];
@@ -117,15 +117,21 @@ models.keras.multi.predict:{[data;mdl]
   }
 
 // load required python modules
-models.i.npArray   :.p.import[`numpy       ]`:array;
-models.i.kerasSeq  :.p.import[`keras.models]`:Sequential;
-models.i.kerasDense:.p.import[`keras.layers]`:Dense;
-models.i.numpySeed :.p.import[`numpy.random]`:seed;
+models.i.npArray   :.p.import[`numpy        ]`:array;
+models.i.kerasSeq  :.p.import[`keras.models ]`:Sequential;
+models.i.kerasDense:.p.import[`keras.layers ]`:Dense;
+models.i.numpySeed :.p.import[`numpy.random ]`:seed;
+models.i.backend   :.p.import[`keras.backend]`:backend;
+
+// Check if tensorflow is being used as the backend for keras
+models.i.tensorflowBackend:"tensorflow"~models.i.backend[]`
 
 // import appropriate random seed depending on tensorflow version
-models.i.tf:.p.import[`tensorflow];
-models.i.tfType:$[2>"I"$first models.i.tf[`:__version__]`;`:set_random_seed;`:random.set_seed];
-models.i.tensorflowSeed:models.i.tf models.i.tfType;
+if[models.i.tensorflowBackend;
+  models.i.tf:.p.import[`tensorflow];
+  models.i.tfType:$[2>"I"$first models.i.tf[`:__version__]`;`:set_random_seed;`:random.set_seed];
+  models.i.tensorflowSeed:models.i.tf models.i.tfType
+  ];
 
 p)def tfWarnings(warn):
   import os

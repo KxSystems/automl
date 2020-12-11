@@ -162,7 +162,7 @@ utils.generatePredict:{[config;feats]
   utils.printing:original_print;
   $[`sklearn~modelLibrary;
     bestModel[`:predict;<]feats;
-    modelLibrary in`keras`torch;
+    modelLibrary in`keras`torch`theano;
     [feats:enlist[`xtest]!enlist feats;
     customName:"." sv string config`modelLib`mdlFunc;
      get[".automl.models.",customName,".predict"][feats;bestModel]];
@@ -206,13 +206,15 @@ utils.loadModel:{[config]
   loadFunction:$[modelLibrary~`sklearn;
     .p.import[`joblib][`:load];
     modelLibrary~`keras;
-    $[0~checkimport[0];.p.import[`keras.models][`:load_model];'"Keras model could not be loaded"];
+    $[check.keras[];.p.import[`keras.models][`:load_model];'"Keras model could not be loaded"];
     modelLibrary~`torch;
     $[0~checkimport[1];.p.import[`torch][`:load];'"Torch model could not be loaded"];
+    modelLibrary~`theano;
+    $[0~checkimport[5];.p.import[`joblib][`:load];'"Theano model could not be loaded"];
     '"Model Library must be one of 'sklearn', 'keras' or 'torch'"
    ];
   modelPath:config[`modelsSavePath],string config`modelName;
-  modelFile:$[modelLibrary~`sklearn;
+  modelFile:$[modelLibrary in`sklearn`theano;
     modelPath;
     modelLibrary in`keras;modelPath,".h5";
     modelLibrary~`torch;modelPath,".pt";
@@ -265,22 +267,25 @@ utils.dataType:`ipc`binary`csv!(`port`select;`directory`fileName;`directory`file
 // @category Utility
 // @fileoverview Dictionary with mappings for console printing to reduce clutter
 utils.printDict:(!) . flip(
-  (`describe  ;"The following is a breakdown of information for each of the relevant columns in the dataset");
+  (`describe;"The following is a breakdown of information for each of the relevant columns in the dataset");
   (`errColumns;"The following columns were removed due to type restrictions for ");
-  (`preproc   ;"Data preprocessing complete, starting feature creation");
-  (`sigFeat   ;"Feature creation and significance testing complete");
-  (`totalFeat ;"Total number of significant features being passed to the models = ");
-  (`select    ;"Starting initial model selection - allow ample time for large datasets");
-  (`scoreFunc ;"Scores for all models using ");
-  (`bestModel ;"Best scoring model = ");
-  (`modelFit  ;"Continuing to final model fitting on testing set");
+  (`preproc;"Data preprocessing complete, starting feature creation");
+  (`sigFeat;"Feature creation and significance testing complete");
+  (`totalFeat;"Total number of significant features being passed to the models = ");
+  (`select;"Starting initial model selection - allow ample time for large datasets");
+  (`scoreFunc;"Scores for all models using ");
+  (`bestModel;"Best scoring model = ");
+  (`modelFit;"Continuing to final model fitting on testing set");
   (`hyperParam;"Continuing to hyperparameter search and final model fitting on testing set");
-  (`score     ;"Best model fitting now complete - final score on testing set = ");
+  (`kerasClass;"Test set does not contain examples of each class removing multi-class keras models");
+  (`torchModels;"Attempting to run Torch models without Torch installed, removing Torch models");
+  (`theanoModels;"Attempting to run Theano models without Theano installed, removing Theano models");
+  (`score;"Best model fitting now complete - final score on testing set = ");
   (`confMatrix;"Confusion matrix for testing set:");
-  (`graph     ;"Saving down graphs to ");
-  (`report    ;"Saving down procedure report to ");
-  (`meta      ;"Saving down model parameters to ");
-  (`model     ;"Saving down model to "))
+  (`graph;"Saving down graphs to ");
+  (`report;"Saving down procedure report to ");
+  (`meta;"Saving down model parameters to ");
+  (`model;"Saving down model to "))
 
 // @kind function
 // @category Utility
@@ -288,20 +293,26 @@ utils.printDict:(!) . flip(
 //  If two elements are within a key,first element is the warning given when ignoreWarnings=2,
 //  the second is the warning given when ignoreWarnings=1
 utils.printWarnings:(!) . flip(
-  (`configExists     ;("A configuration file of this name already exists, this run will be exited";
-                       "A configuration file of this name already exists and will be overwritten"));
-  (`savePathExists   ;("The savePath chosen already exists, this run will be exited";
-                       "The savePath chosen already exists and will be overwritten"));
-  (`loggingPathExists;("The logging path chosen already exists, this run will be overwritten";
-                       "The logging path chosen already exists and will be overwritten"));
-  (`printDefault     ;"If saveOption is 0, logging or printing to screen must be enabled. Defaulting to .automl.utils.printing:1b");
-  (`pythonHashSeed   ;"For full reproducibility between q processes of the NLP word2vec implementation,",
-                      " the PYTHONHASHSEED environment variable must be set upon initialization of q. See ",
-                      "https://code.kx.com/q/ml/automl/ug/options/#seed for details.");
-  (`neuralNetWarning ;("Limiting the models being applied. No longer running neural networks or SVMs.",
-                       " Upper limit for number of targets set to: ";
-                       "It is advised to remove any neural network or SVM based models from model evaluation.",
-                       " Currently running with in a number of datapoings in excess of: "))
+  (`configExists;("A configuration file of this name already exists, this run ",
+    "will be exited";
+    "A configuration file of this name already exists and will be overwritten"));
+  (`savePathExists;("The savePath chosen already exists, this run will be",
+     " exited";
+     "The savePath chosen already exists and will be overwritten"));
+  (`loggingPathExists;("The logging path chosen already exists, this run will ",
+    "be overwritten";
+    "The logging path chosen already exists and will be overwritten"));
+  (`printDefault;"If saveOption is 0, logging or printing to screen must be ",
+     "enabled. Defaulting to .automl.utils.printing:1b");
+  (`pythonHashSeed;"For full reproducibility between q processes of the NLP ",
+    "word2vec implementation, the PYTHONHASHSEED environment variable must ",
+    "be set upon initialization of q. See ",
+    "https://code.kx.com/q/ml/automl/ug/options/#seed for details.");
+  (`neuralNetWarning;("Limiting the models being applied. No longer running ",
+    "neural networks or SVMs. Upper limit for number of targets set to: ";
+    "It is advised to remove any neural network or SVM based models from ",
+    "model evaluation. Currently running with in a number of datapoings in",
+    " excess of: "))
   )
 
 

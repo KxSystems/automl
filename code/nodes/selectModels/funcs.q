@@ -8,17 +8,48 @@
 // @param mdls {tab} Models which are to be applied to the dataset
 // @param tts  {dict} Feature and target data split into train and testing sets
 // @param tgt  {(num[];sym[])} numerical or symbol vector containing the target dataset
+// @param cfg  {dict} Configuration information assigned by the user and related to the current run
 // @return {tab} Keras model removed if needed and removal highlighted
-selectModels.targetKeras:{[mdls;tts;tgt]
-  if[1~checkimport[0];
+selectModels.targetKeras:{[mdls;tts;tgt;cfg]
+  if[not check.keras[];
     :?[mdls;enlist(<>;`lib;enlist `keras);0b;()]
     ];
   multiCheck:`multi in mdls`typ;
   tgtCount:min count@'distinct each tts`ytrain`ytest;
   tgtCheck:count[distinct tgt]>tgtCount;
   if[multiCheck&tgtCheck;
-    -1"\n Test set does not contain examples of each class. Removed any multi keras models";
+    cfg[`logFunc] utils.printDict`kerasClass;
     :delete from mdls where lib=`keras,typ=`multi
+    ];
+  mdls
+  }
+
+
+/// @kind function
+// @category selectModels
+// @fileoverview Remove torch models if these are unavailable
+// @param mdls {tab} Models which are to be applied to the dataset
+// @param cfg  {dict} Configuration information assigned by the user and related to the current run
+// @return {tab} Keras model removed if needed and removal highlighted
+selectModels.torchModels:{[mdls;cfg]
+  if[0<>checkimport[1];
+    cfg[`logFunc] utils.printDict`torchModels;
+    :?[mdls;enlist(<>;`lib;enlist `torch);0b;()]
+    ];
+  mdls
+  }
+
+
+/ @kind function
+// @category selectModels
+// @fileoverview Remove theano models if these are unavailable
+// @param mdls {tab} Models which are to be applied to the dataset
+// @param cfg  {dict} Configuration information assigned by the user and related to the current run
+// @return {tab} Keras model removed if needed and removal highlighted
+selectModels.theanoModels:{[mdls;cfg]
+  if[0<>checkimport[5];
+    cfg[`logFunc] utils.printDict`theanoModels;
+    :?[mdls;enlist(<>;`lib;enlist `theano);0b;()]
     ];
   mdls
   }
