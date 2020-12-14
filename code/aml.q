@@ -97,9 +97,10 @@ newConfig:{[fileName]
   filePath:hsym`$utils.ssrWindows fileName;
   if[not()~key filePath;
     ignore:utils.ignoreWarnings;
-    $[ignore=2;{'x};ignore=1;-1;]utils.printWarnings[`configExists]ignore
-	];
-  defaultConfig:read0`$path,"/code/customization/configuration/default.json";
+    index:$[ignore=2;0;1];
+    $[ignore=2;{'x};ignore=1;-1;]utils.printWarnings[`configExists]index
+    ];
+  defaultConfig:read0 `$path,"/code/customization/configuration/default.json";
   h:hopen filePath;
   {x y,"\n"}[h]each defaultConfig;
   hclose h;

@@ -76,6 +76,13 @@
       "seed":true,
       "type":"multi",
       "apply":true
+    },
+    "Theano":{
+      "library":"theano",
+      "module":"NN",
+       "seed":true,
+       "type":"binary",
+       "apply":true
     }
   },
   "regression":{

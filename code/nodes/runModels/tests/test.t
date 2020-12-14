@@ -110,10 +110,10 @@ binaryPreds:5 1 2 16#160?0b
 multiPreds:($[hasKeras;6;5],1 2 16)#192?0b
 regPreds:8 1 2 16#256?1f
 
-binaryReturn:`SVC`LogisticRegression`GaussianNB`LinearSVC`binarykeras
-multiReturnKeras:`MLPClassifier`KNeighborsClassifier`AdaBoostClassifier`multikeras`RandomForestClassifier`GradientBoostingClassifier
+binaryReturn:`SVC`LogisticRegression`GaussianNB`LinearSVC`BinaryKeras
+multiReturnKeras:`MLPClassifier`KNeighborsClassifier`AdaBoostClassifier`MultiKeras`GradientBoostingClassifier`RandomForestClassifier
 multiReturn:`MLPClassifier`KNeighborsClassifier`AdaBoostClassifier`RandomForestClassifier`GradientBoostingClassifier
-regReturn  :`Lasso`LinearRegression`regkeras`AdaBoostRegressor`GradientBoostingRegressor`MLPRegressor`RandomForestRegressor`KNeighborsRegressor
+regReturn  :`Lasso`LinearRegression`RegKeras`AdaBoostRegressor`GradientBoostingRegressor`MLPRegressor`RandomForestRegressor`KNeighborsRegressor
 
 passingTest[keyOrderModels;(binaryModelTab;`.ml.accuracy;binaryPreds);0b;binaryReturn]
 passingTest[keyOrderModels;(multiModelTab ;`.ml.r2score ;multiPreds);0b;$[hasKeras;multiReturnKeras;multiReturn]]

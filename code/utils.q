@@ -194,7 +194,7 @@ utils.loadModel:{[config]
     '"Model Library must be one of 'sklearn', 'keras' or 'torch'"
     ];
   modelPath:config[`modelsSavePath],string config`modelName;
-  modelFile:$[modelLibrary~`sklearn`theano;
+  modelFile:$[modelLibrary in`sklearn`theano;
       modelPath;
     modelLibrary in`keras;
       modelPath,".h5";
@@ -297,14 +297,15 @@ utils.printDict:(!) . flip(
 //   given when ignoreWarnings=2, the second is the warning given when 
 //   ignoreWarnings=1.
 utils.printWarnings:(!) . flip(
-  (`configExists;("A configuration file of this name already exists, this run",
-    " will be exited";"A configuration file of this name already exists and ",
-    "will be overwritten"));
+  (`configExists;("A configuration file of this name already exists";
+     "A configuration file of this name already exists and will be ",
+     "overwritten"));
   (`savePathExists;("The savePath chosen already exists, this run will be",
-     " exited";"The savePath chosen already exists and will be overwritten"));
-  (`loggingPathExists;("The logging path chosen already exists, this run will",
-    " be overwritten";"The logging path chosen already exists and will be ",
-    "overwritten"));
+     " exited";
+     "The savePath chosen already exists and will be overwritten"));
+  (`loggingPathExists;("The logging path chosen already exists, this run ", 
+    "will be exited";
+    "The logging path chosen already exists and will be overwritten"));
   (`printDefault;"If saveOption is 0, logging or printing to screen must be ",
      "enabled. Defaulting to .automl.utils.printing:1b");
   (`pythonHashSeed;"For full reproducibility between q processes of the NLP ",
@@ -312,10 +313,10 @@ utils.printWarnings:(!) . flip(
     "be set upon initialization of q. See ",
     "https://code.kx.com/q/ml/automl/ug/options/#seed for details.");
   (`neuralNetWarning;("Limiting the models being applied. No longer running ",
-    "neural networks or SVMs. Upper limit for number of targets set to: ";
-    "It is advised to remove any neural network or SVM based models from ",
-    "model evaluation. Currently running with in a number of data points in",
-    " excess of: "))
+     "neural networks or SVMs. Upper limit for number of targets set to: ";
+     "It is advised to remove any neural network or SVM based models from ",
+     "model evaluation. Currently running with in a number of data points in",
+     " excess of: "))
   )
 
 

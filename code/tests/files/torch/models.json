@@ -76,6 +76,13 @@
       "seed":true,
       "type":"multi",
       "apply":true
+    },
+    "Torch":{
+      "library":"torch",
+      "module":"NN",
+      "seed":true,
+      "type":"binary",
+      "apply":true
     }
   },
   "regression":{
@@ -137,3 +144,4 @@
     }
   }
 }
+

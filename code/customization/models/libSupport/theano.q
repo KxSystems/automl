@@ -4,5 +4,5 @@
 // interface for the support of Theano models. It also acts as a location to which users defined
 // Theano models could be added
 
-// import pytorch as torch
+// import theano
 theano:.p.import[`theano];

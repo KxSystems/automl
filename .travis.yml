@@ -29,7 +29,8 @@ install:
       pip -q install -r requirements.txt;
       pip install tensorflow;
       pip install keras;
-      pip install pytorch;
+      pip install torch;
+      pip install theano;
       pip install gensim;
       pip install sobol-seq;
     fi
