@@ -1,19 +1,20 @@
 \d .automl
 
-// Loading of the feature dataset, this can be from in process or several alternative datasources
+// Loading of the feature dataset, this can be from in process or several 
+//   alternative data sources
 
 // @kind function
 // @category node
-// @fileoverview Load feature dataset from a location defined by a user provided dictionary
-//   and in accordance with the function .ml.i.loaddset
-// @param cfg {dict} Dictionary outlining the location and method by which to retrieve the data
-// @return    {tab} The feature data as a table
-featureData.node.function:{[cfg]
-  dset:.ml.i.loaddset cfg;
-  $[98h<>type dset;
+// @fileoverview Load feature dataset from a location defined by a user 
+//   provided dictionary and in accordance with the function .ml.i.loaddset
+// @param config {dict} Location and method by which to retrieve the data
+// @return {tab} Feature data as a table
+featureData.node.function:{[config]
+  data:.ml.i.loaddset config;
+  $[98h<>type data;
     '`$"Feature dataset must be a simple table for use with Automl";
-    dset
-  ]
+    data
+    ]
   }
 
 // Input information

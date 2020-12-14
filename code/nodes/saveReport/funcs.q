@@ -1,17 +1,21 @@
 \d .automl
 
-// Definitions of the main callable functions used in the application of .automl.saveReport
+// Definitions of the main callable functions used in the application of
+//  .automl.saveReport
 
 // @kind function
 // @category saveReport
-// @fileoverview  Create a dictionary with image filenames for report generation
+// @fileoverview Create a dictionary with image filenames for report generation
 // @param params {dict} All data generated during the process
 // @return {dict} Image filenames for report generation
 saveReport.reportDict:{[params]
   config:params`config;
   saveImage:config`imagesSavePath;
   savedPlots:saveImage,/:string key hsym`$saveImage;
-  plotNames:$[`class~config`problemType;`conf`data`impact;`data`impact`reg],`target;
+  plotNames:$[`class~config`problemType;
+    `conf`data`impact;
+    `data`impact`reg
+    ],`target;
   savedPlots:enlist[`savedPlots]!enlist plotNames!savedPlots;
   params,savedPlots
   }
@@ -22,21 +26,21 @@ saveReport.reportDict:{[params]
 // @param params {dict} All data generated during the process
 // @return {null} Report saved to appropriate location 
 saveReport.saveReport:{[params]
-  savePath :params[`config;`reportSavePath];
+  savePath:params[`config;`reportSavePath];
   modelName:params`modelName;
   logFunc:params[`config;`logFunc];
   filePath:savePath,"Report_",string modelName;
   savePrint:utils.printDict[`report],savePath;
   logFunc savePrint;
-  $[0~checkimport[2];
+  $[0~checkimport 2;
     @[{saveReport.latexGenerate . x};
       (params;filePath);
-      {[params;err] 
-       -1"The following error occurred when attempting to run latex report generation";
-       -1 err,"\n";
+      {[params;logFunc;err]
+       errorMessage:utils.printDict[`latexError],err,"\n";
+       logFunc errorMessage;
        saveReport.reportlabGenerate . params;
-      }[(params;filePath)]
-     ];
+       }[(params;filePath);logFunc]
+      ];
     saveReport.reportlabGenerate[params;filePath]
     ]
   }

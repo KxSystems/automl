@@ -1,12 +1,12 @@
 \d .automl
 
-// Save all the graphs relevant for the generation of reports and for prosperity
+// Save all the graphs required for report generation
 
 // @kind function
 // @category node
 // @fileoverview Save all graphs needed for reports 
 // @param params {dict} All data generated during the preprocessing and
-//  prediction stages
+//   prediction stages
 // @return {null} All graphs needed for reports are saved to appropriate location
 saveGraph.node.function:{[params]
   if[params[`config;`saveOption]in 0 1;:params];

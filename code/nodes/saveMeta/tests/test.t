@@ -11,10 +11,10 @@ savePath:.automl.utils.ssrWindows .automl.path,filePath
 system"mkdir",$[.z.o like"w*";" ";" -p "],savePath;
 
 // Generate model meta data
-mdlMetaData:`modelLib`mdlType!`sklearn`class
+mdlMetaData:`modelLib`modelFunc!`sklearn`
 
 // Generate config data
-configSave :enlist[`configSavePath]!enlist savePath
+configSave :`configSavePath`logFunc!(savePath;())
 modelInfo  :`modelName`symEncode`sigFeats!("testingName";`freq`ohe!``;`x)
 configDict0:configSave,`saveOption`featureExtractionType`problemType!(0;`normal;`reg)
 configDict1:configSave,`saveOption`featureExtractionType`problemType!(1;`fresh ;`class)
@@ -27,10 +27,7 @@ paramDict2:(`modelMetaData`config!(mdlMetaData;configDict2)),modelInfo
 -1"\nTesting appropriate inputs to saveMeta";
 
 // Generate function to check if metadata is saved
-metaCheck:{[params;savePath]
-  .automl.saveMeta.node.function[params];
-  @[{get hsym x};`$savePath,"/metadata";{"No metadata"}]
-  }
+metaCheck:{[params;savePath].automl.saveMeta.node.function params;@[{get hsym x};`$savePath,"/metadata";{"No metadata"}]}
 
 passingTest[metaCheck;(paramDict0;savePath);0b;"No metadata"]
 passingTest[metaCheck;(paramDict1;savePath);0b;mdlMetaData,configDict1,modelInfo]

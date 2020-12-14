@@ -120,18 +120,18 @@ optimizeModels.i.confTab:{[confMatrix]
 // @kind function
 // @category optimizeModelsUtilitity
 // @fileoverview Save down confusionMatrix
-// @param mdlDict   {dict}  Library and function of model
+// @param modelDict   {dict}  Library and function of model
 // @param bestModel {<} Fitted best model
 // @param tts       {dict} Feature and target data split into training and testing set
 // @param scoreFunc {<} Scoring metric applied to evaluate the model
 // @param seed      {int} Random seed to use
 // @param idx       {int} Index of column that is being shuffled
 // return {float} Score returned from predicted values using shuffled data 
-optimizeModels.i.predShuffle:{[mdlDict;bestModel;tts;scoreFunc;seed;idx]
+optimizeModels.i.predShuffle:{[modelDict;bestModel;tts;scoreFunc;seed;idx]
   tts[`xtest]:optimizeModels.i.shuffle[tts`xtest;idx];
-  preds:$[mdlDict[`mdlLib] in key models;
-    [customMdl:"." sv string value mdlDict;
-     predFunc:get".automl.models.",customMdl,".predict";
+  preds:$[modelDict[`modelLib] in key models;
+    [customModel:"." sv string modelDict`modelLib`modelFunc;
+     predFunc:get".automl.models.",customModel,".predict";
      predFunc[tts;bestModel]];
     bestModel[`:predict][tts`xtest]`
     ];

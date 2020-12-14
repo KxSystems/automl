@@ -1,14 +1,17 @@
 \d .automl
 
-// Retrieve and generate required configuration information including save paths
+// Entry point node used to pass the run configuration into the AutoML graph
 
 // @kind function 
 // @category node
-// @fileoverview Augment user defined configuration with relevant information
-// @param  cfg {dict} Custom configuration information relevant to the present run
-// @return     {dict} Augmented configuration with additional relevant information as appropriate
-configuration.node.function:{[cfg]
-  cfg
+// @fileoverview Pass the configuration dictionary into the AutoML graph and to
+//   the relevant nodes
+// @param config {dict} Custom configuration information relevant to the present
+//   run
+// @return {dict} Configuration dictionary ready to be passed to the relevant
+//   nodes within the pipeline
+configuration.node.function:{[config]
+  config
   }
 
 // Input information

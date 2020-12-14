@@ -12,12 +12,11 @@ commandLineInput:first each .Q.opt .z.x
 
 // @kind description
 // @name commandLineExecution
-// @desc If a user has defined both a config and run command 
-//   line argument the interface will attempt to run the fully
-//   automated automl by parsing the content of the json file
-//   provided to retrieve the data appropriately via ipc/from disk
-//   the q session will then exit.
-if[all `config`run in lower key commandLineInput;
+// @desc If a user has defined both config and run command line arguments, the
+//   interface will attempt to run the fully automated version of AutoML. The 
+//   content of the JSON file provided will be parsed to retrieve data 
+//   appropriately via ipc/from disk, then the q session will exit.
+if[all`config`run in lower key commandLineInput;
   loadfile`:init.q;
   .ml.updDebug[];
   runCommandLine[];

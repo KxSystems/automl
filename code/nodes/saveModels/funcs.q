@@ -1,11 +1,12 @@
 \d .automl
 
-// Definitions of the main callable functions used in the application of .automl.saveModels
+// Definitions of the main callable functions used in the application of 
+//  .automl.saveModels
 
 // @kind function
 // @category saveGraph
 // @fileoverview Save best Model
-// @param params   {dict} All data generated during the process
+// @param params {dict} All data generated during the process
 // @param savePath {str} Path where images are to be saved
 // return {null} Save best model to appropriate location
 saveModels.saveModel:{[params;savePath]
@@ -15,23 +16,24 @@ saveModels.saveModel:{[params;savePath]
   filePath:savePath,"/",modelName;
   joblib:.p.import`joblib;
   $[modelLib in`sklearn`theano;
-       joblib[`:dump][bestModel;filePath];
+      joblib[`:dump][bestModel;filePath];
     `keras~modelLib;
-       bestModel[`:save][filePath,".h5"];
-       `torch~modelLib;
+      bestModel[`:save][filePath,".h5"];
+    `torch~modelLib;
       torch[`:save][bestModel;filePath,".pt"];
-    -1"\nSaving of non keras/sklearn/torch models types is not currently supported\n"
-  ]; 
+    -1"\nSaving of non keras/sklearn/torch models types is not currently ",
+      "supported\n"
+    ]; 
   printPath:utils.printDict[`model],savePath;
-  params[`config;`logFunc] printPath;
+  params[`config;`logFunc]printPath;
   }
 
 // @kind function
 // @category saveGraph
-// @fileoverview Save nlp w2v model
-// @param params   {dict} All data generated during the process
+// @fileoverview Save NLP w2v model
+// @param params {dict} All data generated during the process
 // @param savePath {str} Path where images are to be saved
-// return {null} Save nlp w2v to appropriate location
+// return {null} Save NLP w2v to appropriate location
 saveModels.saveW2V:{[params;savePath]
   extractType:params[`config]`featureExtractionType;
   if[not extractType~`nlp;:(::)];

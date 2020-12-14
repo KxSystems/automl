@@ -16,17 +16,17 @@ runModels.i.readFile:{[filePath]
 // @fileoverview Fit and score custom model to holdout set
 // @param bestModel {sym} The best scorinng model from xval
 // @param tts       {dict} Feature and target data split into training and testing set
-// @param mdls      {tab}  Models to be applied to feature data
+// @param modelTab  {tab}  Models to be applied to feature data
 // @param scoreFunc {<} Scoring metric applied to evaluate the model
 // @param cfg       {dict} Configuration information assigned by the user and related to the current run
 // @return {dict} The fitted model along with the predictions
-runModels.i.customModel:{[bestModel;tts;mdls;scoreFunc;cfg]
-  modelLib:first exec lib from mdls where model=bestModel;
-  mdlType  :first exec typ from mdls where model=bestModel;
-  if[(`keras~modelLib)&`multi~mdlType;
+runModels.i.customModel:{[bestModel;tts;modelTab;scoreFunc;cfg]
+  modelLib:first exec lib from modelTab where model=bestModel;
+  modelType:first exec typ from modelTab where model=bestModel;
+  if[(`keras~modelLib)&`multi~modelType;
     tts[`ytrain]:runModels.i.prepMultiTarget tts
     ];
-  modelDef:utils.bestModelDef[mdls;bestModel]each`lib`fnc;
+  modelDef:utils.bestModelDef[modelTab;bestModel]each`lib`fnc;
   customStr:".automl.models.",sv[".";string modelDef],".";
   model:get[customStr,"model"][tts;cfg`seed];
   modelFit:get[customStr,"fit"][tts;model];
@@ -49,18 +49,13 @@ runModels.i.prepMultiTarget:{[tts]
 // @fileoverview Fit and score sklearn model to holdout set
 // @param bestModel {sym} The best scorinng model from xval
 // @param tts       {dict} Feature and target data split into training and testing set
-// @param mdls      {tab}  Models to be applied to feature data
+// @param modelTab  {tab}  Models to be applied to feature data
 // @param scoreFunc {<} Scoring metric applied to evaluate the model
 // @return {dict} The fitted model along with the predictions
-runModels.i.sklModel:{[bestModel;tts;mdls;scoreFunc]
-  model:utils.bestModelDef[mdls;bestModel;`minit][][];
+runModels.i.sklModel:{[bestModel;tts;modelTab;scoreFunc]
+  model:utils.bestModelDef[modelTab;bestModel;`minit][][];
   model[`:fit]. tts`xtrain`ytrain;
   modelPred:model[`:predict][tts`xtest]`;
   score:scoreFunc[modelPred;tts`ytest];
   `model`score!(model;score)
   }
-
-// @kind function
-// @category runModelsUtility
-// Text files that can be parsed from within the models folder
-runModels.i.files:`class`reg`score!("models/classmodels.txt";"models/regmodels.txt";"scoring/scoring.txt")

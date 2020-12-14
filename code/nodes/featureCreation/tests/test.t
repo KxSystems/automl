@@ -39,11 +39,12 @@ inappropCfgFunc:cfgKey!`normal`.automl.inappropFunc
 
 featCreate:{[cfg;feat;returnType]
   feats:.automl.featureCreation.node.function[cfg;feat];
-  $[returnType~`key;
-      asc key feats;
-    returnType~`count;
-      show count cols feats`features;
-      ]
+  $[returnType~`key;      
+      asc key feats;    
+    returnType~`count;      
+      count cols feats`features
+    ;
+    ]
   }
 
 // Tests
@@ -54,7 +55,7 @@ returnCols :`creationTime`featModel`features
 -1"\nTesting appropriate FRESH feature creation";
 
 passingTest[featCreate;(freshCfg;freshData;`key  );0b;returnCols]
-passingTest[featCreate;(freshCfg;freshData;`count);0b;649       ]
+passingTest[featCreate;(freshCfg;freshData;`count);0b;665       ]
 
 -1"\nTesting appropriate NLP feature creation.\nNote that some answers returned from NLP feature creation may vary depending on environment settings",
   "\nThe below was ran using spacy==2.3.2";
@@ -62,7 +63,7 @@ passingTest[featCreate;(freshCfg;freshData;`count);0b;649       ]
 passingTest[featCreate;(nlpCfg;nlpData     ;`key  );0b;returnCols]
 passingTest[featCreate;(nlpCfg;nlpData     ;`count);0b;12        ]
 passingTest[featCreate;(nlpCfg;nlpMultiData;`key  );0b;returnCols]
-passingTest[featCreate;(nlpCfg;nlpMultiData;`count);0b;58        ]
+passingTest[featCreate;(nlpCfg;nlpMultiData;`count);0b;62        ]
 
 -1"\nTesting inappropriate NLP feature creation";
 

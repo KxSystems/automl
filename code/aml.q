@@ -1,124 +1,130 @@
 \d .automl
 
-// Automated machine learning, generation of optimal models, running on new data and 
-// generation of default flatfile configurations
+// Automated machine learning, generation of optimal models, predicting on new
+//   data and generation of default configurations
 
 // @kind function
 // @category automl 
-// @fileoverview AutoML pipeline application on training and testing datasets
-//   applying cross validation and hyperparameter search methods across a range
-//   of machine learning models. Saves a reports, models, metadata information and
-//   graphics for oversight purposes. 
-// @param  graph  {dict} fully connected nodes and edges of a the graph used for the 
-//   application of the AutoML pipeline following the definition outline 
-//   in `graph/Automl_Graph.png`
-// @param  xdata  {(dict;table)} unkeyed tabular feature data or dictionary outlining
-//   the instructions with which to retrieve the tabular feature data in
-//   accordance with `.ml.i.loaddset`
-// @param  ydata  {(dict;#any[])} Target vector of any type or dictionary outlining 
-//   the instructions with which to retrieve the target data in accordance with `.ml.i.loaddset`
-// @param  ftype  {sym} Feature extraction type (`nlp/`normal/`fresh)
-// @param  ptype  {sym} Problem type being solved (`reg/`class)
-// @param  params {(dict;char[];::)} One of 
-//   1. Path relative to `.automl.path` pointing to a user defined flatfile for 
-//      modifying default parameters,  
-//   2. Dictionary containing the aspects of default behaviour which is to be overwritten
-//   3. Null(::) allowing a user to run the AutoML framework using default parameters 
-// @return        {dict} A dictionary containing the important information used in the generation
-//   of the model and for creation of the prediction function, and the prediction function which
-//   can be used to make predictions using the generated model.
-fit:{[graph;xdata;ydata;ftype;ptype;params]
+// @fileoverview The application of AutoML on training and testing data,
+//   applying cross validation and hyperparameter searching methods across a
+//   range of machine learning models, with the option to save outputs.
+// @param graph {dict} Fully connected graph nodes and edges following the
+//   structure outlined in `graph/Automl_Graph.png`
+// @param features {(dict;table)} Unkeyed tabular feature data or a dictionary
+//   outlining how to retrieve the data in accordance with `.ml.i.loaddset`
+// @param target {(dict;#any[])} Target vector of any type or a dictionary
+//   outlining how to retrieve the target vector in accordance with
+//   `.ml.i.loaddset`
+// @param ftype {sym} Feature extraction type (`nlp/`normal/`fresh)
+// @param ptype {sym} Problem type being solved (`reg/`class)
+// @param params {(dict;char[];::)} One of the following:
+//   1. Path relative to `.automl.path` pointing to a user defined JSON file
+//      for modifying default parameters
+//   2. Dictionary containing the default behaviours to be overwritten
+//   3. Null (::) indicating to run AutoML using default parameters 
+// @return {dict} Configuration produced within the current run of AutoML along
+//   with a prediction function which can be used to make predictions using the
+//   best model produced
+fit:{[graph;features;target;ftype;ptype;params]
+  runParams:`featureExtractionType`problemType`startDate`startTime!
+    (ftype;ptype;.z.D;.z.T);
   // Retrieve default parameters parsed at startup and append necessary
   // information for further parameter retrieval
   modelName:enlist[`saveModelName]!enlist`$problemDict`modelName;
-  defaultParams:paramDict[`general],paramDict[ftype],modelName;
-  automlConfig :defaultParams,$[type[params]in 10 -11h;enlist[`configPath]!enlist params;
-    99h=type params;params;
-    params~(::);()!();
+  configPath:$[type[params]in 10 -11h;
+      enlist[`configPath]!enlist params;
+    99h=type params;
+	  params;
+    params~(::);
+	  ()!();
     '"Unsupported input type for 'params'"
     ];
-  automlConfig:automlConfig,`featureExtractionType`problemType`startDate`startTime!(ftype;ptype;.z.D;.z.T);
+  automlConfig:paramDict[`general],paramDict[ftype],modelName;
+  automlConfig:automlConfig,configPath,runParams;
   // Default = accept data from process. Overwritten if dictionary input
-  xdata:$[99h=type xdata;xdata;`typ`data!(`process;xdata)];
-  ydata:$[99h=type ydata;ydata;`typ`data!(`process;ydata)];
-  graph:.ml.addCfg[graph;`automlConfig     ;automlConfig];
-  graph:.ml.addCfg[graph;`featureDataConfig;xdata];
-  graph:.ml.addCfg[graph;`targetDataConfig ;ydata];
-  graph:.ml.connectEdge[graph;`automlConfig     ;`output;`configuration;`input];
-  graph:.ml.connectEdge[graph;`featureDataConfig;`output;`featureData  ;`input];
-  graph:.ml.connectEdge[graph;`targetDataConfig ;`output;`targetData   ;`input];
-  modelOutput:.ml.execPipeline .ml.createPipeline[graph];
-  modelInfo  :exec from modelOutput where nodeId=`saveMeta;
+  features:$[99h=type features;features;`typ`data!(`process;features)];
+  target:$[99h=type target;target;`typ`data!(`process;target)];
+  graph:.ml.addCfg[graph;`automlConfig;automlConfig];
+  graph:.ml.addCfg[graph;`featureDataConfig;features];
+  graph:.ml.addCfg[graph;`targetDataConfig ;target];
+  graph:.ml.connectEdge[graph;`automlConfig;`output;`configuration;`input];
+  graph:.ml.connectEdge[graph;`featureDataConfig;`output;`featureData;`input];
+  graph:.ml.connectEdge[graph;`targetDataConfig;`output;`targetData;`input];
+  modelOutput:.ml.execPipeline .ml.createPipeline graph;
+  modelInfo:exec from modelOutput where nodeId=`saveMeta;
   modelConfig:modelInfo[`outputs;`output];
-  predictFunc:utils.generatePredict[modelConfig];
+  predictFunc:utils.generatePredict modelConfig;
   `modelInfo`predict!(modelConfig;predictFunc)
   }[graph]
 
-
 // @kind function
 // @category automl
-// @fileoverview Retrieve a fit automl model and associated workflow for use in prediction
-// @param modelDetails {dict} Information regarding where within the outputs folder the model
-//    and required metadata is to be retrieved
-// @return {dict} a dictionary containing the predict function (generated using utils.generatePredict)
-//    and all relevant metadata information for the model
+// @fileoverview Retrieve a previously fit AutoML model and associated workflow
+//   to be used for predictions
+// @param modelDetails {dict} Information regarding the location of the model
+//   and metadata within the outputs directory
+// @return {dict} The predict function (generated using utils.generatePredict)
+//   and all relevant metadata for the model
 getModel:{[modelDetails]
-  pathToOutputs:utils.modelPath[modelDetails];
+  pathToOutputs:utils.modelPath modelDetails;
   pathToMeta:hsym`$pathToOutputs,"config/metadata";
   config:utils.extractModelMeta[modelDetails;pathToMeta];
-  loadModel:utils.loadModel[config];
+  loadModel:utils.loadModel config;
   modelConfig:config,enlist[`bestModel]!enlist loadModel;
-  predictFunc:utils.generatePredict[modelConfig];
+  predictFunc:utils.generatePredict modelConfig;
   `modelInfo`predict!(modelConfig;predictFunc)
   }
 
-
 // @kind function
 // @category automl
-// @fileoverview Generate a new json flat file for use in application of AutoML
-//   for command line or as an alternative to the param file in .automl.run.
-// @param  fileName {str/sym/hsym} Name to be associated with the json file
-//   to be generated in 'code/customization/configuration/customConfig'.
-// @return          {::} Returns generic null on successful invocation and saves
-//   a copy of the file 'code/customization/configuration/default.json' to the 
-//   appropriate named file.
+// @fileoverview Generate a new JSON file for use in the application of AutoML
+//   via command line or as an alternative to the param file in .automl.fit.
+// @param fileName {str/sym/hsym} Name for generated JSON file to be stored in
+//   'code/customization/configuration/customConfig'
+// @return {::} Returns generic null on successful invocation and saves a copy
+//   of the file 'code/customization/configuration/default.json' to the 
+//   appropriately named file
 newConfig:{[fileName]
   fileNameType:type fileName;
-  fileName:$[10h=fileNameType;fileName;
+  fileName:$[10h=fileNameType;
+      fileName;
     -11h=fileNameType;
-    $[":"~first strFileName;1_;]strFileName:string fileName;
-    '`$"fileName must be string, symbol or hsym"];
-  fileName:raze[path],"/code/customization/configuration/customConfig/",fileName;
+      $[":"~first strFileName;1_;]strFileName:string fileName;
+    '`$"fileName must be string, symbol or hsym"
+	];
+  customPath:"/code/customization/configuration/customConfig/";
+  fileName:raze[path],customPath,fileName;
   filePath:hsym`$utils.ssrWindows fileName;
-  if[not ()~key filePath;
+  if[not()~key filePath;
     ignore:utils.ignoreWarnings;
     $[ignore=2;{'x};ignore=1;-1;]utils.printWarnings[`configExists]ignore
-    ];
-  defaultConfig:read0 `$path,"/code/customization/configuration/default.json";
+	];
+  defaultConfig:read0`$path,"/code/customization/configuration/default.json";
   h:hopen filePath;
   {x y,"\n"}[h]each defaultConfig;
   hclose h;
   }
 
-
 // @kind function
 // @category automl
-// @fileoverview Run the AutoML framework based on user provided custom json flat files.
-//   This function is triggered when executing the automl.q file and invoking the functionality
-//   is based on the presence of an appropriately named configuration file and presence of the
-//   run command line argument on session startup i.e.
-//   $ q automl.q -config myconfig.json -run
-//   This function takes no parameters as input an does not returns any artifacts to be used 
-//   in process. Instead it executes the entirety of the automl pipeline saving the report/model
-//   images and metadata to disc and exits the process.
+// @fileoverview Run AutoML based on user provided custom JSON files. This 
+//   function is triggered when executing the automl.q file. Invoking the 
+//   functionality is based on the presence of an appropriately named 
+//   configuration file and presence of the run command line argument on 
+//   session startup i.e. 
+//     $ q automl.q -config myconfig.json -run
+//   This function takes no parameters as input and does not returns any 
+//   artifacts to be used in process. Instead it executes the entirety of the
+//   AutoML pipeline saving the report/model images/metadata to disc and exits
+//   the process
 runCommandLine:{[]
   ptype:`$problemDict`problemType;
   ftype:`$problemDict`featureExtractionType;
   dataRetrieval:`$problemDict`dataRetrievalMethod;
-  if[any(raze ptype,ftype,raze dataRetrieval)=\:`;
-    '"`problemType,`featureExtractionType and `dataRetrievalMethods must all be fully defined"
-  ];
-  data:utils.getCommandLineData[dataRetrieval];
+  errorMessage:"`problemType,`featureExtractionType and `dataRetrievalMethods",
+    " must all be fully defined";
+  if[any(raze ptype,ftype,raze dataRetrieval)=\:`;'errorMessage];
+  data:utils.getCommandLineData dataRetrieval;
   fit[;;ftype;ptype;::]. data`features`target;
   }
 
@@ -130,16 +136,18 @@ runCommandLine:{[]
 //   - 0 = Ignore warnings completely and continue evaluation
 //   - 1 = Highlight to a user that a warning was being flagged but continue
 //   - 2 = Exit evaluation of AutoML highlighting to the user why this happened
-// @return {null} update the global .automl.utils.ignoreWarnings with new level
+// @return {null} update the global utils.ignoreWarnings with new level
 updateIgnoreWarnings:{[warningLevel]
-  if[not warningLevel in til 3;'"Warning severity level must a long 0, 1 or 2."];
+  if[not warningLevel in til 3;
+    '"Warning severity level must a long 0, 1 or 2."
+	];
   utils.ignoreWarnings::warningLevel
   }
 
 // @kind function
 // @category Utility
 // @fileoverview Update logging and printing states
-// @return {null} Change the boolean representation of .automl.utils.logging
+// @return {null} Change the boolean representation of utils.logging
 //   and .automl.utils.printing respectively
 updateLogging :{utils.logging ::not utils.logging}
 updatePrinting:{utils.printing::not utils.printing}

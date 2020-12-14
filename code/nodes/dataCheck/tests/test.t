@@ -60,7 +60,7 @@ inapprTypeFunc:{"The function",x," not defined in your process\n"}
 // inappropriate function inputs and associated error message
 inapprTTS         :normalConfig,enlist[`trainTestSplit]!enlist`notafunc
 inapprTTSPrint    :inapprTypeFunc[" notafunc is"]
-inapprFuncPrf     :normalConfig,`functions`predictionFunction!`notafunc1`notafunc2
+inapprFuncPrf     :normalConfig,`predictionFunction`trainTestSplit!`notafunc1`notafunc2
 inapprFuncPrfPrint:inapprTypeFunc["s notafunc1, notafunc2 are"]
 
 // Testing of all inappropriately function inputs
@@ -117,7 +117,7 @@ freshTab:([]5000?100?0t;5000?1f;5000?1f)
 inapprTarget:99?1f
 
 // inappropriate target length errors
-freshError  :"Target count must equal count of unique agg values for fresh";
+freshError  :"Target count must equal count of unique agg values for FRESH";
 normNLPError:"Must have the same number of targets as values in table";
 
 // Testing of all inappropriate normal and NLP target lengths

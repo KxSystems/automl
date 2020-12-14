@@ -1,22 +1,24 @@
-// Sub select models based on limitations imposed by the dataset, this includes the selecting
-// removal of poorly scaling models and the refusal to run Keras models if sufficient samples of each
-// class are not present across the folds of the dataset
 \d .automl
+
+// Select subset of models based on limitations imposed by the dataset. This 
+//   includes the selection/removal of poorly scaling models. In the case of 
+//   classification problems, Keras models will also be removed if there are not
+//   sufficient samples of each target class present in each fold of the data.
 
 // @kind function
 // @category node
-// @fileoverview Delect models based on limitations imposed by the dataset and users environment
-// @param tts     {dict} Feature and target data split into training and testing set
-// @param target  {(num[];sym[])} Target data as a numeric/symbol vector 
-// @param mdl     {tab}  Potential models to be applied to feature data
-// @param cfg     {dict} Configuration information assigned by the user and related to the current run
+// @fileoverview Select models based on limitations imposed by the dataset and 
+//   users environment
+// @param tts {dict} Feature and target data split into training/testing sets
+// @param target {(num[];sym[])} Target data as a numeric/symbol vector 
+// @param modelTab {tab} Potential models to be applied to feature data
+// @param config {dict} Information related to the current run of AutoML
 // @return {tab} Appropriate models to be applied to feature data
-selectModels.node.function:{[tts;target;mdls;cfg]
-  cfg[`logFunc] utils.printDict`select;
-  models:selectModels.targetKeras[mdls;tts;target;cfg];
-  models:selectModels.torchModels[mdls;cfg];
-  models:selectModels.theanoModels[mdls;cfg];
-  selectModels.targetLimit[models;target;cfg]
+selectModels.node.function:{[tts;target;modelTab;config]
+  config[`logFunc]utils.printDict`select;
+  modelTab:selectModels.targetKeras[modelTab;tts;target;config];
+  modelTab:selectModels.removeUnavailable[config]/[modelTab;`theano`torch];
+  selectModels.targetLimit[modelTab;target;config]
   }
 
 // Input information

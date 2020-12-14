@@ -11,7 +11,7 @@ feat:([]100?1f;100?1f;asc 100?1f)
 targ:asc 100?`a`b`c
 
 // Config
-config:`startDate`startTime`featureExtractionType`problemType!(.z.D;.z.T;`normal;`class)
+config:`logFunc`startDate`startTime`featureExtractionType`problemType!(();.z.D;.z.T;`normal;`class)
 
 // Feature Description and Symbol Encoding
 featDescOutput:.automl.featureDescription.node.function[config;feat]

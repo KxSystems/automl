@@ -3,10 +3,10 @@
 .automl.loadfile`:code/tests/utils.q
 
 // Default configuration dictionaries
-configKeys   :`seed`trainTestSplit`gridSearchFunction`gridSearchArgument,
+configKeys   :`logFunc`seed`trainTestSplit`gridSearchFunction`gridSearchArgument,
               `crossValidationFunction`crossValidationArgument`predictionFunction,
               `scoringFunctionClassification`scoringFunctionRegression`holdoutSize
-configVals   :(42;`.ml.traintestsplit;`.automl.gs.kfshuff;5;`.ml.xv.kfshuff;5;
+configVals   :(();42;`.ml.traintestsplit;`.automl.gs.kfshuff;5;`.ml.xv.kfshuff;5;
                `.automl.utils.fitPredict;`.ml.accuracy;`.ml.mse;.2)
 configDefault:configKeys!configVals
 
@@ -30,14 +30,16 @@ ttsReg       :tts,`ytrain`ytest!(80#tgtReg       ;-20#tgtReg)
 configReg    :enlist[`problemType]!enlist`reg
 configClass  :enlist[`problemType]!enlist`class
 
-regModelTab  :.automl.modelGeneration.jsonParse configReg
-regModelTab  :update minit:.automl.modelGeneration.mdlFunc .'flip(lib;fnc;model)from regModelTab;
+regModelTab:.automl.modelGeneration.jsonParse configReg
+regModelTab:.automl.modelGeneration.modelPrep[configReg;regModelTab;tgtReg]
 
 classModelTab:.automl.modelGeneration.jsonParse configClass
-classModelTab:update minit:.automl.modelGeneration.mdlFunc .'flip(lib;fnc;model)from classModelTab;
 
-binaryModelTab:select from classModelTab where typ=`binary
-multiModelTab :select from classModelTab where typ=`multi 
+classBinaryModelTab:.automl.modelGeneration.modelPrep[configClass;classModelTab;tgtClass]
+classMultiModelTab:.automl.modelGeneration.modelPrep[configClass;classModelTab;tgtMultiClass]
+
+binaryModelTab:select from classBinaryModelTab where typ=`binary
+multiModelTab :select from classMultiModelTab where typ=`multi 
 
 -1"\nTesting appropriate input values for holdoutSplit";
 
@@ -82,7 +84,7 @@ regDict   :`shape`typ!(5 2 16;9h)
 // Test appropriate sklearn input values for xValSeed
 passingTest[xValDict;(configDefault;ttsClass     ;binarySkl);0b;binaryDict]
 passingTest[xValDict;(configDefault;ttsMultiClass;multiSkl );0b;multiDict]
-passingTest[xValDict;(configDefault;ttsReg       ;regSkl    );0b;regDict]
+passingTest[xValDict;(configDefault;ttsReg       ;regSkl   );0b;regDict]
 
 -1"\nTesting appropriate input values for extracting the scoring function";
 
@@ -101,25 +103,27 @@ keyOrderModels:{[tab;score;preds]
 
 \S 42
 
+hasKeras:0~.automl.checkimport 0
+
 // Generated predicted values
 binaryPreds:5 1 2 16#160?0b
-multiPreds:6 1 2 16#192?0b
+multiPreds:($[hasKeras;6;5],1 2 16)#192?0b
 regPreds:8 1 2 16#256?1f
 
 binaryReturn:`SVC`LogisticRegression`GaussianNB`LinearSVC`binarykeras
-multiReturn:`MLPClassifier`KNeighborsClassifier`AdaBoostClassifier`multikeras`RandomForestClassifier`GradientBoostingClassifier
+multiReturnKeras:`MLPClassifier`KNeighborsClassifier`AdaBoostClassifier`multikeras`RandomForestClassifier`GradientBoostingClassifier
+multiReturn:`MLPClassifier`KNeighborsClassifier`AdaBoostClassifier`RandomForestClassifier`GradientBoostingClassifier
 regReturn  :`Lasso`LinearRegression`regkeras`AdaBoostRegressor`GradientBoostingRegressor`MLPRegressor`RandomForestRegressor`KNeighborsRegressor
 
-// Test appropriate inputs values to orderModels
 passingTest[keyOrderModels;(binaryModelTab;`.ml.accuracy;binaryPreds);0b;binaryReturn]
-passingTest[keyOrderModels;(multiModelTab ;`.ml.r2score ;multiPreds);0b;multiReturn]
+passingTest[keyOrderModels;(multiModelTab ;`.ml.r2score ;multiPreds);0b;$[hasKeras;multiReturnKeras;multiReturn]]
 passingTest[keyOrderModels;(regModelTab   ;`.ml.mse     ;regPreds);0b;regReturn]
 
 -1"\nTesting appropriate input values for fitting the best model";
 
 // Generate model scoring dictionary
 binaryModelDict:binaryModelTab[`model]!5?1f
-multiModelDict :multiModelTab[`model]!6?1f
+multiModelDict :multiModelTab[`model]!$[0~.automl.checkimport 0;6;5]?1f
 regModelDict   :regModelTab[`model]!8?1f
 
 // Get type of each item in return dictionary
@@ -129,6 +133,9 @@ fitModel:{[mdlDict;tts;mdlTab;score;cfg]
   
 // Type of each key returned in dictionary
 fitModelReturn:`model`score`holdoutTime`bestModel!105 -9 -19 -11h
+
+// Update config to print updates
+configDefault:configDefault,enlist[`logFunc]!enlist{x};
 
 // Test appropriate input values to bestModelFit
 passingTest[fitModel;(binaryModelDict;ttsClass     ;binaryModelTab;`.ml.accuracy;configDefault);0b;fitModelReturn]
@@ -146,7 +153,7 @@ createMeta:{[holdout;modelDict;score;time;mdls;modelName]
   }
   
 // Generate return dictionary 
-metaReturn:`holdoutScore`modelScores`metric`xValTime`holdoutTime`modelLib`mdlType!-9 99 -11 -19 -19 -11 -11h
+metaReturn:`holdoutScore`modelScores`metric`xValTime`holdoutTime`modelLib`modelFunc!-9 99 -11 -19 -19 -11 -11h
 
 // Test appropriate input values to createMeta
 passingTest[createMeta;(holdoutRun;binaryModelDict;`.ml.accuracy;"t"$1;binaryModelTab;`LinearSVC)            ;0b;metaReturn]
