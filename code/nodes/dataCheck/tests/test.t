@@ -10,7 +10,7 @@ featData:([]100?1f;100?1f)
 startDateTime:`startDate`startTime!(.z.D;.z.T)
 
 // Retrieve default values defined at startup by .automl.paramDict
-modelName:enlist[`saveModelName]!enlist`
+modelName:enlist[`savedModelName]!enlist`
 normalDefault:.automl.paramDict[`general],.automl.paramDict[`normal],modelName;
 freshDefault :.automl.paramDict[`general],.automl.paramDict[`fresh] ,modelName;
 nlpDefault   :.automl.paramDict[`general],.automl.paramDict[`nlp]   ,modelName;

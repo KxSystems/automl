@@ -24,7 +24,7 @@ check.loadkeras:{
     [-1"Requirements for Keras models not satisfied. Keras along with ",
      "Tensorflow or Theano must be installed. Keras models will be excluded ",
      "from model evaluation."
-	 ];
+     ];
     ]
   }
 
@@ -35,7 +35,7 @@ check.loadtorch:{
      ];
     [-1"Requirements for PyTorch models not satisfied. Torch must be ",
      "installed. PyTorch models will be excluded from model evaluation."
-	 ];
+     ];
     ]
   }
 
@@ -56,6 +56,7 @@ check.loadtheano:{
      ];
     [-1"Requirements for Theano models not satisfied. Theano must be ",
      "installed. Theano models will be excluded from model evaluation."
-	 ];
+     ];
     ]
   }
+

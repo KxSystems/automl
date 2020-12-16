@@ -1,11 +1,11 @@
 {
   "problemDetails":{
-    "featureExtractionType":"",
-    "problemType"          :"",
+    "featureExtractionType":"normal",
+    "problemType"          :"class",
     "modelName"            :"",
     "dataRetrievalMethod"  :{
-      "featureData":"",
-      "targetData" :""
+      "featureData":"csv",
+      "targetData" :"csv"
     }
   },
   "retrievalMethods":{
@@ -22,17 +22,17 @@
     },
     "csv":{
       "featureData":{
-        "schema"   :"",
-        "separator":"",
-        "directory":"",
-        "fileName" :""
+        "schema"   :"FFJ",
+        "separator":",",
+        "directory":"code/tests/files/cli",
+        "fileName" :"testCSVData.csv"
       },
       "targetData":{
-        "schema"      :"",
-        "separator"   :"",
-        "directory"   :"",
-        "fileName"    :"",
-        "targetColumn":""
+        "schema"      :"FFJ",
+        "separator"   :",",
+        "directory"   :"code/tests/files/cli",
+        "fileName"    :"testCSVData.csv",
+        "targetColumn":"target"
       }
     },
     "binary":{
@@ -132,10 +132,6 @@
       "targetLimit":{
         "value":10000,
         "type" :"long"
-      },
-      "savedModelName":{
-        "value":"",
-        "type":"symbol"
       }
     },
     "fresh":{

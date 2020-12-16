@@ -1,11 +1,11 @@
 {
   "problemDetails":{
-    "featureExtractionType":"",
-    "problemType"          :"",
+    "featureExtractionType":"normal",
+    "problemType"          :"class",
     "modelName"            :"",
     "dataRetrievalMethod"  :{
-      "featureData":"",
-      "targetData" :""
+      "featureData":"binary",
+      "targetData" :"binary"
     }
   },
   "retrievalMethods":{
@@ -37,12 +37,12 @@
     },
     "binary":{
       "featureData":{
-       "directory":"",
-       "fileName" :""
+       "directory":"code/tests/files/cli",
+       "fileName" :"testBinaryFeatures"
       },
       "targetData":{
-        "directory"   :"",
-        "fileName"    :"",
+        "directory"   :"code/tests/files/cli",
+        "fileName"    :"testBinaryTarget",
         "targetColumn":""
       }
     }
@@ -132,10 +132,6 @@
       "targetLimit":{
         "value":10000,
         "type" :"long"
-      },
-      "savedModelName":{
-        "value":"",
-        "type":"symbol"
       }
     },
     "fresh":{

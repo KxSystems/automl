@@ -8,15 +8,10 @@ if[not 0~.automl.checkimport[5];exit 0];
 
 // Create feature and target data
 nGeneral:100
-nFresh  :5000
 
 featureDataNormal:([]nGeneral?1f;asc nGeneral?1f;nGeneral?`a`b`c)
-featureDataFresh :([]nFresh?nGeneral?0p;nFresh?1f;asc nFresh?1f)
-featureDataNLP   :([]nGeneral?1f;asc nGeneral?("generating";"sufficient tesing";"data"))
 
 targetBinary     :asc 100?0b
-
-newFreshParams:update valid:0b from .ml.fresh.params where pnum>0
 
 // language agnostic function for moving a file to a new location
 .test.moveFiles:{[filePaths]
@@ -45,9 +40,6 @@ newFreshParams:update valid:0b from .ml.fresh.params where pnum>0
 -1"\nTesting appropriate inputs to fit function for with theano models loaded\n";
 
 passingTest[.test.checkFit;(featureDataNormal;targetBinary;`normal;`class;::);1b;11 99 104h]
-passingTest[.test.checkFit;(featureDataFresh ;targetBinary;`fresh ;`class;::);1b;11 99 104h]
-passingTest[.test.checkFit;(featureDataNLP   ;targetBinary;`nlp   ;`class;::);1b;11 99 104h]
-
 
 // Revert to the default theano setup
 .test.moveFiles each reverse each .test.filePaths rotate[3;til 6];

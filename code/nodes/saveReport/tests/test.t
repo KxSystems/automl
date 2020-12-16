@@ -16,7 +16,7 @@ genCfg:{[start;feat;ftype;ptype]
   out:"/outputs/testing/";
   cfg:start,(`featureExtractionType`problemType!(ftype;ptype)),
       .automl.paramDict[`general],.automl.paramDict[ftype],
-      enlist[`saveModelName]!enlist`;
+      enlist[`savedModelName]!enlist`;
   cfg:.automl.dataCheck.updateConfig[feat;cfg];  
   cfg[`reportSavePath]:(.automl.path,out,"report/");
   cfg[`imagesSavePath]:(.automl.path,"/code/nodes/saveReport/tests/images/");

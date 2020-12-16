@@ -5,20 +5,17 @@
 \S 42
 
 .automl.updatePrinting[]
+.ml.graphDebug:1b
 
 // Create feature and target data
 nGeneral:100
-nFresh  :5000
 
 featureDataNormal:([]nGeneral?1f;asc nGeneral?1f;nGeneral?`a`b`c)
-featureDataFresh :([]nFresh?nGeneral?0p;nFresh?1f;asc nFresh?1f)
-featureDataNLP   :([]nGeneral?1f;asc nGeneral?("generating";"sufficient tesing";"data"))
 
 targetRegression :desc 100?1f
 targetBinary     :asc 100?0b
 targetMulti      :desc 100?4
 
-newFreshParams:update valid:0b from .ml.fresh.params where pnum>0
 
 // Create params dictionary
 params0   :enlist[`seed]!enlist 42
@@ -34,7 +31,7 @@ test.checkLogging:{[params]
   config:last params;
   dict:model`modelInfo;
   date:string dict`startDate;
-  time:ssr[string dict`startTime;":";"."]
+  time:ssr[string dict`startTime;":";"."];
   if[not .automl.utils.logging;:0Nd~dict`printFile];
   dir:$[`loggingDir in key config;
     config[`loggingDir],"/";
@@ -48,7 +45,6 @@ test.checkLogging:{[params]
     0b]
   }
 
-
 -1"\nTesting appropriate inputs for logging";
 
 // Test when logging is disabled
@@ -59,8 +55,8 @@ passingTest[test.checkLogging;(featureDataNormal;targetBinary;`normal;`class;par
 
 // Test when logging is enabled
 passingTest[test.checkLogging;(featureDataNormal;targetRegression;`normal;`reg  ;params0);1b;1b]
-passingTest[test.checkLogging;(featureDataFresh ;targetBinary    ;`fresh ;`class;params1);1b;1b]
-passingTest[test.checkLogging;(featureDataNLP   ;targetMulti     ;`nlp   ;`class;params2);1b;1b]
+passingTest[test.checkLogging;(featureDataNormal;targetBinary    ;`normal;`class;params1);1b;1b]
+passingTest[test.checkLogging;(featureDataNormal;targetMulti     ;`normal;`class;params2);1b;1b]
 passingTest[test.checkLogging;(featureDataNormal;targetBinary    ;`normal;`class;params3);1b;1b]
 
 -1"\nTesting inappropriate inputs for logging";
@@ -73,10 +69,10 @@ logPath:"logDir/logFile"
 h:hopen hsym`$logPath
 hclose h
 
-failingTest[.automl.fit;(featureDataFresh;targetMulti     ;`fresh;`class;paramsFail);0b;typeError]
-failingTest[.automl.fit;(featureDataNLP  ;targetRegression;`nlp  ;`reg  ;params3   );0b;overWriteError]
+failingTest[.automl.fit;(featureDataNormal;targetMulti     ;`normal;`class;paramsFail);0b;typeError]
+failingTest[.automl.fit;(featureDataNormal;targetRegression;`normal;`reg  ;params3   );0b;overWriteError]
 
 -1"\nRemoving any directories created";
 
 // Remove any files created
-system "rm -rf ",logPath;
+system "rm -rf logDir";

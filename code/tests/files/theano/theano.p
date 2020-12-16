@@ -55,7 +55,7 @@ def buildModel(train_X,train_y,seed):
 
 
 def fitModel(train_X,train_y,model):
-    for iter in range(500):
+    for iter in range(5):
         for i in range(len(train_X)):
             model(train_X[i: i + 1], train_y[i: i + 1]) 
 

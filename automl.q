@@ -16,9 +16,11 @@ commandLineInput:first each .Q.opt .z.x
 //   interface will attempt to run the fully automated version of AutoML. The 
 //   content of the JSON file provided will be parsed to retrieve data 
 //   appropriately via ipc/from disk, then the q session will exit.
-if[all`config`run in lower key commandLineInput;
+commandLineArguments:lower key commandLineInput
+if[all`config`run in commandLineArguments;
   loadfile`:init.q;
   .ml.updDebug[];
-  runCommandLine[];
+  testRun:`test in commandLineArguments;
+  runCommandLine[testRun];
   exit 0]
 

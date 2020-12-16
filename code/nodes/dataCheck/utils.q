@@ -76,7 +76,7 @@ dataCheck.i.getData:{[fileName;ptype]
 dataCheck.i.pathConstruct:{[config]
   names:`config`models;
   if[config[`saveOption]=2;names:names,`images`report];
-  pname:$[`~config`saveModelName;dataCheck.i.dateTimePath;dataCheck.i.customPath]config;
+  pname:$[`~config`savedModelName;dataCheck.i.dateTimePath;dataCheck.i.customPath]config;
   paths:pname,/:string[names],\:"/";
   dictNames:`$string[names],\:"SavePath";
   (dictNames!paths),enlist[`mainSavePath]!enlist pname
@@ -90,7 +90,8 @@ dataCheck.i.pathConstruct:{[config]
 dataCheck.i.dateTimePath:{[config]
   date:string config`startDate;
   time:string config`startTime;
-  path,"/",dataCheck.i.dateTimeStr["outputs/",date,"/run_",time,"/"]
+  dirString:"outputs/dateTimeModels/",date,"/run_",time,"/";
+  path,"/",dataCheck.i.dateTimeStr[dirString]
   }
 
 // @kind function
@@ -99,12 +100,12 @@ dataCheck.i.dateTimePath:{[config]
 // @param config {dict} Configuration information assigned by the user and related to the current run
 // @return {str} Path constructed based on user defined custom model name
 dataCheck.i.customPath:{[config]
-  modelName:config[`saveModelName];
+  modelName:config[`savedModelName];
   modelName:$[10h=type modelName;modelName;
    -11h=type modelName;string modelName;
    '"unsupported input type, model name must be a symbol atom or string"];
-  filePath:path,"/outputs/namedModels/",modelName,"/";
-  filePath
+  config[`savedModelName]:modelName;
+  path,"/outputs/namedModels/",modelName,"/"
   }
 
 // @kind function
@@ -130,7 +131,8 @@ dataCheck.i.logging:{[config]
     date:string config`startDate;
     time:string config`startTime;
     logStr:"logFile_",date,"_",time,".txt";
-    config[`loggingFile]:dataCheck.i.dateTimeStr logStr];
+    config[`loggingFile]:dataCheck.i.dateTimeStr logStr
+    ];
   typeLoggingFile:type config[`loggingFile];
   loggingFile:$[10h=typeLoggingFile;;
     -11h=typeLoggingFile;string;
@@ -139,12 +141,13 @@ dataCheck.i.logging:{[config]
   config
   }
 
-// @kind function
-// @category dataCheckUtility
-// @fileoverview Construct date time string path in appropriate format
-// @param strPath {str} Date time path string
-// @return {str} Date and time path converted to appropriate format
+// @kind function	
+// @category dataCheckUtility	
+// @fileoverview Construct date time string path in appropriate format	
+// @param strPath {str} Date time path string	
+// @return {str} Date and time path converted to appropriate format	
 dataCheck.i.dateTimeStr:{[strPath]ssr[strPath;":";"."]}
+
 
 // @kind function
 // @category dataCheckUtility
@@ -157,7 +160,12 @@ dataCheck.i.fileNameCheck:{[config]
   mainFileExists:$[0<config`saveOption;count key hsym`$config`mainSavePath;0];
   loggingExists :$[utils.logging;count key hsym`$config`printFile;0];
   dataCheck.i.delFiles[config;ignore;mainFileExists;loggingExists];
-  dataCheck.i.printWarning[config;ignore;mainFileExists;loggingExists]
+  dataCheck.i.printWarning[config;ignore;mainFileExists;loggingExists];
+  if[not`~config`savedModelName;
+    h:hopen hsym`$path,"/outputs/timeNameMapping.txt";
+    h .Q.s enlist[sum config`startDate`startTime]!enlist config`savedModelName;
+    hclose h;
+    ]
   }
  
 
