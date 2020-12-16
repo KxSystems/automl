@@ -91,7 +91,6 @@ deleteModels:{[config]
     ];
   }
 
-
 // @kind function
 // @category automl
 // @fileoverview Generate a new JSON file for use in the application of AutoML
