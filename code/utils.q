@@ -450,13 +450,15 @@ utils.deleteDateTimeModel:{[config;pathStem]
   timeInfo:config`startTime;
   pathStem,:"dateTimeModels/";
   allDates:key hsym`$pathStem;
-  relevantDates:string utils.getRelevantDates[dateInfo;allDates];
+  relevantDates:utils.getRelevantDates[dateInfo;allDates];
+  dateCheck:(1=count relevantDates)&0>type relevantDates;
+  relevantDates:string $[dateCheck;enlist;]relevantDates;
   datePaths:(pathStem,/:relevantDates),\:"/";
   fileList:raze{x,/:string key hsym`$x}each datePaths;
   relevantFiles:utils.getRelevantFiles[timeInfo;fileList];
   utils.deleteRecursively each hsym`$relevantFiles;
   emptyPath:where 0=count each key each datePaths:hsym`$datePaths;
-  if[count emptyPath;utils.deleteRecursively each datePaths emptyPath];
+  if[count emptyPath;hdel each datePaths emptyPath];
   }
 
 // @kind function
