@@ -430,7 +430,6 @@ utils.parseNamedFiles:{
 //   folders outside of automl
 utils.deleteRecursively :{[filepath]
   if[not filepath>hsym`$path;'"Delete path outside of scope of automl"];
-  keyPath:key filepath;
   orderedPaths:{$[11h=type d:key x;raze x,.z.s each` sv/:x,/:d;d]}filepath;
   hdel each desc orderedPaths;
   }
