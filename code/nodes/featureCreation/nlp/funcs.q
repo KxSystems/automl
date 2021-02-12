@@ -13,7 +13,7 @@
 // @return {dict} Updated table with NLP created features included, along with
 //   the string columns and word2vec model
 featureCreation.nlp.proc:{[features;config]
-  stringCols:.ml.i.fndcols[features;"C"];
+  stringCols:.ml.i.findCols[features;"C"];
   spacyLoad:.p.import[`spacy;`:load]"en_core_web_sm";
   args:(spacyLoad;features stringCols);
   sentences:$[1<count stringCols;

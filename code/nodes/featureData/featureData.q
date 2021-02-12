@@ -10,7 +10,7 @@
 // @param config {dict} Location and method by which to retrieve the data
 // @return {tab} Feature data as a table
 featureData.node.function:{[config]
-  data:.ml.i.loaddset config;
+  data:.ml.i.loadDataset config;
   $[98h<>type data;
     '`$"Feature dataset must be a simple table for use with Automl";
     data

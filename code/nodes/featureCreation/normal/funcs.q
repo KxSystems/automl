@@ -51,7 +51,7 @@ featureCreation.normal.default:{[features]
 // @param features {tab} Feature data as a table
 // return {tab} Bulk transformtions applied to appropriate columns
 featureCreation.normal.bulkTransform:{[features]
-  bulkCols:.ml.i.fndcols[features;"hij"];
+  bulkCols:.ml.i.findCols[features;"hij"];
   stringFunc:("_multi";"_sum";"_div";"_sub");
   // Name the columns based on the unique combinations
   bulkCols@:.ml.combs[count bulkCols;2];
@@ -70,7 +70,7 @@ featureCreation.normal.bulkTransform:{[features]
 // @param features {tab} Feature data as a table
 // return {tab} Truncated single value decomposition applied to feature table
 featureCreation.normal.truncSingleDecomp:{[features]
-  truncCols:.ml.i.fndcols[features;"f"];
+  truncCols:.ml.i.findCols[features;"f"];
   truncCols@:.ml.combs[count truncCols,:();2];
   decomposition:.p.import[`sklearn.decomposition;`:TruncatedSVD;`n_components pykw 1];
   fitTransform:{raze x[`:fit_transform][flip y]`};

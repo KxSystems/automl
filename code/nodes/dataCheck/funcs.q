@@ -97,7 +97,7 @@ dataCheck.NLPLoad:{[config]
 // @return {(Null;err)} Null on success, error for inappropriate data
 dataCheck.NLPSchema:{[config;features]
   if[not`nlp~config`featureExtractionType;:()];
-  if[0~count .ml.i.fndcols[features;"C"];
+  if[0~count .ml.i.findCols[features;"C"];
     '`$"User wishing to apply nlp functionality must pass a table containing ",
      "a character column."
     ];
@@ -112,19 +112,19 @@ dataCheck.NLPSchema:{[config;features]
 dataCheck.featureTypes:{[features;config]
   typ:config`featureExtractionType;
   $[typ in`tseries`normal;
-      [fCols:.ml.i.fndcols[features;"sfihjbepmdznuvt"];
+      [fCols:.ml.i.findCols[features;"sfihjbepmdznuvt"];
        tab:flip fCols!features fCols
        ];
     typ=`fresh;
       // Ignore aggregating columns for FRESH as these can be of any type
       [apprCols:flip(aggCols:config[`aggregationColumns])_ flip features;
-       cls:.ml.i.fndcols[apprCols;"sfiehjb"];
+       cls:.ml.i.findCols[apprCols;"sfiehjb"];
        // Restore aggregating columns
        tab:flip(aggCols!features aggCols,:()),cls!features cls;
        fCols:cols tab
        ];
     typ=`nlp;
-      [fCols:.ml.i.fndcols[features;"sfihjbepmdznuvtC"];
+      [fCols:.ml.i.findCols[features;"sfihjbepmdznuvtC"];
        tab:flip fCols!features fCols
        ];
     '`$"This form of feature extraction is not currently supported"

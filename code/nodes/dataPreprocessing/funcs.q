@@ -16,12 +16,12 @@ dataPreprocessing.symEncoding:{[features;config;symEncode]
     if[count symEncode`freq;
       features:$[`fresh~typ;
 	    [aggColData:0!config[`aggregationColumns]xgroup features;
-         raze .ml.freqencode[;symEncode`freq]each flip each aggColData
+         raze .ml.freqEncode[;symEncode`freq]each flip each aggColData
 		 ];
-        .ml.freqencode[features;symEncode`freq]
+        .ml.freqEncode[features;symEncode`freq]
         ]; 
       ];
-    features:.ml.onehot[0!features;symEncode`ohe];
+    features:.ml.oneHot.fitPredict[0!features;symEncode`ohe];
     // Extract symbol columns from dictionary
     symbolCols:distinct raze symEncode;
     :flip symbolCols _ flip features
@@ -60,8 +60,8 @@ dataPreprocessing.featPreprocess:{[features;config]
 // @return {tab} Feature table with appropriate feature preprocessing applied
 dataPreprocessing.nonTextPreprocess:{[features]
   features:dataPreprocessing.nullEncode[features;med];
-  features:.ml.dropconstant features;
-  dataPreprocessing.infreplace features
+  features:.ml.dropConstant features;
+  dataPreprocessing.infReplace features
   }
 
 // @kind function
@@ -70,7 +70,7 @@ dataPreprocessing.nonTextPreprocess:{[features]
 // @param features {tab} Feature data as a table
 // @return {tab} Feature table with appropriate feature preprocessing applied
 dataPreprocessing.textPreprocess:{[features]
-  if[count[cols features]>count charCol:.ml.i.fndcols[features;"C"];
+  if[count[cols features]>count charCol:.ml.i.findCols[features;"C"];
     nonTextPreproc:dataPreprocessing.nonTextPreprocess charCol _features;
     :?[features;();0b;charCol!charCol],'nonTextPreproc
     ];
@@ -100,7 +100,7 @@ dataPreprocessing.nullEncode:{[features;func]
 // Temporary infreplace function until toolkit is updated
 dataPreprocessing.infreplace:{
   $[98=t:type x;
-    [appCols:.ml.i.fndcols[x;"hijefpnuv"];
+    [appCols:.ml.i.findCols[x;"hijefpnuv"];
     typCols:type each dt:appCols!x appCols;
     flip flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
     ];
@@ -110,11 +110,11 @@ dataPreprocessing.infreplace:{
      (x til[count x]except appIndex),dataPreprocessing.i.infrep'[dt;typIndex]
      ];
     98=type keyX:key x;
-     [appCols:.ml.i.fndcols[x:value x;"hijefpnuv"];
+     [appCols:.ml.i.findCols[x:value x;"hijefpnuv"];
      typCols:type each dt:appCols!x appCols;
      cols[keyX]xkey flip flip[keyX],flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
      ];
-    [appCols:.ml.i.fndcols[x:flip x;"hijefpnuv"];
+    [appCols:.ml.i.findCols[x:flip x;"hijefpnuv"];
     typCols:type each dt:appCols!x appCols;
      flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
      ]

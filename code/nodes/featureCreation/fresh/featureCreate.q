@@ -21,10 +21,10 @@ featureCreation.fresh.create:{[features;config]
   cols2use:cols[features]except aggCols;
   featExtractStart:.z.T;
   // Apply feature creation and encode nulls with the median value of column
-  features:value .ml.fresh.createfeatures[features;aggCols;cols2use;params];
+  features:value .ml.fresh.createFeatures[features;aggCols;cols2use;params];
   features:dataPreprocessing.nullEncode[features;med];
   features:dataPreprocessing.infreplace features;
-  features:0^.ml.dropconstant features;
+  features:0^.ml.dropConstant features;
   featExtractEnd:.z.T-featExtractStart;
   `creationTime`features`featModel!(featExtractEnd;features;())
   }
