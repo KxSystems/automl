@@ -101,16 +101,16 @@ utils.getCommandLineData:{[method]
   dict:key[method]!methodSpecification'[value method;key method];
   if[count idx:where`ipc=method;dict[idx]:("J";"c";"c")$/:3#'dict idx];
   dict:dict,'([]typ:value method);
-  featureData:.ml.i.loaddset dict`featureData;
+  featureData:.ml.i.loadDataset dict`featureData;
   featurePath:dict[`featureData]utils.dataType method`featureData;
   targetPath:dict[`targetData]utils.dataType method`targetData;
   targetName:`$dict[`targetData]`targetColumn;
   // If data retrieval methods are the same for both feature and target data, 
   // only load data once and retrieve the target from the table. Otherwise,
-  // retrieve target data using .ml.i.loaddset
+  // retrieve target data using .ml.i.loadDataset
   data:$[featurePath~targetPath;
     (flip targetName _ flip featureData;featureData targetName);
-    (featureData;.ml.i.loaddset[dict`targetData]$[`~targetName;::;targetName])
+    (featureData;.ml.i.loadDataset[dict`targetData]$[`~targetName;::;targetName])
     ];
   `features`target!data
   }

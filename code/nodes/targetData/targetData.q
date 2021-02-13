@@ -10,7 +10,7 @@
 // @param config {dict} Location and method by which to retrieve the data
 // @return {(num[];sym[])} Numerical or symbol target vector
 targetData.node.function:{[config]
-  dset:.ml.i.loaddset config;
+  dset:.ml.i.loadDataset config;
   $[.Q.ty[dset]in"befhijs";
     dset;
     '`$"Dataset not of a suitable type only 'befhijs' currently supported"

@@ -21,7 +21,7 @@ featureDescription.symEncodeSchema:{[features;nVals;config]
     config`aggregationColumns;
     (::)
     ];
-  symbolCols:.ml.i.fndcols[features;"s"]except aggcols;
+  symbolCols:.ml.i.findCols[features;"s"]except aggcols;
   $[0=count symbolCols;
     `freq`ohe!``;
     [
@@ -46,11 +46,11 @@ featureDescription.symEncodeSchema:{[features;nVals;config]
 featureDescription.dataDescription:{[features]
   columns :`count`unique`mean`std`min`max`type;
   // Find columns based on their type
-  numcols :.ml.i.fndcols[features;"hijef"];
-  timecols:.ml.i.fndcols[features;"pmdznuvt"];
-  boolcols:.ml.i.fndcols[features;"b"];
-  catcols :.ml.i.fndcols[features;"s"];
-  textcols:.ml.i.fndcols[features;"cC"];
+  numcols :.ml.i.findCols[features;"hijef"];
+  timecols:.ml.i.findCols[features;"pmdznuvt"];
+  boolcols:.ml.i.findCols[features;"b"];
+  catcols :.ml.i.findCols[features;"s"];
+  textcols:.ml.i.findCols[features;"cC"];
   // Projection for the retrieval of appropriate metadata information
   featureMeta:featureDescription.i.metaData[features;;];
   // Apply metadata retrieval to different columns types

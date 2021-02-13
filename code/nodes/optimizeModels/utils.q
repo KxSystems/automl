@@ -162,11 +162,12 @@ optimizeModels.i.shuffle:{[data;col]
 // @param ordFunc   {func} Ordeing of scores 
 // @return {dict} Impact score of each column in ascending order 
 optimizeModels.i.impact:{[scores;countCols;ordFunc]
-  scores:$[any 0>scores;.ml.minmaxscaler;]scores;
+  scores:$[any 0>scores;.ml.minMaxScaler.fitPredict;]scores;
   scores:$[ordFunc~desc;1-;]scores;
   keyDict:til countCols;
   asc keyDict!scores%max scores
   }
+
 
 // Updated cross validation functions necessary for the application of hyperparameter search ordering correctly.
 // Only change is expected input to the t variable of the function, previously this was a simple
@@ -174,11 +175,47 @@ optimizeModels.i.impact:{[scores;countCols;ordFunc]
 // Expected input is now at minimum t:enlist[`val]!enlist num, while for testing on the holdout sets this
 // should be include the scoring function and ordering the model requires to find the best model
 // `val`scf`ord!(0.2;`.ml.mse;asc) for example
-xv.i.search:{[sf;k;n;x;y;f;p;t]
- if[0=t`val;:sf[k;n;x;y;f;p]];i:(0,floor count[y]*1-abs t`val)_$[0>t`val;.ml.xv.i.shuffle;til count@]y;
- (r;pr;[$[type[fn:get t`scf]in(100h;104h);
-          [pykwargs pr:first key t[`ord]avg each fn[;].''];
-          [pykwargs pr:first key desc avg each]]r:sf[k;n;x i 0;y i 0;f;p]](x;y)@\:/:i)}
-xv.i.xvpf:{[pf;xv;k;n;x;y;f;p]p!(xv[k;n;x;y]f pykwargs@)@'p:pf p}
-gs:1_xv.i.search@'xv.i.xvpf[{[p]key[p]!/:1_'(::)cross/value p}]@'.ml.xv.j
-rs:1_xv.i.search@'xv.i.xvpf[{[p].ml.hp.hpgen p}]@'.ml.xv.j
+
+// @kind function
+// @category optimizeModelsUtility
+// @fileoverview Modified hyperparameter search with option to test final model 
+// @param scoreFunc {func} Scoring function
+// @param k {int} Number of folds
+// @param n {int} Number of repetitions
+// @param features {#any[][]} Matrix of features
+// @param target {#any[]} Vector of targets
+// @param dataFunc {func} Function which takes data as input
+// @param hyperparams {dict} Dictionary of hyperparameters
+// @param testType {float} Size of the holdout set used in a fitted grid 
+//   search, where the best model is fit to the holdout set. If 0 the function 
+//   will return scores for each fold for the given hyperparameters. If 
+//   negative the data will be shuffled prior to designation of the holdout set
+// @return {table/(table;dict;float)} Either validation or testing results from 
+//   hyperparameter search with (full results;best set;testing score)
+hp.i.search:{[scoreFunc;k;n;features;target;dataFunc;hyperparams;testType]
+  if[0=testType`val;:scoreFunc[k;n;features;target;dataFunc;hyperparams]];
+  dataShuffle:$[0>testType`val;xv.i.shuffle;til count@]target;
+  i:(0,floor count[target]*1-abs testType`val)_dataShuffle;
+  r:scoreFunc[k;n;features i 0;target i 0;dataFunc;hyperparams];
+  func:get testType`scf;
+  res:$[type[func]in(100h;104h);
+    dataFunc[pykwargs pr:first key testType[`ord]each func[;].''];
+    dataFunc[pykwargs pr:first key desc avg each r](features;target)@\:/:i
+    ];
+  (r;pr;res)
+  }
+
+// @kind data
+// @category optimizeModelsUtility
+// @fileoverview All possible gs/rs functions
+xvKeys:`kfSplit`kfShuff`kfStrat`tsRolls`tsChain`pcSplit`mcSplit
+
+// @kind function
+// @category optimizeModelsUtility
+// @fileoverview Update gs functions with automl `hp.i.search` function
+gs:xvKeys!{hp.i.search last value x}each .ml.gs xvKeys
+
+// @kind data
+// @category optimizeModelsUtility
+// @fileoverview Update rs functions with automl `hp.i.search` function
+rs:xvKeys!{hp.i.search last value x}each .ml.rs xvKeys

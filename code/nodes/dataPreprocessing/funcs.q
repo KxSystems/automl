@@ -61,7 +61,7 @@ dataPreprocessing.featPreprocess:{[features;config]
 dataPreprocessing.nonTextPreprocess:{[features]
   features:dataPreprocessing.nullEncode[features;med];
   features:.ml.dropConstant features;
-  dataPreprocessing.infReplace features
+  dataPreprocessing.infreplace features
   }
 
 // @kind function

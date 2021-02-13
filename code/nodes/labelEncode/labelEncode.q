@@ -12,9 +12,9 @@
 labelEncode.node.function:{[target]
   symMap:()!();
   if[11h~type target;
-    encode:.ml.labelencode target;
-    symMap:encode`mapping;
-    target:encode`encoding
+    encode:.ml.labelEncode.fit target;
+    symMap:encode`modelInfo;
+    target:encode[`predict] target
     ];
   `symMap`target!(symMap;target)
   }

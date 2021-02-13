@@ -10,7 +10,7 @@
 // @return      {int;float;bool} the predicted values for a given model as applied to input data
 models.keras.fitScore:{[data;seed;mname]
   if[mname~`multi;
-    data[;1]:models.i.npArray@'flip@'value@'.ml.i.onehot1 each data[;1]];
+    data[;1]:models.i.npArray@'flip@'value@'.ml.i.oneHot each data[;1]];
   dataDict:`xtrain`ytrain`xtest`ytest!raze data;
   mdl:get[".automl.models.keras.",string[mname],".model"][dataDict;seed];
   mdl:get[".automl.models.keras.",string[mname],".fit"][dataDict;mdl];

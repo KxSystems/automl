@@ -126,7 +126,7 @@ optimizeModels.confMatrix:{[pred;tts;config]
     pred:`long$pred;
     yTest:`long$yTest
     ];
-  confMatrix:.ml.confmat[pred;yTest];
+  confMatrix:.ml.confMatrix[pred;yTest];
   confTable:optimizeModels.i.confTab confMatrix;
   config[`logFunc]each(utils.printDict`confMatrix;confTable);
   confMatrix

@@ -18,7 +18,7 @@ system"mkdir",$[.z.o like "w*";" ";" -p "],savePath;
 // Generate confusion matrix
 preds:10?0b
 yTest:10?0b
-confMatrix:.ml.confmat[preds;yTest]
+confMatrix:.ml.confMatrix[preds;yTest]
 
 // Generate impact dictionary
 colIndex  :0 2 1

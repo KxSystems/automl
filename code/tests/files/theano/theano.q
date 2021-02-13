@@ -23,7 +23,7 @@ models.theano.fitScore:{[data;seed;mname]
 // @param seed  {int} seed used for initialising the same model
 // @return      {<} the compiled theano models
 models.theano.NN.model:{[data;seed]
-  data[`ytrain]:models.i.npArray flip value .ml.i.onehot1 data[`ytrain];
+  data[`ytrain]:models.i.npArray flip value .ml.i.oneHot data[`ytrain];
   models.theano.buildModel[models.i.npArray data`xtrain;data`ytrain;seed]
   }
 
@@ -35,7 +35,7 @@ models.theano.NN.model:{[data;seed]
 // @param mdl   {<} model object being passed through the system (compiled/fitted)
 // @return      {<} a vanilla fitted theano model
 models.theano.NN.fit:{[data;mdl]
-  data[`ytrain]:models.i.npArray flip value .ml.i.onehot1 data[`ytrain];
+  data[`ytrain]:models.i.npArray flip value .ml.i.oneHot data[`ytrain];
   mdls:.p.wrap each mdl`;
   trainMdl:first mdls;
   models.theano.trainModel[models.i.npArray data`xtrain;data`ytrain;trainMdl];

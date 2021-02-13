@@ -26,9 +26,9 @@ featureSignificance.applySigFunc:{[config;features;target]
 featureSignificance.significance:{[features;target]
   BHTest:.ml.fresh.benjhoch .05;
   percentile:.ml.fresh.percentile .25;
-  sigFeats:.ml.fresh.significantfeatures[features;target;BHTest];
+  sigFeats:.ml.fresh.significantFeatures[features;target;BHTest];
   if[0=count sigFeats;
-    sigFeats:.ml.fresh.significantfeatures[features;target;percentile]
+    sigFeats:.ml.fresh.significantFeatures[features;target;percentile]
 	];
   sigFeats
   }
@@ -41,7 +41,7 @@ featureSignificance.significance:{[features;target]
 featureSignificance.correlationCols:{[sigFeats]
   thres:.95;
   sigCols:cols sigFeats;
-  corrMat:abs .ml.corrmat sigFeats;
+  corrMat:abs .ml.corrMatrix sigFeats;
   boolMat:t>\:t:til count first sigFeats;
   sigCols:featureSignificance.threshVal[thres;sigCols]'[corrMat;boolMat];
   raze distinct 1#'asc each key[sigCols],'value sigCols

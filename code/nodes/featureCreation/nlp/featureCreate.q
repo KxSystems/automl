@@ -16,7 +16,7 @@ featureCreation.nlp.create:{[features;config]
   charPrep:featureCreation.nlp.proc[features;config];
   // Table returned with NLP feature creation, any constant columns are dropped
   featNLP:charPrep`features;
-  featNLP:.ml.dropconstant featNLP;
+  featNLP:.ml.dropConstant featNLP;
   // Run normal feature creation on numeric datasets and add to NLP features 
   //   if relevant
   cols2use:cols[features]except charPrep`stringCols;

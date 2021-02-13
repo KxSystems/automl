@@ -152,7 +152,7 @@ saveGraph.i.plotResiduals:{[residDict;tts;modelName;savePath]
   resid[`:set_title]["Plot of residuals";`fontsize pykw 12];
   resid[`:set_xlabel]["Actual values";`fontsize pykw 12];
   resid[`:set_ylabel]["Residuals";`fontsize pykw 12];
-  spacing:.ml.linspace[min true;max true;count true];
+  spacing:.ml.linearSpace[min true;max true;count true];
   resid[`:plot][spacing;count[true]#0f;"k--"];
   filePath:savePath,sv["_";string(`Regression_Analysis;modelName)],".png";
   utils.plt[`:savefig][filePath;`bbox_inches pykw "tight"];
