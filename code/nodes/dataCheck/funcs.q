@@ -1,20 +1,23 @@
-\d .automl
-
+// code/nodes/dataCheck/funcs.q - Functions called in dataCheck node
+// Copyright (c) 2021 Kx Systems Inc
+//
 // Definitions of the main callable functions used in the application of
 //   .automl.dataCheck
+
+\d .automl
 
 // Configuration update
 
 // @kind function
 // @category dataCheck
-// @fileoverview Update configuration based on feature dataset and default 
+// @desc Update configuration based on feature dataset and default 
 //   parameters
-// @param features {tab} Feature data as a table
-// @param config {(dict;char[])} Path to JSON file containing configuration 
+// @param features {table} Feature data as a table
+// @param config {dictionary|char[]} Path to JSON file containing configuration 
 //   dictionary or a dictionary containing relevant information for the update
 //   of augmented with start date/time
-// @return {dict} Full configuration info needed, augmenting config with any 
-//   default information
+// @return {dictionary} Full configuration info needed, augmenting config with
+//   any default information
 dataCheck.updateConfig:{[features;config]
   typ:config`featureExtractionType;
   // Retrieve boiler plate additions at run start - ignored in custom additions
@@ -53,10 +56,10 @@ dataCheck.updateConfig:{[features;config]
 
 // @kind function
 // @category dataCheck
-// @fileoverview Ensure that any non-default functions a user wishes to use 
+// @desc Ensure that any non-default functions a user wishes to use 
 //   exist within the current process such that they are callable
-// @param config {dict} Information relating to the current run of AutoML
-// @return {(Null;err)} Null on success, error if function invalid
+// @param config {dictionary} Information relating to the current run of AutoML
+// @return {::|err} Null on success, error if function invalid
 dataCheck.functions:{[config]
   // List of possible objects where user may input a custom function
   funcs2Search:`predictionFunction`trainTestSplit`significantFeatures,
@@ -75,9 +78,9 @@ dataCheck.functions:{[config]
 
 // @kind function
 // @category dataCheck
-// @fileoverview Ensure that NLP functionality is available
-// @param config {dict} Information relating to the current run of AutoML
-// @return {(Null;err)} Null on success, error if requirements insufficient
+// @desc Ensure that NLP functionality is available
+// @param config {dictionary} Information relating to the current run of AutoML
+// @return {::|err} Null on success, error if requirements insufficient
 dataCheck.NLPLoad:{[config]
   if[not`nlp~config`featureExtractionType;:()];
   if[not(0~checkimport 3)&(::)~@[{system"l ",x};"nlp/nlp.q";{0b}];
@@ -91,10 +94,10 @@ dataCheck.NLPLoad:{[config]
 
 // @kind function
 // @category dataCheck
-// @fileoverview Ensure data contains appropriate types for application of NLP
-// @param config {dict} Information relating to the current run of AutoML
-// @param features {tab} Feature data as a table
-// @return {(Null;err)} Null on success, error for inappropriate data
+// @desc Ensure data contains appropriate types for application of NLP
+// @param config {dictionary} Information relating to the current run of AutoML
+// @param features {table} Feature data as a table
+// @return {::|err} Null on success, error for inappropriate data
 dataCheck.NLPSchema:{[config;features]
   if[not`nlp~config`featureExtractionType;:()];
   if[0~count .ml.i.findCols[features;"C"];
@@ -105,10 +108,10 @@ dataCheck.NLPSchema:{[config;features]
 
 // @kind function
 // @category dataCheck
-// @fileoverview Remove feature columns which do not conform to allowed schema
-// @param features {tab} Feature data as a table
-// @param config {dict} Information relating to the current run of AutoML
-// @return {tab} Feature dataset with inappropriate columns removed
+// @desc Remove feature columns which do not conform to allowed schema
+// @param features {table} Feature data as a table
+// @param config {dictionary} Information relating to the current run of AutoML
+// @return {table} Feature dataset with inappropriate columns removed
 dataCheck.featureTypes:{[features;config]
   typ:config`featureExtractionType;
   $[typ in`tseries`normal;
@@ -135,16 +138,16 @@ dataCheck.featureTypes:{[features;config]
 
 // @kind function
 // @category dataCheck
-// @fileoverview Ensure target data and final feature dataset are same length
-// @param features {tab} Feature data as a table
-// @param target {(num[];sym[])} Target data as a numeric/symbol vector 
-// @param config {dict} Information relating to the current run of AutoML
-// @return {(Null;err)} Null on success, error if mismatch in length
+// @desc Ensure target data and final feature dataset are same length
+// @param features {table} Feature data as a table
+// @param target {number[]|symbol[]} Target data as a numeric/symbol vector 
+// @param config {dictionary} Information relating to the current run of AutoML
+// @return {::|err} Null on success, error if mismatch in length
 dataCheck.length:{[features;target;config]
   typ:config`featureExtractionType;
   $[-11h=type typ;
     $[`fresh=typ;
-        // Check that the number of unique aggregate equals the number of targets
+     // Check that the number of unique aggregate equals the number of targets
         [aggcols:config`aggregationColumns;
          featAggCols:$[1=count aggcols;features aggcols;(,'/)features aggcols];
          if[count[target]<>count distinct featAggCols;
@@ -163,19 +166,19 @@ dataCheck.length:{[features;target;config]
 
 // @kind function
 // @category dataCheck
-// @fileoverview Ensure target data contains more than one unique value
-// @param target {(num[];sym[])} Target data as a numeric/symbol vector
-// @return {(Null;err)} Null on success, error on unsuitable target
+// @desc Ensure target data contains more than one unique value
+// @param target {(number[]|symbol[])} Target data as a numeric/symbol vector
+// @return {::|err} Null on success, error on unsuitable target
 dataCheck.target:{[target]
   if[1=count distinct target;'"Target must have more than one unique value"]
   }
 
 // @kind function
 // @category dataCheck
-// @fileoverview Checks that the trainTestSplit size provided in config is a 
+// @desc Checks that the trainTestSplit size provided in config is a 
 //   floating value between 0 and 1
-// @param config {dict} Information relating to the current run of AutoML
-// @return {(Null;err)} Null on success, error on unsuitable target
+// @param config {dictionary} Information relating to the current run of AutoML
+// @return {::|err} Null on success, error on unsuitable target
 dataCheck.ttsSize:{[config]
   if[(sz<0.)|(sz>1.)|-9h<>type sz:config`testingSize;
     '"Testing size must be in range 0-1"

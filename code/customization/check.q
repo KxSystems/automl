@@ -1,8 +1,11 @@
-\d .automl
-
+// code/customization/check.q - Check and load optional functionality
+// Copyright (c) 2021 Kx Systems Inc
+//
 // This file includes the logic for requirement checks and loading of optional
-//   functionality within the framework, namely dependencies for deep learning
-//   or NLP models etc.
+// functionality within the framework, namely dependencies for deep learning
+// or NLP models etc.
+
+\d .automl
 
 // Check if keras module along with appropriate backend functionality can be 
 //   loaded into the process

@@ -1,14 +1,17 @@
-\d .automl
-
+// code/nodes/dataPreprocessing/funcs.q - Functions called by dataPreprocessing
+// Copyright (c) 2021 Kx Systems Inc
+//
 // Definitions of the main callable functions used in the application of
 //    .automl.dataPreprocessing
 
+\d .automl
+
 // @kind function
 // @category dataPreprocessing
-// @fileoverview Symbol encoding applied to feature data
-// @param features {tab} Feature data as a table
-// @param config {dict} Information relating to the current run of AutoML
-// @return {tab} Feature table encoded appropriately for the task
+// @desc Symbol encoding applied to feature data
+// @param features {table} Feature data as a table
+// @param config {dictionary} Information relating to the current run of AutoML
+// @return {table} Feature table encoded appropriately for the task
 dataPreprocessing.symEncoding:{[features;config;symEncode]
   typ:config`featureExtractionType;
   // If no symbol columns, return table or empty encoding schema
@@ -31,10 +34,10 @@ dataPreprocessing.symEncoding:{[features;config;symEncode]
 
 // @kind function
 // @category dataPreprocessing
-// @fileoverview  Apply preprocessing depending on feature extraction type
-// @param features {tab} Feature data as a table
-// @param config {dict} Information relating to the current run of AutoML
-// @return {tab} Feature table with appropriate feature preprocessing applied
+// @desc  Apply preprocessing depending on feature extraction type
+// @param features {table} Feature data as a table
+// @param config {dictionary} Information relating to the current run of AutoML
+// @return {table} Feature table with appropriate feature preprocessing applied
 dataPreprocessing.featPreprocess:{[features;config]
   typ:config`featureExtractionType;
   // For FRESH the aggregate columns need to be excluded from the preprocessing
@@ -55,9 +58,9 @@ dataPreprocessing.featPreprocess:{[features;config]
 
 // @kind function
 // @category dataPreprocessing
-// @fileoverview Apply preprocessing for non NLP feature extraction type
-// @param features {tab} Feature data as a table
-// @return {tab} Feature table with appropriate feature preprocessing applied
+// @desc Apply preprocessing for non NLP feature extraction type
+// @param features {table} Feature data as a table
+// @return {table} Feature table with appropriate feature preprocessing applied
 dataPreprocessing.nonTextPreprocess:{[features]
   features:dataPreprocessing.nullEncode[features;med];
   features:.ml.dropConstant features;
@@ -66,9 +69,9 @@ dataPreprocessing.nonTextPreprocess:{[features]
 
 // @kind function
 // @category dataPreprocessing
-// @fileoverview  Apply preprocessing for NLP feature extraction type
-// @param features {tab} Feature data as a table
-// @return {tab} Feature table with appropriate feature preprocessing applied
+// @desc  Apply preprocessing for NLP feature extraction type
+// @param features {table} Feature data as a table
+// @return {table} Feature table with appropriate feature preprocessing applied
 dataPreprocessing.textPreprocess:{[features]
   if[count[cols features]>count charCol:.ml.i.findCols[features;"C"];
     nonTextPreproc:dataPreprocessing.nonTextPreprocess charCol _features;
@@ -79,11 +82,11 @@ dataPreprocessing.textPreprocess:{[features]
 
 // @kind function
 // @category dataPreprocessingUtility
-// @fileoverview null encoding of feature data 
-// @param features {tab} Feature data as a table
-// @param func {lambda} Function to be applied to column from which the value 
+// @desc null encoding of feature data 
+// @param features {table} Feature data as a table
+// @param func {fn} Function to be applied to column from which the value 
 //   to fill nulls is derived (med/min/max)
-// @return {tab} Feature table with null values filled if required
+// @return {table} Feature table with null values filled if required
 dataPreprocessing.nullEncode:{[features;func]
   nullCheck:flip null features;
   nullFeat:where 0<sum each nullCheck;
@@ -112,7 +115,8 @@ dataPreprocessing.infreplace:{
     98=type keyX:key x;
      [appCols:.ml.i.findCols[x:value x;"hijefpnuv"];
      typCols:type each dt:appCols!x appCols;
-     cols[keyX]xkey flip flip[keyX],flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
+     cols[keyX]xkey flip flip[keyX],
+       flip[x]^dataPreprocessing.i.infrep'[dt;typCols]
      ];
     [appCols:.ml.i.findCols[x:flip x;"hijefpnuv"];
     typCols:type each dt:appCols!x appCols;
