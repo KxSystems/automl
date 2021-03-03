@@ -7,7 +7,7 @@
 
 // @kind function 
 // @category node
-// @fileoverview Pass the configuration dictionary into the AutoML graph and to
+// @desc Pass the configuration dictionary into the AutoML graph and to
 //   the relevant nodes
 // @param config {dictionary} Custom configuration information relevant to the
 //   present run

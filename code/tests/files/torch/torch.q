@@ -1,13 +1,16 @@
+// code/tests/files/torch/torch.q - PyTorch test files
+// Copyright (c) 2021 Kx Systems Inc
+
 \d .automl
 
 // @kind function
 // @category models
-// @fileoverview Fit model on training data and score using test data
-// @param data  {dict} containing training and testing data according to keys
+// @desc Fit model on training data and score using test data
+// @param data  {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param seed  {int} seed used for initialising the same model
-// @param mname {sym} name of the model being applied
-// @return {int;float;bool} the predicted values for a given model as applied to input data
+// @param mname {symbol} name of the model being applied
+// @return {int;float;boolean} the predicted values for a given model as applied to input data
 models.torch.fitScore:{[data;seed;mname]
   dataDict:`xtrain`ytrain`xtest`ytest!raze data;
   mdl:get[".automl.models.torch.",string[mname],".model"][dataDict;seed];
@@ -18,8 +21,8 @@ models.torch.fitScore:{[data;seed;mname]
 
 // @kind function
 // @category models
-// @fileoverview Fit a vanilla torch model to data
-// @param data {dict} containing training and testing data according to keys
+// @desc Fit a vanilla torch model to data
+// @param data {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param model {<} model object being passed through the system (compiled)
 // @return {<} a vanilla fitted torch model
@@ -39,8 +42,8 @@ models.torch.NN.fit:{[data;model]
 
 // @kind function
 // @category models
-// @fileoverview Compile a keras model for binary problems
-// @param data  {dict} containing training and testing data according to keys
+// @desc Compile a keras model for binary problems
+// @param data  {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param seed  {int} seed used for initialising the same model
 // @return {<} the compiled torch models
@@ -51,12 +54,12 @@ models.torch.NN.model:{[data;seed]
 
 // @kind function
 // @category models
-// @fileoverview Predict test data values using a compiled model
+// @desc Predict test data values using a compiled model
 //  for binary problem types
-// @param data {dict} containing training and testing data according to keys
+// @param data {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param model {<} model object being passed through the system (fitted)
-// @return {bool} the predicted values for a given model
+// @return {boolean} the predicted values for a given model
 models.torch.NN.predict:{[data;model] 
   dataX:models.i.numpy[models.i.npArray[data`xtest]][`:float][];
   torchMax:last models.i.torch[`:max][model[dataX];1]`;

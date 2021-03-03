@@ -1,13 +1,16 @@
+// code/tests/files/theano/theano.q - Theano test files
+// Copyright (c) 2021 Kx Systems Inc
+
 \d .automl
 
 // @kind function
 // @category models
-// @fileoverview Fit model on training data and score using test data
-// @param data  {dict} containing training and testing data according to keys
+// @desc Fit model on training data and score using test data
+// @param data  {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param seed  {int} seed used for initialising the same model
-// @param mname {sym} name of the model being applied
-// @return      {int;float;bool} the predicted values for a given model as applied to input data
+// @param mname {symbol} name of the model being applied
+// @return      {int|float|boolean} the predicted values for a given model as applied to input data
 models.theano.fitScore:{[data;seed;mname]
   dataDict:`xtrain`ytrain`xtest`ytest!raze data;
   mdl:get[".automl.models.theano.",string[mname],".model"][dataDict;seed];
@@ -17,8 +20,8 @@ models.theano.fitScore:{[data;seed;mname]
 
 // @kind function
 // @category models
-// @fileoverview Compile a theano model for binary problems
-// @param data  {dict} containing training and testing data according to keys
+// @desc Compile a theano model for binary problems
+// @param data  {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param seed  {int} seed used for initialising the same model
 // @return      {<} the compiled theano models
@@ -29,8 +32,8 @@ models.theano.NN.model:{[data;seed]
 
 // @kind function
 // @category models
-// @fileoverview Fit a vanilla theano model to data
-// @param data  {dict} containing training and testing data according to keys
+// @desc Fit a vanilla theano model to data
+// @param data  {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param mdl   {<} model object being passed through the system (compiled/fitted)
 // @return      {<} a vanilla fitted theano model
@@ -44,12 +47,12 @@ models.theano.NN.fit:{[data;mdl]
 
 // @kind function
 // @category models
-// @fileoverview Predict test data values using a compiled model
+// @desc Predict test data values using a compiled model
 //  for binary problem types
-// @param data  {dict} containing training and testing data according to keys
+// @param data  {dictionary} containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
 // @param mdl   {<} model object being passed through the system (compiled/fitted)
-// @return      {bool} the predicted values for a given model
+// @return      {boolean} the predicted values for a given model
 models.theano.NN.predict:{[data;mdl]
   models.theano.predictModel[models.i.npArray data`xtest;mdl]`
   }

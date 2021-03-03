@@ -1,13 +1,16 @@
-\d .automl
+// code/nodes/saveGraph/utils.q - Utilities for the saveGraph node
+// Copyright (c) 2021 Kx Systems Inc
+//
+// Utility functions specific the the saveGraph node implementation
 
-// Utility functions for saveGraph
+\d .automl
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Create regression target distribution plot and save down locally
-// @param params    {dict} All data generated during the process
-// @param savePath  {str} Path to where plots are to be saved
-// @return {null} Target distribution plot saved to appropriate location
+// @desc Create regression target distribution plot and save down locally
+// @param params    {dictionary} All data generated during the process
+// @param savePath  {string} Path to where plots are to be saved
+// @return {::} Target distribution plot saved to appropriate location
 saveGraph.i.regTargetPlot:{[params;savePath]
   target:raze params[`ttsObject;`ytrain`ytest];
   utils.plt[`:figure][];
@@ -18,10 +21,10 @@ saveGraph.i.regTargetPlot:{[params;savePath]
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Create binary target distribution plot and save down locally
-// @param params    {dict} All data generated during the process
-// @param savePath  {str} Path to where plots are to be saved
-// @return {null} Target distribution plot saved to appropriate location
+// @desc Create binary target distribution plot and save down locally
+// @param params    {dictionary} All data generated during the process
+// @param savePath  {string} Path to where plots are to be saved
+// @return {::} Target distribution plot saved to appropriate location
 saveGraph.i.classTargetPlot:{[params;savePath]
   target:raze params[`ttsObject;`ytrain`ytest];
   symMap:params[`symMap];
@@ -36,10 +39,10 @@ saveGraph.i.classTargetPlot:{[params;savePath]
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Save target plot locally
+// @desc Save target plot locally
 // @param pltObj    {<} EmbedPy matplotlib object
-// @param savePath  {str} Path to where plots are to be saved
-// @return {null} Target distribution plot saved to appropriate location
+// @param savePath  {string} Path to where plots are to be saved
+// @return {::} Target distribution plot saved to appropriate location
 saveGraph.i.targetPlot:{[pltObj;savePath]
   pltObj[`:title]["Target Distribution";`fontsize pykw 12];
   pltObj[`:xlabel]["Target";`fontsize pykw 12];
@@ -52,12 +55,12 @@ saveGraph.i.targetPlot:{[pltObj;savePath]
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Save confusion matrix
+// @desc Save confusion matrix
 // @param confMatrix {int[]} Confusion matrix
-// @param classes    {str} Classes of possible predictions
-// @param modelName  {str} Name of best model
-// @param savePath   {str} Path to where images are to be saved
-// @return {null} Saves confusion matrix to appropriate location
+// @param classes    {string} Classes of possible predictions
+// @param modelName  {string} Name of best model
+// @param savePath   {string} Path to where images are to be saved
+// @return {::} Saves confusion matrix to appropriate location
 saveGraph.i.displayConfMatrix:{[confMatrix;classes;modelName;savePath]
   colorMap:utils.plt`:cm.Blues;
   subPlots:utils.plt[`:subplots][`figsize pykw 5 5];
@@ -83,26 +86,27 @@ saveGraph.i.displayConfMatrix:{[confMatrix;classes;modelName;savePath]
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Add text to confusion matrix
+// @desc Add text to confusion matrix
 // @param confMatrix {int[]} Confusion matrix
 // @param thresh     {int} Threshold value
 // @param i          {int} Row in the confusion matrix
 // @param j          {int} column in the confusion matrix
-// @return {null} Adds text to plot
+// @return {::} Adds text to plot
 saveGraph.i.addText:{[confMatrix;thresh;i;j]
   color:$[thresh<confMatrix[i;j];`white;`black];
   valueStr:string confMatrix[i;j];
-  utils.plt[`:text][j;i;valueStr;`horizontalalignment pykw`center;`color pykw color]
+  utils.plt[`:text][j;i;valueStr;`horizontalalignment pykw`center;
+  `color pykw color];
   }
 
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Create impact plot and save down locally
+// @desc Create impact plot and save down locally
 // @param impact    {float[]} The impact value of each feature
-// @param modelName {modelName} Name of best model
-// @param savePath  {str} Path to where plots are to be saved
-// @return {null} Impact plot saved to appropriate location
+// @param modelName {string} Name of best model
+// @param savePath  {string} Path to where plots are to be saved
+// @return {::} Impact plot saved to appropriate location
 saveGraph.i.plotImpact:{[impact;modelName;savePath]
   utils.plt[`:figure][`figsize pykw 20 1.5];
   subPlots:utils.plt[`:subplots][];
@@ -126,11 +130,11 @@ saveGraph.i.plotImpact:{[impact;modelName;savePath]
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Create residual plot and save down locally
-// @param residDict {dict} The resid and true values
+// @desc Create residual plot and save down locally
+// @param residDict {dictionary} The resid and true values
 // @param modelName {modelName} Name of best model
-// @param savePath  {str} Path to where plots are to be saved
-// @return {null} Residual plot saved to appropriate location
+// @param savePath  {string} Path to where plots are to be saved
+// @return {::} Residual plot saved to appropriate location
 saveGraph.i.plotResiduals:{[residDict;tts;modelName;savePath]
   resids:residDict[`residuals];
   preds :residDict[`preds];
@@ -161,10 +165,10 @@ saveGraph.i.plotResiduals:{[residDict;tts;modelName;savePath]
 
 // @kind function
 // @category saveGraphUtility
-// @fileoverview Create data split plot
-// @param cfg      {dict} configuration information related to the current run
-// @param fileName {str}  Filename to save plot under
-// @return {null} Data split plot saved to appropriate location
+// @desc Create data split plot
+// @param cfg {dictionary} configuration information related to the current run
+// @param fileName {string}  Filename to save plot under
+// @return {::} Data split plot saved to appropriate location
 saveGraph.i.dataSplit:{[config;fileName]
   trn:(trnHld:1.-config`testingSize)*1-config`testingSize;
   sz:1.;

@@ -7,7 +7,7 @@
 
 // @kind function
 // @category node
-// @fileoverview Save all metadata information needed to predict on new data
+// @desc Save all metadata information needed to predict on new data
 // @param params {dictionary} All data generated during the preprocessing and
 //   prediction stages
 // @return {dictionary} All metadata information needed to generate predict

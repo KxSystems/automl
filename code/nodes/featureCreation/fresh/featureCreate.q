@@ -1,11 +1,16 @@
+// code/nodes/featureCreation/fresh/featureCreation.q - FRESH feature creation
+// Copyright (c) 2021 Kx Systems Inc
+//
+// Create features using the fresh algorithm
+
 \d .automl
 
 // @kind function
 // @category featureCreate 
-// @fileoverview Create features using the FRESH algorithm
-// @param features {tab} Feature data as a table 
-// @param config  {dict} Information related to the current run of AutoML
-// @return {tab} Features created in accordance with the FRESH feature 
+// @desc Create features using the FRESH algorithm
+// @param features {table} Feature data as a table 
+// @param config  {dictionary} Information related to the current run of AutoML
+// @return {table} Features created in accordance with the FRESH feature 
 //   creation procedure
 featureCreation.fresh.create:{[features;config]
   aggCols:config`aggregationColumns;

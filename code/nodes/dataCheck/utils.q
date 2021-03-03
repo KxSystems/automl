@@ -36,7 +36,7 @@ dataCheck.i.errColumns:{[clist;slist;typ;config]
 //   and related to the current run
 // @param default {dictionary} Default dictionary which may need to be updated
 // @param ptyp {symbol} problem type being solved (`nlp/`normal/`fresh)
-/. returns > configuration dictionary modified with any custom information
+// returns > configuration dictionary modified with any custom information
 dataCheck.i.getCustomConfig:{[feat;config;default;ptyp]
   dict:$[(typ:type config)in 10 -11 99h;
       [if[10h~typ ;config:dataCheck.i.getData[config;ptyp]];
