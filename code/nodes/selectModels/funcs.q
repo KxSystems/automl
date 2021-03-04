@@ -2,7 +2,7 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Definitions of the main callable functions used in the application of 
-//   .automl.selectModels
+// .automl.selectModels
 
 \d .automl
 

@@ -10,7 +10,7 @@
 // @kind function
 // @category node
 // @desc Encode target data if target is a symbol vector 
-// @param target {(number[];symbol[])} Numerical or symbol target vector
+// @param target {number[]|symbol[]} Numerical or symbol target vector
 // @return {dictionary} Mapping between symbol encoding and encoded target data 
 labelEncode.node.function:{[target]
   symMap:()!();

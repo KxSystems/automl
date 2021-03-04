@@ -6,9 +6,10 @@
 
 \d .automl
 
-// @kind function
+// @kind data
 // @category utility
 // @desc List of models to exclude
+// @type symbol[]
 utils.excludeList:`GaussianNB`LinearRegression
 
 // @kind function
@@ -21,7 +22,7 @@ utils.excludeList:`GaussianNB`LinearRegression
 // @param hyperParam {dictionary} Hyperparameters to be searched
 // @param data {float[]} Data split into training and testing sets of format
 //   ((xtrn;ytrn);(xval;yval))
-// @return {(boolean[];float[])} Predicted and true validation values
+// @return {list} Predicted and true validation values
 utils.fitPredict:{[func;hyperParam;data]
   predicts:$[0h~type hyperParam;
     func[data;hyperParam 0;hyperParam 1];
@@ -43,7 +44,7 @@ utils.qpyFuncSearch:{[funcName]
 // @kind function
 // @category utility
 // @desc Load NLP library if requirements met
-// This function takes no arguments and returns nothing. Its purpose is to load
+//   This function takes no arguments and returns nothing. Its purpose is to load
 //   the NLP library if requirements are met. If not, a statement printed to 
 //   terminal.
 utils.loadNLP:{
@@ -112,8 +113,9 @@ utils.getCommandLineData:{[method]
   // only load data once and retrieve the target from the table. Otherwise,
   // retrieve target data using .ml.i.loadDataset
   data:$[featurePath~targetPath;
-  (flip targetName _ flip featureData;featureData targetName);
-  (featureData;.ml.i.loadDataset[dict`targetData]$[`~targetName;::;targetName])
+    (flip targetName _ flip featureData;featureData targetName);
+    (featureData;.ml.i.loadDataset[dict`targetData]$[`~targetName;::;
+      targetName])
   ];
   `features`target!data
   }
@@ -262,17 +264,19 @@ utils.extractModelMeta:{[modelDetails;pathToMeta]
   @[get;pathToMeta;errFunc]
   }
 
-// @kind function
+// @kind data 
 // @category utility
 // @desc Dictionary outlining the keys which must be equivalent for 
 //   data retrieval in order for a dataset not to be loaded twice (assumes 
 //   tabular return under equivalence)
+// @type dictionary
 utils.dataType:`ipc`binary`csv!
   (`port`select;`directory`fileName;`directory`fileName)
 
-// @kind function
+// @kind data
 // @category utility
 // @desc Dictionary with console print statements to reduce clutter
+// @type dictionary
 utils.printDict:(!) . flip(
   (`describe;"The following is a breakdown of information for each of the ",
     "relevant columns in the dataset");
@@ -304,12 +308,13 @@ utils.printDict:(!) . flip(
   (`meta;"Saving down model parameters to ");
   (`model;"Saving down model to "))
 
-// @kind function
+// @kind data
 // @category utility
 // @desc Dictionary of warning print statements that can be turned 
 //   on/off. If two elements are within a key,first element is the warning 
 //   given when ignoreWarnings=2, the second is the warning given when 
 //   ignoreWarnings=1.
+// @type dictionary
 utils.printWarnings:(!) . flip(
   (`configExists;("A configuration file of this name already exists";
      "A configuration file of this name already exists and will be ",
@@ -334,29 +339,32 @@ utils.printWarnings:(!) . flip(
   )
 
 
-// @kind function
+// @kind data 
 // @category utility
 // @desc Decide how warning statements should be handles.
 //   0=No warning or action taken
 //   1=Warning given but no action taken.
 //   2=Warning given and appropriate action taken.
+// @type int
 utils.ignoreWarnings:2
 
-// @kind function
+// @kind data 
 // @category utility
 // @desc Default printing and logging functionality
+// @type boolean
 utils.printing:1b
 utils.logging :0b
 
 // @kind function
 // @category api
-// @desc
+// @desc Print string to stdout or log file
 // @param filename {symbol} Filename to apply to log of outputs to file
 // @param val {string} Item that is to be displayed to standard out of any type
 // @param nline1 {int} Number of new line breaks before the text that are 
 //   needed to 'pretty print' the display
 // @param nline2 {int} Number of new line breaks after the text that are needed
 //   to 'pretty print' the display
+// @return {::} String is printed to std or to log file
 utils.printFunction:{[filename;val;nline1;nline2]
   if[not 10h~type val;val:.Q.s val];
   newLine1:nline1#"\n";
@@ -434,7 +442,7 @@ utils.parseNamedFiles:{
 // @category utility
 // @desc Delete files and folders recursively
 // @param filepath {symbol} File handle for file or directory to delete
-// @return {::;err} Null on success, an error if attempting to delete 
+// @return {::|err} Null on success, an error if attempting to delete 
 //   folders outside of automl
 utils.deleteRecursively :{[filepath]
   if[not filepath>hsym`$path;'"Delete path outside of scope of automl"];
@@ -451,7 +459,7 @@ utils.deleteRecursively :{[filepath]
 //   wildcarded string
 // @param pathStem {string} the start of all paths to be constructed, this
 //   is in the general case .automl.path,"/outputs/"
-// @return {::;err} Null on success, error if attempting to delete folders
+// @return {::|err} Null on success, error if attempting to delete folders
 //   which do not have a match
 utils.deleteDateTimeModel:{[config;pathStem]
   dateInfo:config`startDate;
@@ -537,7 +545,7 @@ utils.getRelevantFiles:{[timeInfo;fileList]
 //   .automl.path,"/outputs/" folder
 // @param pathStem {string} the start of all paths to be constructed, this
 //   is in the general case .automl.path,"/outputs/"
-// @return {::;err} Null on success, error if attempting to delete folders
+// @return {::|err} Null on success, error if attempting to delete folders
 //   which do not have a match
 utils.deleteNamedModel:{[config;pathStem]
   nameInfo:config[`savedModelName];

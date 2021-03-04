@@ -23,26 +23,26 @@ featureCreation.nlp.proc:{[features;config]
     {x@''flip y};
     {x each y 0}
     ]. args;
-  regexTab      :featureCreation.nlp.regexTab[features;stringCols;
-  			featureCreation.nlp.i.regexList];
+  regexTab:featureCreation.nlp.regexTab[features;stringCols;
+    featureCreation.nlp.i.regexList];
   namedEntityTab:featureCreation.nlp.getNamedEntity[sentences;stringCols];
-  sentimentTab  :featureCreation.nlp.sentimentCreate[features;stringCols;
-  			`compound`pos`neg`neu];
-  corpus        :featureCreation.nlp.corpus[features;stringCols;
-  			`isStop`tokens`uniPOS`likeNumber];
-  colsCheck     :featureCreation.nlp.i.colCheck[cols corpus;];
-  uniposTab     :featureCreation.nlp.uniposTagging[corpus;stringCols]
-  			colsCheck"uniPOS*";
-  stopTab       :featureCreation.nlp.boolTab[corpus]colsCheck"isStop*";
-  numTab        :featureCreation.nlp.boolTab[corpus]colsCheck"likeNumber*";
-  countTokens   :flip enlist[`countTokens]!enlist count each corpus`tokens;
-  tokens        :string(,'/)corpus colsCheck"tokens*";
-  w2vTab        :featureCreation.nlp.word2vec[tokens;config];
-  nlpTabList    :(uniposTab;sentimentTab;w2vTab 0;namedEntityTab;regexTab;
-  			stopTab;numTab;countTokens);
-  nlpTab        :(,'/)nlpTabList;
-  nlpKeys       :`features`stringCols`model;
-  nlpValues     :(nlpTab;stringCols;w2vTab 1);
+  sentimentTab:featureCreation.nlp.sentimentCreate[features;stringCols;
+    `compound`pos`neg`neu];
+  corpus:featureCreation.nlp.corpus[features;stringCols;
+    `isStop`tokens`uniPOS`likeNumber];
+  colsCheck:featureCreation.nlp.i.colCheck[cols corpus;];
+  uniposTab:featureCreation.nlp.uniposTagging[corpus;stringCols]
+    colsCheck"uniPOS*";
+  stopTab:featureCreation.nlp.boolTab[corpus]colsCheck"isStop*";
+  numTab:featureCreation.nlp.boolTab[corpus]colsCheck"likeNumber*";
+  countTokens:flip enlist[`countTokens]!enlist count each corpus`tokens;
+  tokens:string(,'/)corpus colsCheck"tokens*";
+  w2vTab:featureCreation.nlp.word2vec[tokens;config];
+  nlpTabList:(uniposTab;sentimentTab;w2vTab 0;namedEntityTab;regexTab;
+    stopTab;numTab;countTokens);
+  nlpTab:(,'/)nlpTabList;
+  nlpKeys:`features`stringCols`model;
+  nlpValues:(nlpTab;stringCols;w2vTab 1);
   nlpKeys!nlpValues
   }
 

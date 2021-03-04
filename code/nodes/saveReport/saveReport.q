@@ -7,7 +7,7 @@
 
 // @kind function
 // @category node
-// @desc  Save a Python generated report summarizing the process of
+// @desc Save a Python generated report summarizing the process of
 //   reaching the users final model via pyLatex/reportlab
 // @param params {dictionary} All data generated during the preprocessing and
 //   prediction stages

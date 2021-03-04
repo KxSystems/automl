@@ -1,7 +1,10 @@
+// code/tests/utils.q - Testing utilities
+// Copyright (c) 2021 Kx Systems Inc
+//
 // The following utilities are used to test that a function is returning the 
-//   expected error message or data. These functions will likely be provided in
-//   some form within the test.q script provided as standard for the testing of
-//   q and embedPy code.
+// expected error message or data. These functions will likely be provided in
+// some form within the test.q script provided as standard for the testing of
+// q and embedPy code.
 
 // @kind function
 // @category tests

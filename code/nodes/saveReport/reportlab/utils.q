@@ -7,8 +7,8 @@
 
 // Python imports
 saveReport.i.canvas:.p.import`reportlab.pdfgen.canvas
-saveReport.i.table :.p.import[`reportlab.platypus]`:Table
-saveReport.i.np    :.p.import`numpy
+saveReport.i.table:.p.import[`reportlab.platypus]`:Table
+saveReport.i.np:.p.import`numpy
 
 // @kind function
 // @category saveReportUtility
@@ -28,7 +28,7 @@ saveReport.i.printDescripTab:{[tab]
 // @category saveReportUtility
 // @desc Convert kdb table to printable format
 // @param pdf {<} PDF gen module used
-// @param f   {int} The placement height from the bottom of the page
+// @param f {int} The placement height from the bottom of the page
 // @param tab {table} kdb table to be converted
 // @return {int} The placement height from the bottom of the page
 saveReport.i.printKDBTable:{[pdf;f;tab]
@@ -41,13 +41,13 @@ saveReport.i.printKDBTable:{[pdf;f;tab]
 
 // @kind function
 // @category saveReportUtility
-// @desc
-// @param m   {<} pdf gen module used
-// @param h   {int} the placement height from the bottom of the page
-// @param i   {int} how far below is the text
+// @desc Add text to report
+// @param m {<} pdf gen module used
+// @param h {int} the placement height from the bottom of the page
+// @param i {int} how far below is the text
 // @param txt {string} text to include
-// @param f   {int} font size
-// @param s   {int} font size
+// @param f {int} font size
+// @param s {int} font size
 // @return {int} the placement height from the bottom of the page
 saveReport.i.text:{[m;h;i;txt;f;s]
   if[(h-i)<100;h:795;m[`:showPage][];];
@@ -58,13 +58,13 @@ saveReport.i.text:{[m;h;i;txt;f;s]
 
 // @kind function
 // @category saveReportUtility
-// @desc
-// @param m   {<} pdf gen module used
-// @param h   {int} the placement height from the bottom of the page
-// @param i   {int} how far below is the text
+// @desc Add title to report
+// @param m {<} pdf gen module used
+// @param h {int} the placement height from the bottom of the page
+// @param i {int} how far below is the text
 // @param txt {string} text to include
-// @param f   {int} font size
-// @param s   {int} font size
+// @param f {int} font size
+// @param s {int} font size
 // @return {int} the placement height from the bottom of the page
 saveReport.i.title:{[m;h;i;txt;f;s]
   if[(h-i)<100;h:795;m[`:showPage][]];
@@ -75,13 +75,13 @@ saveReport.i.title:{[m;h;i;txt;f;s]
 
 // @kind function
 // @category saveReportUtility
-// @desc
-// @param m   {<} pdf gen module used
-// @param fp  {string} filepath
-// @param h   {int} the placement height from the bottom of the page
-// @param i   {int} how far below is the text
-// @param wi  {int} image width
-// @param hi  {int} image height
+// @desc Add image to report
+// @param m {<} pdf gen module used
+// @param fp {string} filepath
+// @param h {int} the placement height from the bottom of the page
+// @param i {int} how far below is the text
+// @param wi {int} image width
+// @param hi {int} image height
 // @return {int} the placement height from the bottom of the page
 saveReport.i.image:{[m;fp;h;i;wi;hi]
   if[(h-i)<100;h:795;m[`:showPage][]];
@@ -91,13 +91,13 @@ saveReport.i.image:{[m;fp;h;i;wi;hi]
 
 // @kind function
 // @category saveReportUtility
-// @desc
-// @param m   {<} pdf gen module used
-// @param t   {<} pandas table
-// @param h   {int} the placement height from the bottom of the page
-// @param i   {int} how far below is the text
-// @param wi  {int} image width
-// @param hi  {int} image height
+// @desc Add table to report
+// @param m {<} pdf gen module used
+// @param t {<} pandas table
+// @param h {int} the placement height from the bottom of the page
+// @param i {int} how far below is the text
+// @param wi {int} image width
+// @param hi {int} image height
 // @return {int} the placement height from the bottom of the page
 saveReport.i.makeTable:{[m;t;h;i;wi;hi]
   if[(h-i)<100;h:795;m[`:showPage][]]t:saveReport.i.table 

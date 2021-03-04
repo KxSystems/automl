@@ -9,7 +9,7 @@
 // @category saveReport
 // @desc Generate a report using the Python package 'reportlab'.
 //  This report outlines the results from a timed + dated run of automl.
-// @param params   {dictionary} All data generated during the process
+// @param params {dictionary} All data generated during the process
 // @param filePath {string} Location to save report
 // @return {::} Associated pdf report saved to disk
 saveReport.reportlabGenerate:{[params;filePath]
@@ -17,10 +17,10 @@ saveReport.reportlabGenerate:{[params;filePath]
   // Main variables
   bestModel:params`modelName;
   modelMeta:params`modelMetaData;
-  config   :params`config;
-  pdf      :saveReport.i.canvas[`:Canvas]filePath,".pdf";
-  ptype    :$[`class~config`problemType;"classification";"regression"];
-  plots    :params`savedPlots;
+  config:params`config;
+  pdf:saveReport.i.canvas[`:Canvas]filePath,".pdf";
+  ptype:$[`class~config`problemType;"classification";"regression"];
+  plots:params`savedPlots;
 
   // Report generation
  

@@ -2,10 +2,10 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Select subset of models based on limitations imposed by the dataset. This 
-//   includes the selection/removal of poorly scaling models. In the case of 
-//   classification problems, Keras models will also be removed if there are 
-//   not sufficient samples of each target class present in each fold of the
-//   data.
+// includes the selection/removal of poorly scaling models. In the case of 
+// classification problems, Keras models will also be removed if there are 
+// not sufficient samples of each target class present in each fold of the
+// data.
 
 \d .automl
 

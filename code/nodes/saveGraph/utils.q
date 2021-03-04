@@ -8,8 +8,8 @@
 // @kind function
 // @category saveGraphUtility
 // @desc Create regression target distribution plot and save down locally
-// @param params    {dictionary} All data generated during the process
-// @param savePath  {string} Path to where plots are to be saved
+// @param params {dictionary} All data generated during the process
+// @param savePath {string} Path to where plots are to be saved
 // @return {::} Target distribution plot saved to appropriate location
 saveGraph.i.regTargetPlot:{[params;savePath]
   target:raze params[`ttsObject;`ytrain`ytest];
@@ -22,8 +22,8 @@ saveGraph.i.regTargetPlot:{[params;savePath]
 // @kind function
 // @category saveGraphUtility
 // @desc Create binary target distribution plot and save down locally
-// @param params    {dictionary} All data generated during the process
-// @param savePath  {string} Path to where plots are to be saved
+// @param params {dictionary} All data generated during the process
+// @param savePath {string} Path to where plots are to be saved
 // @return {::} Target distribution plot saved to appropriate location
 saveGraph.i.classTargetPlot:{[params;savePath]
   target:raze params[`ttsObject;`ytrain`ytest];
@@ -40,8 +40,8 @@ saveGraph.i.classTargetPlot:{[params;savePath]
 // @kind function
 // @category saveGraphUtility
 // @desc Save target plot locally
-// @param pltObj    {<} EmbedPy matplotlib object
-// @param savePath  {string} Path to where plots are to be saved
+// @param pltObj {<} EmbedPy matplotlib object
+// @param savePath {string} Path to where plots are to be saved
 // @return {::} Target distribution plot saved to appropriate location
 saveGraph.i.targetPlot:{[pltObj;savePath]
   pltObj[`:title]["Target Distribution";`fontsize pykw 12];
@@ -57,9 +57,9 @@ saveGraph.i.targetPlot:{[pltObj;savePath]
 // @category saveGraphUtility
 // @desc Save confusion matrix
 // @param confMatrix {int[]} Confusion matrix
-// @param classes    {string} Classes of possible predictions
-// @param modelName  {string} Name of best model
-// @param savePath   {string} Path to where images are to be saved
+// @param classes {string} Classes of possible predictions
+// @param modelName {string} Name of best model
+// @param savePath {string} Path to where images are to be saved
 // @return {::} Saves confusion matrix to appropriate location
 saveGraph.i.displayConfMatrix:{[confMatrix;classes;modelName;savePath]
   colorMap:utils.plt`:cm.Blues;
@@ -88,9 +88,9 @@ saveGraph.i.displayConfMatrix:{[confMatrix;classes;modelName;savePath]
 // @category saveGraphUtility
 // @desc Add text to confusion matrix
 // @param confMatrix {int[]} Confusion matrix
-// @param thresh     {int} Threshold value
-// @param i          {int} Row in the confusion matrix
-// @param j          {int} column in the confusion matrix
+// @param thresh {int} Threshold value
+// @param i {int} Row in the confusion matrix
+// @param j {int} column in the confusion matrix
 // @return {::} Adds text to plot
 saveGraph.i.addText:{[confMatrix;thresh;i;j]
   color:$[thresh<confMatrix[i;j];`white;`black];
@@ -103,9 +103,9 @@ saveGraph.i.addText:{[confMatrix;thresh;i;j]
 // @kind function
 // @category saveGraphUtility
 // @desc Create impact plot and save down locally
-// @param impact    {float[]} The impact value of each feature
+// @param impact {float[]} The impact value of each feature
 // @param modelName {string} Name of best model
-// @param savePath  {string} Path to where plots are to be saved
+// @param savePath {string} Path to where plots are to be saved
 // @return {::} Impact plot saved to appropriate location
 saveGraph.i.plotImpact:{[impact;modelName;savePath]
   utils.plt[`:figure][`figsize pykw 20 1.5];
@@ -133,7 +133,7 @@ saveGraph.i.plotImpact:{[impact;modelName;savePath]
 // @desc Create residual plot and save down locally
 // @param residDict {dictionary} The resid and true values
 // @param modelName {modelName} Name of best model
-// @param savePath  {string} Path to where plots are to be saved
+// @param savePath {string} Path to where plots are to be saved
 // @return {::} Residual plot saved to appropriate location
 saveGraph.i.plotResiduals:{[residDict;tts;modelName;savePath]
   resids:residDict[`residuals];

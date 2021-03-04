@@ -49,7 +49,7 @@ runModels.holdoutSplit:{[config;tts]
 //   sets
 // @param config {dictionary} Information relating to the current run of AutoML
 // @param modelTab {table} Models to be applied to feature data
-// @return {boolean[]|float[]} Predictions and associated actual values for
+// @return {list} Predictions and associated actual values for
 //   each cross validation fold
 runModels.xValSeed:{[tts;config;modelTab]
   xTrain:tts`xtrain;
@@ -141,7 +141,7 @@ runModels.bestModelFit:{[scores;tts;modelTab;scoreFunc;config]
 //   holdout set
 // @param scores {dictionary} Scores returned by each model
 // @param scoreFunc {<} Scoring function applied to predictions
-// @param xValTime {T} Time taken to apply xval functions to data
+// @param xValTime {time} Time taken to apply xval functions to data
 // @param modelTab {table} Models to be applied to feature data
 // @param modelName {string} Name of best model
 // @return {dictionary} Metadata to be contained within the end reports

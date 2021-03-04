@@ -18,11 +18,11 @@ runModels.i.readFile:{[filePath]
 // @category runModelsUtility
 // @desc Fit and score custom model to holdout set
 // @param bestModel {symbol} The best scorinng model from xval
-// @param tts       {dictionary} Feature and target data split into training 
+// @param tts {dictionary} Feature and target data split into training 
 //   and testing set
-// @param modelTab  {table}  Models to be applied to feature data
+// @param modelTab {table}  Models to be applied to feature data
 // @param scoreFunc {<} Scoring metric applied to evaluate the model
-// @param cfg       {dictionary} Configuration information assigned by the 
+// @param cfg {dictionary} Configuration information assigned by the 
 //   user and related to the current run
 // @return {dictionary} The fitted model along with the predictions
 runModels.i.customModel:{[bestModel;tts;modelTab;scoreFunc;cfg]
@@ -43,7 +43,7 @@ runModels.i.customModel:{[bestModel;tts;modelTab;scoreFunc;cfg]
 // @kind function
 // @category runModelsUtility
 // @desc One hot encodes target values and converts to Numpy array
-// @param tts       {dictionary} Feature and target data split into training
+// @param tts {dictionary} Feature and target data split into training
 //   and testing set
 // @return {dictionary} Preprocessed target values
 runModels.i.prepMultiTarget:{[tts]
@@ -54,9 +54,9 @@ runModels.i.prepMultiTarget:{[tts]
 // @category runModelsUtility
 // @desc Fit and score sklearn model to holdout set
 // @param bestModel {symbol} The best scorinng model from xval
-// @param tts       {dictionary} Feature and target data split into training
+// @param tts {dictionary} Feature and target data split into training
 //   and testing set
-// @param modelTab  {table}  Models to be applied to feature data
+// @param modelTab {table}  Models to be applied to feature data
 // @param scoreFunc {<} Scoring metric applied to evaluate the model
 // @return {dictionary} The fitted model along with the predictions
 runModels.i.sklModel:{[bestModel;tts;modelTab;scoreFunc]

@@ -7,8 +7,10 @@
 
 \d .automl
 
-// Check if keras module along with appropriate backend functionality can be 
-//   loaded into the process
+// @kind function
+// @category check
+// @desc Check if keras model can be loaded into the process
+// @return {boolean} 1b if keras can be loaded 0b otherwise 
 check.keras:{
   if[0~checkimport 0;
     backend:.p.import[`keras.backend][`:backend][]`;
@@ -19,6 +21,11 @@ check.keras:{
    }
 
 // Import checks and statements
+
+// @kind function
+// @category check
+// @desc Load keras customized models 
+// @return {::} Load models or standard out if not available
 check.loadkeras:{
   $[check.keras[];
     [loadfile`:code/customization/models/libSupport/keras.p;
@@ -31,6 +38,10 @@ check.loadkeras:{
     ]
   }
 
+// @kind function
+// @category check
+// @desc Load PyTorch customized models 
+// @return {::} Load models or standard out if not available
 check.loadtorch:{
   $[0~checkimport 1;
     [loadfile`:code/customization/models/libSupport/torch.p;
@@ -42,6 +53,10 @@ check.loadtorch:{
     ]
   }
 
+// @kind function
+// @category check
+// @desc Load latex module 
+// @return {::} Load latex or standard out if not available
 check.loadlatex:{
   $[0~checkimport 2;
     [loadfile`:code/nodes/saveReport/latex/latex.p;
@@ -52,6 +67,10 @@ check.loadlatex:{
     ]
   }
 
+// @kind function
+// @category check
+// @desc Load Theano customized models 
+// @return {::} Load models or standard out if not available
 check.loadtheano:{
   $[0~checkimport 5;
     [loadfile`:code/customization/models/libSupport/theano.p;

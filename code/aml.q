@@ -13,15 +13,15 @@
 //   range of machine learning models, with the option to save outputs.
 // @param graph {dictionary} Fully connected graph nodes and edges following 
 //   the structure outlined in `graph/Automl_Graph.png`
-// @param features {(dictionary;table)} Unkeyed tabular feature data or a 
+// @param features {dictionary|table} Unkeyed tabular feature data or a 
 //   dictionary outlining how to retrieve the data in accordance with 
 //   `.ml.i.loaddset`
-// @param target {(dictionary;any[])} Target vector of any type or a dictionary
+// @param target {dictionary|any[]} Target vector of any type or a dictionary
 //   outlining how to retrieve the target vector in accordance with
 //   `.ml.i.loaddset`
 // @param ftype {symbol} Feature extraction type (`nlp/`normal/`fresh)
 // @param ptype {symbol} Problem type being solved (`reg/`class)
-// @param params {(dictionary;char[];::)} One of the following:
+// @param params {dictionary|char[]|::} One of the following:
 //   1. Path relative to `.automl.path` pointing to a user defined JSON file
 //      for modifying default parameters
 //   2. Dictionary containing the default behaviours to be overwritten
@@ -100,7 +100,7 @@ deleteModels:{[config]
 // @category automl
 // @desc Generate a new JSON file for use in the application of AutoML
 //   via command line or as an alternative to the param file in .automl.fit.
-// @param fileName {string/symbol/hsym} Name for generated JSON file to be 
+// @param fileName {string|symbol} Name for generated JSON file to be 
 //   stored in 'code/customization/configuration/customConfig'
 // @return {::} Returns generic null on successful invocation and saves a copy
 //   of the file 'code/customization/configuration/default.json' to the 
@@ -168,7 +168,7 @@ runCommandLine:{[testRun]
 //   - 0 = Ignore warnings completely and continue evaluation
 //   - 1 = Highlight to a user that a warning was being flagged but continue
 //   - 2 = Exit evaluation of AutoML highlighting to the user why this happened
-// @return {::} update the global utils.ignoreWarnings with new level
+// @return {::} Update the global utils.ignoreWarnings with new level
 updateIgnoreWarnings:{[warningLevel]
   if[not warningLevel in til 3;
     '"Warning severity level must a long 0, 1 or 2."

@@ -11,8 +11,8 @@
 // @desc Apply data from a table relating to a subset of columns to a
 //   list of aggregating functions in order to retrieve relevant statistics to
 //   describe the dataset
-// @param  feature {table} Feature data as a table
-// @param  colList {symbol[]} Column list on which the functions are to be 
+// @param feature {table} Feature data as a table
+// @param colList {symbol[]} Column list on which the functions are to be 
 //   applied
 // @param  funcList {fn[]} List of functions to apply to relevant data
 // @return {number[][]} Descriptive statistics and information

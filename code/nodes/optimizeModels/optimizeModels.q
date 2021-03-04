@@ -1,9 +1,9 @@
-// code/nodes/optimizeModels/optimizeModels.q - Optimizem models node
+// code/nodes/optimizeModels/optimizeModels.q - Optimize models node
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Following the initial selection of the most promising model apply the user
-//   defined optimization grid/random/sobol if feasible.
-//   Ignore for keras/pytorch etc.
+// defined optimization grid/random/sobol if feasible.
+// Ignore for keras/pytorch etc.
 
 \d .automl
 

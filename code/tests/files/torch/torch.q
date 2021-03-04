@@ -1,16 +1,19 @@
 // code/tests/files/torch/torch.q - PyTorch test files
 // Copyright (c) 2021 Kx Systems Inc
+//
+// Contains the functionality to apply vanilla pytorch models 
+// within the automl framework
 
 \d .automl
 
 // @kind function
 // @category models
 // @desc Fit model on training data and score using test data
-// @param data  {dictionary} containing training and testing data according to keys
+// @param data {dictionary} Containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
-// @param seed  {int} seed used for initialising the same model
-// @param mname {symbol} name of the model being applied
-// @return {int;float;boolean} the predicted values for a given model as applied to input data
+// @param seed {int} Seed used for initialising the same model
+// @param mname {symbol} Name of the model being applied
+// @return {int|float|boolean} the predicted values for a given model as applied to input data
 models.torch.fitScore:{[data;seed;mname]
   dataDict:`xtrain`ytrain`xtest`ytest!raze data;
   mdl:get[".automl.models.torch.",string[mname],".model"][dataDict;seed];
@@ -22,10 +25,10 @@ models.torch.fitScore:{[data;seed;mname]
 // @kind function
 // @category models
 // @desc Fit a vanilla torch model to data
-// @param data {dictionary} containing training and testing data according to keys
+// @param data {dictionary} Containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
-// @param model {<} model object being passed through the system (compiled)
-// @return {<} a vanilla fitted torch model
+// @param model {<} Model object being passed through the system (compiled)
+// @return {<} A vanilla fitted torch model
 models.torch.NN.fit:{[data;model]
   optimArg:enlist[`lr]!enlist 0.9;
   optimizer:models.i.Adam[model[`:parameters][];pykwargs optimArg];
@@ -43,10 +46,10 @@ models.torch.NN.fit:{[data;model]
 // @kind function
 // @category models
 // @desc Compile a keras model for binary problems
-// @param data  {dictionary} containing training and testing data according to keys
+// @param data {dictionary} Containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
-// @param seed  {int} seed used for initialising the same model
-// @return {<} the compiled torch models
+// @param seed {int} Seed used for initialising the same model
+// @return {<} The compiled torch models
 models.torch.NN.model:{[data;seed]
   models.torch.torchModel[count first data`xtrain;200]
   }
@@ -56,10 +59,10 @@ models.torch.NN.model:{[data;seed]
 // @category models
 // @desc Predict test data values using a compiled model
 //  for binary problem types
-// @param data {dictionary} containing training and testing data according to keys
+// @param data {dictionary} Containing training and testing data according to keys
 //   `xtrn`ytrn`xtst`ytst
-// @param model {<} model object being passed through the system (fitted)
-// @return {boolean} the predicted values for a given model
+// @param model {<} Model object being passed through the system (fitted)
+// @return {boolean} The predicted values for a given model
 models.torch.NN.predict:{[data;model] 
   dataX:models.i.numpy[models.i.npArray[data`xtest]][`:float][];
   torchMax:last models.i.torch[`:max][model[dataX];1]`;
@@ -68,13 +71,13 @@ models.torch.NN.predict:{[data;model]
 
 
 // load required python modules
-models.i.torch      :.p.import[`torch           ]
-models.i.npArray    :.p.import[`numpy           ]`:array;
-models.i.Adam       :.p.import[`torch.optim     ]`:Adam
-models.i.numpy      :.p.import[`torch           ]`:from_numpy
-models.i.tensorData :.p.import[`torch.utils.data]`:TensorDataset
-models.i.dataLoader :.p.import[`torch.utils.data]`:DataLoader
-models.i.neuralNet  :.p.import[`torch.nn]
+models.i.torch:.p.import[`torch]
+models.i.npArray:.p.import[`numpy]`:array;
+models.i.Adam:.p.import[`torch.optim]`:Adam
+models.i.numpy:.p.import[`torch]`:from_numpy
+models.i.tensorData:.p.import[`torch.utils.data]`:TensorDataset
+models.i.dataLoader:.p.import[`torch.utils.data]`:DataLoader
+models.i.neuralNet:.p.import[`torch.nn]
 
 models.torch.torchFit:.p.get[`runmodel];
 models.torch.torchModel:.p.get[`classifier];

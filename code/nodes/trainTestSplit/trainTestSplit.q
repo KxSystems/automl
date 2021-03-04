@@ -2,8 +2,8 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Apply the user defined train test split functionality onto the users feature
-//   and target datasets returning the train-test split data as a list of 
-//   (xtrain;ytrain;xtest;ytest)
+// and target datasets returning the train-test split data as a list of 
+// (xtrain;ytrain;xtest;ytest)
 
 \d .automl
 

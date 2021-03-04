@@ -9,7 +9,7 @@
 
 // @kind function
 // @category dataCheckUtility
-// @desc print to standard out flagging the removal of inappropriate 
+// @desc Print to standard out flagging the removal of inappropriate 
 //   columns
 // @param clist {symbol[]} list of all columns in the dataset
 // @param slist {symbol[]} sublist of columns appropriate for the use case

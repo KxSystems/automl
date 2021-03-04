@@ -36,7 +36,7 @@ modelGeneration.jsonParse:{[config]
 // @param config {dictionary} Information relating to the current run of AutoML
 // @param modelTab {table} Information on applicable models based on problem 
 //   type
-// @param target {(number[];symbol[])} Numerical or symbol target vector
+// @param target {number[]|symbol[]} Numerical or symbol target vector
 // @return {table} Appropriate models based on target and problem type
 modelGeneration.modelPrep:{[config;modelTab;target]
   if[`class=config`problemType;

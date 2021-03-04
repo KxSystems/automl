@@ -10,8 +10,8 @@
 // @kind function
 // @category optimizeModelsUtility
 // @desc Extract the hyperparameter dictionaries based on the applied model
-// @param bestModel  {<} Fitted best Model
-// @param cfg        {dictionary} Configuration information assigned 
+// @param bestModel {<} Fitted best Model
+// @param cfg {dictionary} Configuration information assigned 
 //   by the user and related to the current run
 // @return {dictionary} The hyperparameters appropriate for the model being
 //   used
@@ -77,10 +77,10 @@ optimizeModels.i.randomParams:{[extractParams;typeConvert]
 //   data points in the validation set for all hyperparameter 
 //   nearest neighbour calculations.
 // @param hyperFunc {symbol} Hyperparameter function to be used
-// @param numFolds  {int} Number of folds to use
-// @param tts       {dictionary} Feature and target data split into training 
+// @param numFolds {int} Number of folds to use
+// @param tts {dictionary} Feature and target data split into training 
 //   and testing set
-// @param cfg       {dictionary} Configuration information assigned by the 
+// @param cfg {dictionary} Configuration information assigned by the 
 //   user and related to the current run
 // @return {dictionary} The hyperparameters appropriate for the model being 
 //   used
@@ -96,10 +96,10 @@ optimizeModels.i.splitCount:{[hyperFunc;numFolds;tts;cfg]
 // @desc Alter hyperParameter dictionary depending on bestModel and type
 //  of hyperopt to be used
 // @param modelName {symbol} Name of best model
-// @param hyperTyp  {symbol} Type of hyperparameter to be used
-// @param splitCnt  {int} How data shoudl be split for hyperParam search
+// @param hyperTyp {symbol} Type of hyperparameter to be used
+// @param splitCnt {int} How data shoudl be split for hyperParam search
 // @param hyperDict {dictionary} HyperParameters used for hyperParam search  
-// @param cfg       {dictionary} Configuration information assigned by the 
+// @param cfg {dictionary} Configuration information assigned by the 
 //   user and related to the current run
 // @return {dictionary} The hyperparameters appropriate for the model being 
 //   used
@@ -138,13 +138,13 @@ optimizeModels.i.confTab:{[confMatrix]
 // @kind function
 // @category optimizeModelsUtilitity
 // @desc Save down confusionMatrix
-// @param modelDict   {dictionary}  Library and function of model
+// @param modelDict {dictionary}  Library and function of model
 // @param bestModel {<} Fitted best model
-// @param tts       {dictionary} Feature and target data split into training 
+// @param tts {dictionary} Feature and target data split into training 
 //   and testing set
 // @param scoreFunc {<} Scoring metric applied to evaluate the model
-// @param seed      {int} Random seed to use
-// @param idx       {int} Index of column that is being shuffled
+// @param seed {int} Random seed to use
+// @param idx {int} Index of column that is being shuffled
 // return {float} Score returned from predicted values using shuffled data 
 optimizeModels.i.predShuffle:{[modelDict;bestModel;tts;scoreFunc;seed;idx]
   tts[`xtest]:optimizeModels.i.shuffle[tts`xtest;idx];
@@ -161,7 +161,7 @@ optimizeModels.i.predShuffle:{[modelDict;bestModel;tts;scoreFunc;seed;idx]
 // @category optimizeModelsUtility
 // @desc Shuffle column within the data
 // @param data {float[]} Data to shuffle
-// @param col  {int} Column in data to shuffle
+// @param col {int} Column in data to shuffle
 // @return {float[]} The original data shuffled 
 optimizeModels.i.shuffle:{[data;col]
   countData:count data;
@@ -176,9 +176,9 @@ optimizeModels.i.shuffle:{[data;col]
 // @kind function
 // @category optimizeModelsUtility
 // @desc Create dictionary of impact of each column in ascending order
-// @param scores    {float[]} Impact score of each column
+// @param scores {float[]} Impact score of each column
 // @param countCols {int} Number of columns in the feature data
-// @param ordFunc   {fn} Ordeing of scores 
+// @param ordFunc {fn} Ordeing of scores 
 // @return {dictionary} Impact score of each column in ascending order 
 optimizeModels.i.impact:{[scores;countCols;ordFunc]
   scores:$[any 0>scores;.ml.minMaxScaler.fitPredict;]scores;

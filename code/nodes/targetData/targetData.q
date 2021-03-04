@@ -2,7 +2,7 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Loading of the target dataset, data can be loaded from in process or 
-//   alternative data sources
+// alternative data sources
 
 \d .automl
 

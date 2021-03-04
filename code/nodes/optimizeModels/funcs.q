@@ -43,7 +43,7 @@ optimizeModels.hyperSearch:{[modelDict;modelInfo;bestModel;config]
 // @param tts {dictionary} Feature and target data split into training/testing
 //   sets
 // @param config {dictionary} Information relating to the current run of AutoML
-// @return {(float[];boolean[];int[])} Predicted values  
+// @return {float[]|boolean[]|int[]} Predicted values  
 optimizeModels.scorePred:{[custom;modelDict;bestModel;config]
   tts:modelDict`tts;
   config[`logFunc]utils.printDict`modelFit;
@@ -62,7 +62,7 @@ optimizeModels.scorePred:{[custom;modelDict;bestModel;config]
 // @param bestModel {<} Fitted best model
 // @param tts {dictionary} Feature and target data split into training/testing
 //   sets
-// @return {(float[];boolean[];int[])} Predicted values  
+// @return {float[]|boolean[]|int[]} Predicted values  
 optimizeModels.scoreCustom:{[modelDict;bestModel;tts]
   customName:"."sv string modelDict`modelLib`modelFunc;
   get[".automl.models.",customName,".predict"][tts;bestModel]
@@ -86,7 +86,7 @@ optimizeModels.scoreSklearn:{[bestModel;tts]
 // @param modelDict {dictionary} Data related to model retrieval and various
 //   configuration associated with a run
 // @param config {dictionary} Information relating to the current run of AutoML
-// @return {(float[];boolean[];int[])} Predicted values 
+// @return {float[]|boolean[]|int[]} Predicted values 
 optimizeModels.paramSearch:{[modelInfo;modelDict;config]
   tts:modelDict`tts;
   scoreFunc:modelDict`scoreFunc;
@@ -167,7 +167,7 @@ optimizeModels.impactDict:{[modelDict;hyperSearch;config]
 // @category optimizeModels
 // @desc Get residuals for regression models
 // @param hyperSearch {dictionary} Values returned from hyperParameter search
-// @param tts  {dictionary} Feature and target data split into training/testing
+// @param tts {dictionary} Feature and target data split into training/testing
 //   sets
 // @param config {dictionary} Information relating to the current run of AutoML
 // return {dictionary} Residual errors and true values

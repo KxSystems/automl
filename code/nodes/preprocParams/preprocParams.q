@@ -3,7 +3,6 @@
 //
 // Collect all the parameters relevant for the preprocessing phase
 
-
 \d .automl
 
 // @kind function
@@ -31,10 +30,10 @@ preprocParams.node.function:{[config;descrip;cTime;sigFeats;symEncode;symMap;
   }
 
 // Input information
-inputKeys :`config`dataDescription`creationTime`sigFeats`symEncode`symMap,
-  `featModel`ttsObject;
-inputTypes:"!+tSS!<!"
-preprocParams.node.inputs  :inputKeys!inputTypes
+preprocParams.i.k :`config`dataDescription`creationTime`sigFeats`symEncode,
+  `symMap`featModel`ttsObject;
+preprocParams.i.t:"!+tSS!<!";
+preprocParams.node.inputs:preprocParams.i.k!preprocParams.i.t;
 
 // Output information
-preprocParams.node.outputs :"!"
+preprocParams.node.outputs:"!"
