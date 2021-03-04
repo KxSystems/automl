@@ -21,7 +21,7 @@ featureCreation.normal.create:{[features;config]
   featTable:(cols[features]except timeCols)#features;
   // Apply user defined functions to the table
   featTable:featureCreation.normal.applyFunc/[featTable;config`functions];
-  featTable:dataPreprocessing.infreplace featTable;
+  featTable:.ml.infReplace featTable;
   featTable:dataPreprocessing.nullEncode[featTable;med];
   featTable:.ml.dropConstant featTable;
   // Apply the transform of time specific columns as appropriate
