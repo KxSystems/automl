@@ -22,7 +22,7 @@ utils.excludeList:`GaussianNB`LinearRegression
 // @param hyperParam {dictionary} Hyperparameters to be searched
 // @param data {float[]} Data split into training and testing sets of format
 //   ((xtrn;ytrn);(xval;yval))
-// @return {list} Predicted and true validation values
+// @return {boolean[]|float[]} Predicted and true validation values
 utils.fitPredict:{[func;hyperParam;data]
   predicts:$[0h~type hyperParam;
     func[data;hyperParam 0;hyperParam 1];
@@ -115,8 +115,8 @@ utils.getCommandLineData:{[method]
   data:$[featurePath~targetPath;
     (flip targetName _ flip featureData;featureData targetName);
     (featureData;.ml.i.loadDataset[dict`targetData]$[`~targetName;::;
-      targetName])
-  ];
+    targetName])
+    ];
   `features`target!data
   }
 

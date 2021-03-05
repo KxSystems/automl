@@ -141,9 +141,10 @@ dataCheck.i.logging:{[config]
     if[`~config`loggingDir;
       -1"\nIf saveOption is 0 and loggingDir is not defined,",
         " logging is disabled.\n";
-    .automl.utils.printing:1b;
-    .automl.utils.logging:0b;
-    :config]
+      .automl.utils.printing:1b;
+      .automl.utils.logging:0b;
+      :config
+      ]
     ];
   if[10h<>type config`loggingDir;string config`loggingDir]
   printDir:$[`~config`loggingDir;
@@ -235,12 +236,12 @@ dataCheck.i.printWarning:{[config;ignore;mainFileExists;loggingExists]
   if[ignore=0;:()];
   index:$[ignore=2;0;1];
   if[mainFileExists;
-      dataCheck.i.warningOption[config;ignore] 
-      utils.printWarnings[`savePathExists]index
+    dataCheck.i.warningOption[config;ignore] 
+    utils.printWarnings[`savePathExists]index
     ];
   if[loggingExists;
-       dataCheck.i.warningOption[config;ignore] 
-       utils.printWarnings[`loggingPathExists]index
+    dataCheck.i.warningOption[config;ignore] 
+    utils.printWarnings[`loggingPathExists]index
     ];
   }
 

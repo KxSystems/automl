@@ -49,7 +49,7 @@ runModels.holdoutSplit:{[config;tts]
 //   sets
 // @param config {dictionary} Information relating to the current run of AutoML
 // @param modelTab {table} Models to be applied to feature data
-// @return {list} Predictions and associated actual values for
+// @return {boolean[]|float[]} Predictions and associated actual values for
 //   each cross validation fold
 runModels.xValSeed:{[tts;config;modelTab]
   xTrain:tts`xtrain;
