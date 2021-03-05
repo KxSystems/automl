@@ -2,7 +2,6 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Collect all the parameters relevant for the preprocessing phase
-
 \d .automl
 
 // @kind function

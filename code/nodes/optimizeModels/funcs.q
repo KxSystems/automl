@@ -74,7 +74,7 @@ optimizeModels.scoreCustom:{[modelDict;bestModel;tts]
 // @param bestModel {<} Fitted best model
 // @param tts {dictionary} Feature and target data split into training/testing 
 //   sets
-// @return {(float[];boolean[];int[])} Predicted scores
+// @return {float[]|boolean[]|int[]} Predicted scores
 optimizeModels.scoreSklearn:{[bestModel;tts]
   bestModel[`:predict][tts`xtest]`
   }

@@ -30,7 +30,7 @@ dataCheck.i.errColumns:{[clist;slist;typ;config]
 
 // @kind function
 // @category dataCheckUtility
-// @desc retrieve default parameters and update with custom information
+// @desc Retrieve default parameters and update with custom information
 // @param feat {table} The feature data as a table
 // @param config {dictionary} Configuration information assigned by the user 
 //   and related to the current run

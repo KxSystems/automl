@@ -444,7 +444,7 @@ utils.parseNamedFiles:{
 // @param filepath {symbol} File handle for file or directory to delete
 // @return {::|err} Null on success, an error if attempting to delete 
 //   folders outside of automl
-utils.deleteRecursively :{[filepath]
+utils.deleteRecursively:{[filepath]
   if[not filepath>hsym`$path;'"Delete path outside of scope of automl"];
   orderedPaths:{$[11h=type d:key x;raze x,.z.s each` sv/:x,/:d;d]}filepath;
   hdel each desc orderedPaths;

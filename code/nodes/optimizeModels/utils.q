@@ -42,7 +42,7 @@ optimizeModels.i.extractdict:{[bestModel;cfg]
 // @param extractParams {dictionary} Hyperparameters for the given model 
 //   type (class/reg)
 //   initially parsed with '.j.k' from 'gsHyperParameters.json'
-// @param typeConvert   {string}  List of appropriate types to convert the 
+// @param typeConvert {string} List of appropriate types to convert the 
 //   hyperparameters to
 // @return {dictionary} Hyperparameters cast to appropriate representation
 optimizeModels.i.gridParams:{[extractParams;typeConvert]

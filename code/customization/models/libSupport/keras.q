@@ -30,13 +30,13 @@ models.keras.fitScore:{[data;seed;mname]
 // @desc Fit a vanilla keras model to data
 // @param data {dictionary} Containing training and testing data according to
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl {<} model Object being passed through the system 
+// @param model {<} Model object being passed through the system 
 //   (compiled/fitted)
 // @return {<} A vanilla fitted keras model
-models.keras.binary.fit:models.keras.reg.fit:models.keras.multi.fit:{[data;mdl]
-  mdl[`:fit][models.i.npArray data`xtrain;data`ytrain;`batch_size pykw 32;
+models.keras.binary.fit:models.keras.reg.fit:models.keras.multi.fit:{[data;model]
+  model[`:fit][models.i.npArray data`xtrain;data`ytrain;`batch_size pykw 32;
     `verbose pykw 0];
-  mdl
+  model
   }
 
 // @kind function
@@ -63,11 +63,11 @@ models.keras.binary.model:{[data;seed]
 //  for binary problem types
 // @param data {dictionary} Containing training and testing data according to 
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl {<} model Object being passed through the system (
+// @param model {<} Model object being passed through the system (
 //   compiled/fitted)
 // @return {boolean} The predicted values for a given model
-models.keras.binary.predict:{[data;mdl]
-  .5<raze mdl[`:predict][models.i.npArray data`xtest]`
+models.keras.binary.predict:{[data;model]
+  .5<raze model[`:predict][models.i.npArray data`xtest]`
   }
 
 // @kind function
@@ -94,11 +94,11 @@ models.keras.reg.model:{[data;seed]
 //  for regression problem types
 // @param data {dictionary} Containing training and testing data according to 
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl {<} Model object being passed through the system 
+// @param model {<} Model object being passed through the system 
 //   (compiled/fitted)
 // @return {int|float} The predicted values for a given model
-models.keras.reg.predict:{[data;mdl]
-  raze mdl[`:predict][models.i.npArray data`xtest]`
+models.keras.reg.predict:{[data;model]
+  raze model[`:predict][models.i.npArray data`xtest]`
   }
 
 // @kind function
@@ -127,11 +127,11 @@ models.keras.multi.model:{[data;seed]
 //   for multiclass problem types
 // @param data {dictionary} Containing training and testing data according to
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl {<} Model object being passed through the system (
+// @param model {<} Model object being passed through the system (
 //   compiled/fitted)
 // @return {int|float|boolean} The predicted values for a given model
-models.keras.multi.predict:{[data;mdl]
-  mdl[`:predict_classes][models.i.npArray data`xtest]`
+models.keras.multi.predict:{[data;model]
+  model[`:predict_classes][models.i.npArray data`xtest]`
   }
 
 // load required python modules
