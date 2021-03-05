@@ -1,14 +1,17 @@
-\d .automl
-
+// code/nodes/featureCreation/nlp/featureCreation.q - Feature creation
+// Copyright (c) 2021 Kx Systems Inc
+//
 // Apply NLP specific feature extraction on string characters and normal
-//   preprcoessing methods to remaining data
+// preprcoessing methods to remaining data
+
+\d .automl
 
 // @kind function
 // @category featureCreate
-// @fileoverview Apply word2vec on string data for NLP problems
-// @param features {tab} Feature data as a table 
-// @param config {dict} Information related to the current run of AutoML
-// @return {tab} Features created in accordance with the NLP feature creation 
+// @desc Apply word2vec on string data for NLP problems
+// @param features {table} Feature data as a table 
+// @param config {dictionary} Information related to the current run of AutoML
+// @return {table} Features created in accordance with the NLP feature creation 
 //   procedure
 featureCreation.nlp.create:{[features;config]
   featExtractStart:.z.T;

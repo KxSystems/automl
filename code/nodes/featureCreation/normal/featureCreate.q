@@ -1,14 +1,17 @@
-\d .automl
-
+// code/nodes/featureCreation/normal/featureCreation.q - Normal feature create
+// Copyright (c) 2021 Kx Systems Inc
+//
 // Create features for 'normal problems' 
+
+\d .automl
 
 // @kind function
 // @category featureCreation
-// @fileoverview Create features for 'normal problems' -> one target for each
+// @desc Create features for 'normal problems' -> one target for each
 //   row, with no time dependency or fresh like structure
-// @param features {tab} Feature data as a table
-// @param config {dict} Information related to the current run of AutoML
-// @return {tab} Features created in accordance with the normal feature 
+// @param features {table} Feature data as a table
+// @param config {dictionary} Information related to the current run of AutoML
+// @return {table} Features created in accordance with the normal feature 
 //   creation procedure
 featureCreation.normal.create:{[features;config]
   featureExtractStart:.z.T;
@@ -18,7 +21,7 @@ featureCreation.normal.create:{[features;config]
   featTable:(cols[features]except timeCols)#features;
   // Apply user defined functions to the table
   featTable:featureCreation.normal.applyFunc/[featTable;config`functions];
-  featTable:dataPreprocessing.infreplace featTable;
+  featTable:.ml.infReplace featTable;
   featTable:dataPreprocessing.nullEncode[featTable;med];
   featTable:.ml.dropConstant featTable;
   // Apply the transform of time specific columns as appropriate
