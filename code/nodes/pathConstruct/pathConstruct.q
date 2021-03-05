@@ -2,9 +2,9 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Construct path to where all graphs/reports are to be saved down. Also join 
-//   together all information collected during preprocessing, processing and 
-//   configuration creation in order to provide all information required for 
-//   the generation of report/meta/graph/model saving.
+// together all information collected during preprocessing, processing and 
+// configuration creation in order to provide all information required for 
+// the generation of report/meta/graph/model saving.
 
 \d .automl
 

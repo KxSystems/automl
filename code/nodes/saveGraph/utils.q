@@ -96,7 +96,7 @@ saveGraph.i.addText:{[confMatrix;thresh;i;j]
   color:$[thresh<confMatrix[i;j];`white;`black];
   valueStr:string confMatrix[i;j];
   utils.plt[`:text][j;i;valueStr;`horizontalalignment pykw`center;
-  `color pykw color];
+    `color pykw color];
   }
 
 

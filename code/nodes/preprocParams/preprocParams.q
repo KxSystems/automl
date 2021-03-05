@@ -22,8 +22,7 @@
 //   sets
 // @return {dictionary} Consolidated parameters to be used to generate
 //   reports/graphs
-preprocParams.node.function:{[config;descrip;cTime;sigFeats;symEncode;symMap;
-  featModel;tts]
+preprocParams.node.function:{[config;descrip;cTime;sigFeats;symEncode;symMap;featModel;tts]
   params:`config`dataDescription`creationTime`sigFeats`symEncode`symMap,
   `featModel`ttsObject;
   params!(config;descrip;cTime;sigFeats;symEncode;symMap;featModel;tts)

@@ -2,7 +2,7 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // The functionality below pertains to the application of NLP methods to
-//    kdb+ data
+// kdb+ data
 
 \d .automl
 

@@ -2,7 +2,7 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Definitions of the main callable functions used in the application of
-//    .automl.dataPreprocessing
+// .automl.dataPreprocessing
 
 \d .automl
 
@@ -82,7 +82,7 @@ dataPreprocessing.textPreprocess:{[features]
 
 // @kind function
 // @category dataPreprocessingUtility
-// @desc null encoding of feature data 
+// @desc Null encoding of feature data 
 // @param features {table} Feature data as a table
 // @param func {fn} Function to be applied to column from which the value 
 //   to fill nulls is derived (med/min/max)

@@ -2,8 +2,8 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // The functionality contained in this file covers the required and optional
-//   utilities for normal feature creation within the automated machine 
-//   learning library.
+// utilities for normal feature creation within the automated machine 
+// learning library.
 
 \d .automl
 
@@ -69,8 +69,7 @@ featureCreation.normal.bulkTransform:{[features]
 // @category featureCreation
 // @desc Perform a truncated single value decomposition on unique 
 //   linear combinations of float columns
-//   https://scikit-learn.org/stable/modules/generated/
-//      sklearn.decomposition.TruncatedSVD.html
+//   https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html
 // @param features {table} Feature data as a table
 // return {table} Truncated single value decomposition applied to feature table
 featureCreation.normal.truncSingleDecomp:{[features]

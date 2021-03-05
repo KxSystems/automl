@@ -2,9 +2,9 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Select the most promising model from the list of provided models for the 
-//   user defined problem. This is done in a cross validated manner, with the
-//   best model selected based on how well it generalizes to new data prior to
-//   the application of grid/pseduo-random/sobol-random search optimization.
+// user defined problem. This is done in a cross validated manner, with the
+// best model selected based on how well it generalizes to new data prior to
+// the application of grid/pseduo-random/sobol-random search optimization.
 
 
 \d .automl

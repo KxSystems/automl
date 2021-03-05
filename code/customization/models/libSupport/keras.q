@@ -10,11 +10,11 @@
 // @kind function
 // @category models
 // @desc Fit model on training data and score using test data
-// @param data  {dictionary} containing training and testing data according to
+// @param data {dictionary} Containing training and testing data according to
 //   keys `xtrn`ytrn`xtst`ytst
-// @param seed  {int} seed used for initialising the same model
-// @param mname {symbol} name of the model being applied
-// @return      {int|float|boolean} the predicted values for a given model as 
+// @param seed {int} Seed used for initialising the same model
+// @param mname {symbol} Name of the model being applied
+// @return {int|float|boolean} The predicted values for a given model as 
 //   applied to input data
 models.keras.fitScore:{[data;seed;mname]
   if[mname~`multi;
@@ -28,11 +28,11 @@ models.keras.fitScore:{[data;seed;mname]
 // @kind function
 // @category models
 // @desc Fit a vanilla keras model to data
-// @param data  {dictionary} containing training and testing data according to
+// @param data {dictionary} Containing training and testing data according to
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl   {<} model object being passed through the system 
+// @param mdl {<} model Object being passed through the system 
 //   (compiled/fitted)
-// @return      {<} a vanilla fitted keras model
+// @return {<} A vanilla fitted keras model
 models.keras.binary.fit:models.keras.reg.fit:models.keras.multi.fit:{[data;mdl]
   mdl[`:fit][models.i.npArray data`xtrain;data`ytrain;`batch_size pykw 32;
     `verbose pykw 0];
@@ -42,10 +42,10 @@ models.keras.binary.fit:models.keras.reg.fit:models.keras.multi.fit:{[data;mdl]
 // @kind function
 // @category models
 // @desc Compile a keras model for binary problems
-// @param data  {dictionary} containing training and testing data according to 
+// @param data {dictionary} Containing training and testing data according to 
 //   keys `xtrn`ytrn`xtst`ytst
-// @param seed  {int} seed used for initialising the same model
-// @return      {<} the compiled keras models
+// @param seed {int} Seed used for initialising the same model
+// @return {<} The compiled keras models
 models.keras.binary.model:{[data;seed]
   models.i.numpySeed[seed];
   if[models.i.tensorflowBackend;models.i.tensorflowSeed[seed]];
@@ -61,11 +61,11 @@ models.keras.binary.model:{[data;seed]
 // @category models
 // @desc Predict test data values using a compiled model
 //  for binary problem types
-// @param data  {dictionary} containing training and testing data according to 
+// @param data {dictionary} Containing training and testing data according to 
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl   {<} model object being passed through the system (
+// @param mdl {<} model Object being passed through the system (
 //   compiled/fitted)
-// @return      {boolean} the predicted values for a given model
+// @return {boolean} The predicted values for a given model
 models.keras.binary.predict:{[data;mdl]
   .5<raze mdl[`:predict][models.i.npArray data`xtest]`
   }
@@ -73,10 +73,10 @@ models.keras.binary.predict:{[data;mdl]
 // @kind function
 // @category models
 // @desc Compile a keras model for regression problems
-// @param data  {dictionary} containing training and testing data according to
+// @param data {dictionary} Containing training and testing data according to
 //   keys `xtrn`ytrn`xtst`ytst
-// @param seed  {int} seed used for initialising the same model
-// @return      {<} the compiled keras models
+// @param seed {int} Seed used for initialising the same model
+// @return {<} The compiled keras models
 models.keras.reg.model:{[data;seed]
   models.i.numpySeed[seed];
   if[models.i.tensorflowBackend;models.i.tensorflowSeed[seed]];
@@ -92,11 +92,11 @@ models.keras.reg.model:{[data;seed]
 // @category models
 // @desc Predict test data values using a compiled model
 //  for regression problem types
-// @param data  {dictionary} containing training and testing data according to 
+// @param data {dictionary} Containing training and testing data according to 
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl   {<} model object being passed through the system 
+// @param mdl {<} Model object being passed through the system 
 //   (compiled/fitted)
-// @return      {int|float} the predicted values for a given model
+// @return {int|float} The predicted values for a given model
 models.keras.reg.predict:{[data;mdl]
   raze mdl[`:predict][models.i.npArray data`xtest]`
   }
@@ -104,10 +104,10 @@ models.keras.reg.predict:{[data;mdl]
 // @kind function
 // @category models
 // @desc Compile a keras model for multiclass problems
-// @param data  {dictionary} containing training and testing data according to 
+// @param data {dictionary} Containing training and testing data according to 
 //   keys `xtrn`ytrn`xtst`ytst
-// @param seed  {int} seed used for initialising the same model
-// @return      {<} the compiled keras models
+// @param seed {int} Seed used for initialising the same model
+// @return {<} The compiled keras models
 models.keras.multi.model:{[data;seed]
   models.i.numpySeed[seed];
   if[models.i.tensorflowBackend;models.i.tensorflowSeed[seed]];
@@ -124,12 +124,12 @@ models.keras.multi.model:{[data;seed]
 // @kind function
 // @category models
 // @desc Predict test data values using a compiled model
-//  for multiclass problem types
-// @param data  {dictionary} containing training and testing data according to
+//   for multiclass problem types
+// @param data {dictionary} Containing training and testing data according to
 //   keys `xtrn`ytrn`xtst`ytst
-// @param mdl   {<} model object being passed through the system (
+// @param mdl {<} Model object being passed through the system (
 //   compiled/fitted)
-// @return      {int|float|boolean} the predicted values for a given model
+// @return {int|float|boolean} The predicted values for a given model
 models.keras.multi.predict:{[data;mdl]
   mdl[`:predict_classes][models.i.npArray data`xtest]`
   }
@@ -159,6 +159,6 @@ p)def tfWarnings(warn):
 // allow multiprocess
 .ml.loadfile`:util/mproc.q
 if[0>system"s";
- .ml.mproc.init[abs system"s"]("system[\"l automl/automl.q\"]";
-   ".automl.loadfile`:init.q")
+  .ml.mproc.init[abs system"s"]("system[\"l automl/automl.q\"]";
+  ".automl.loadfile`:init.q")
  ];

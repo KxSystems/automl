@@ -19,8 +19,7 @@
 //   sets
 // @param orderFunc {fn} Function used to order scores
 // @return {dictionary} Score, prediction and best model
-optimizeModels.node.function:{[config;modelInfo;bestModel;modelName;tts;
-  orderFunc]
+optimizeModels.node.function:{[config;modelInfo;bestModel;modelName;tts;orderFunc]
   ptype:$[`reg=config`problemType;"Regression";"Classification"];
   scoreFunc:config`$"scoringFunction",ptype;
   modelDictKeys:`tts`scoreFunc`orderFunc`modelName`modelLib`modelFunc;
@@ -32,7 +31,7 @@ optimizeModels.node.function:{[config;modelInfo;bestModel;modelName;tts;
   impactReport:optimizeModels.impactDict[modelDict;hyperSearch;config];
   residuals:optimizeModels.residuals[hyperSearch;tts;config];
   optimizeModels.consolidateParams[hyperSearch;confMatrix;impactReport;
-  residuals] 
+    residuals] 
   }
 
 // Input information

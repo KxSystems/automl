@@ -501,7 +501,8 @@ utils.getRelevantDates:{[dateInfo;allDates]
     '"startDate provided must be an individual date or regex string"
     ];
   if[0=count relevantDates;
-    '"No dates requested matched a presently saved model folder"];
+    '"No dates requested matched a presently saved model folder"
+    ];
   relevantDates
   }
 
@@ -577,7 +578,8 @@ utils.getRelevantNames:{[nameInfo;namedPathStem]
     '"savedModelName must be a string"
     ];
   if[0=count relevantModels;
-  '"No files matching the user provided savedModelName were found for deletion"
+    '"No files matching the user provided savedModelName were found for",
+    " deletion"
     ];
   relevantModels
   }

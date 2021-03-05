@@ -2,7 +2,7 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Definition of the main callable functions used in the application of
-//   .automl.featureDescription
+// .automl.featureDescription
 
 \d .automl
 

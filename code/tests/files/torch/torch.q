@@ -9,11 +9,12 @@
 // @kind function
 // @category models
 // @desc Fit model on training data and score using test data
-// @param data {dictionary} Containing training and testing data according to keys
-//   `xtrn`ytrn`xtst`ytst
+// @param data {dictionary} Containing training and testing data according to 
+//   keys `xtrn`ytrn`xtst`ytst
 // @param seed {int} Seed used for initialising the same model
 // @param mname {symbol} Name of the model being applied
-// @return {int|float|boolean} the predicted values for a given model as applied to input data
+// @return {int|float|boolean} the predicted values for a given model as 
+//   applied to input data
 models.torch.fitScore:{[data;seed;mname]
   dataDict:`xtrain`ytrain`xtest`ytest!raze data;
   mdl:get[".automl.models.torch.",string[mname],".model"][dataDict;seed];
@@ -25,8 +26,8 @@ models.torch.fitScore:{[data;seed;mname]
 // @kind function
 // @category models
 // @desc Fit a vanilla torch model to data
-// @param data {dictionary} Containing training and testing data according to keys
-//   `xtrn`ytrn`xtst`ytst
+// @param data {dictionary} Containing training and testing data according to
+//   keys `xtrn`ytrn`xtst`ytst
 // @param model {<} Model object being passed through the system (compiled)
 // @return {<} A vanilla fitted torch model
 models.torch.NN.fit:{[data;model]
@@ -46,8 +47,8 @@ models.torch.NN.fit:{[data;model]
 // @kind function
 // @category models
 // @desc Compile a keras model for binary problems
-// @param data {dictionary} Containing training and testing data according to keys
-//   `xtrn`ytrn`xtst`ytst
+// @param data {dictionary} Containing training and testing data according to 
+//   keys `xtrn`ytrn`xtst`ytst
 // @param seed {int} Seed used for initialising the same model
 // @return {<} The compiled torch models
 models.torch.NN.model:{[data;seed]
@@ -59,8 +60,8 @@ models.torch.NN.model:{[data;seed]
 // @category models
 // @desc Predict test data values using a compiled model
 //  for binary problem types
-// @param data {dictionary} Containing training and testing data according to keys
-//   `xtrn`ytrn`xtst`ytst
+// @param data {dictionary} Containing training and testing data according to 
+//   keys `xtrn`ytrn`xtst`ytst
 // @param model {<} Model object being passed through the system (fitted)
 // @return {boolean} The predicted values for a given model
 models.torch.NN.predict:{[data;model] 
@@ -70,7 +71,7 @@ models.torch.NN.predict:{[data;model]
   }
 
 
-// load required python modules
+// Load required python modules
 models.i.torch:.p.import[`torch]
 models.i.npArray:.p.import[`numpy]`:array;
 models.i.Adam:.p.import[`torch.optim]`:Adam

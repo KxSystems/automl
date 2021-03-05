@@ -2,8 +2,8 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Apply feature significance logic to data post feature extraction, returning
-//   the original dataset and a list of significant features to be used both 
-//   for selection of data from new runs and within the current run.
+// the original dataset and a list of significant features to be used both 
+// for selection of data from new runs and within the current run.
 
 \d .automl
 

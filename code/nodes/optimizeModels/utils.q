@@ -178,7 +178,7 @@ optimizeModels.i.shuffle:{[data;col]
 // @desc Create dictionary of impact of each column in ascending order
 // @param scores {float[]} Impact score of each column
 // @param countCols {int} Number of columns in the feature data
-// @param ordFunc {fn} Ordeing of scores 
+// @param ordFunc {fn} Ordering of scores 
 // @return {dictionary} Impact score of each column in ascending order 
 optimizeModels.i.impact:{[scores;countCols;ordFunc]
   scores:$[any 0>scores;.ml.minMaxScaler.fitPredict;]scores;
@@ -189,14 +189,14 @@ optimizeModels.i.impact:{[scores;countCols;ordFunc]
 
 
 // Updated cross validation functions necessary for the application of 
-//   hyperparameter search ordering correctly.
+// hyperparameter search ordering correctly.
 // Only change is expected input to the t variable of the function, 
-//   previously this was a simple floating point values -1<x<1 which denotes 
-//   how the data is to be split for the train-test split.
+// previously this was a simple floating point values -1<x<1 which denotes 
+// how the data is to be split for the train-test split.
 // Expected input is now at minimum t:enlist[`val]!enlist num, while for 
-//   testing on the holdout sets this should be include the scoring function 
-//   and ordering the model requires to find the best model
-//   `val`scf`ord!(0.2;`.ml.mse;asc) for example
+// testing on the holdout sets this should be include the scoring function 
+// and ordering the model requires to find the best model
+// `val`scf`ord!(0.2;`.ml.mse;asc) for example
 
 // @kind function
 // @category optimizeModelsUtility

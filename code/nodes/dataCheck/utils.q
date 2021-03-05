@@ -11,12 +11,12 @@
 // @category dataCheckUtility
 // @desc Print to standard out flagging the removal of inappropriate 
 //   columns
-// @param clist {symbol[]} list of all columns in the dataset
-// @param slist {symbol[]} sublist of columns appropriate for the use case
+// @param clist {symbol[]} List of all columns in the dataset
+// @param slist {symbol[]} Sublist of columns appropriate for the use case
 // @param typ {symbol} Feature extraction type being implemented
 // @param config {dictionary} Configuration information assigned by the user 
 //   and related to the current run
-// @return  {::|stdout} generic null if all columns suitable, appropriate 
+// @return  {::|stdout} Generic null if all columns suitable, appropriate 
 //   print out in the case there are outstanding issues
 dataCheck.i.errColumns:{[clist;slist;typ;config]
   if[count[clist]<>count slist;
@@ -35,39 +35,44 @@ dataCheck.i.errColumns:{[clist;slist;typ;config]
 // @param config {dictionary} Configuration information assigned by the user 
 //   and related to the current run
 // @param default {dictionary} Default dictionary which may need to be updated
-// @param ptyp {symbol} problem type being solved (`nlp/`normal/`fresh)
-// returns > configuration dictionary modified with any custom information
+// @param ptyp {symbol} Problem type being solved (`nlp/`normal/`fresh)
+// @return {dictionary} configuration dictionary modified with any custom 
+//   information
 dataCheck.i.getCustomConfig:{[feat;config;default;ptyp]
   dict:$[(typ:type config)in 10 -11 99h;
-      [if[10h~typ ;config:dataCheck.i.getData[config;ptyp]];
-       if[-11h~typ;config:dataCheck.i.getData[;ptyp]$[":"~first config;1_;]
-       config:string config];
-       $[min key[config]in key default;
-         default,config;
-         '`$"Inappropriate key provided for configuration input"
-        ]
+    [if[10h~typ;
+       config:dataCheck.i.getData[config;ptyp]
+       ];
+    if[-11h~typ;
+      config:dataCheck.i.getData[;ptyp]$[":"~first config;1_;]
+      config:string config
       ];
-      not any config;d;
-      '`$"config must be passed the identity `(::)`, a filepath to a ", 
+    $[min key[config]in key default;
+    default,config;
+    '`$"Inappropriate key provided for configuration input"
+     ]
+    ];
+    not any config;d;
+    '`$"config must be passed the identity `(::)`, a filepath to a ", 
       "parameter flatfile or a dictionary with appropriate key/value pairs"
     ];
   if[ptyp=`fresh;
-     aggcols:dict`aggregationColumns;
-     dict[`aggregationColumns]:$[100h~typagg:type aggcols;aggcols feat;
-                   11h~abs typagg;aggcols;
-                   '`$"aggcols must be passed function or list of columns"
-                   ]
+    aggcols:dict`aggregationColumns;
+    dict[`aggregationColumns]:$[100h~typagg:type aggcols;aggcols feat;
+    11h~abs typagg;aggcols;
+    '`$"aggcols must be passed function or list of columns"
+    ]
   ];
   dict
   }
 
 // @kind function
 // @category dataCheckUtility
-// @desc retrieve a json flatfile from disk 
-// @param  fileName {char[]} name of the file from which the dictionary is 
+// @desc Retrieve a json flatfile from disk 
+// @param  fileName {char[]} Name of the file from which the dictionary is 
 //   being extracted
 // @param  ptype {symbol} The problem type being solved(`nlp`normal`fresh)
-// @return {dictionary} configuration dictionary retrieved from a flatfile
+// @return {dictionary} Configuration dictionary retrieved from a flatfile
 dataCheck.i.getData:{[fileName;ptype]
   customFile:cli.i.checkCustom fileName;
   customJson:.j.k raze read0 `$customFile;
@@ -78,7 +83,7 @@ dataCheck.i.getData:{[fileName;ptype]
 
 // @kind function
 // @category dataCheckUtility
-// @desc create the folders that are required for the saving of the 
+// @desc Create the folders that are required for the saving of the 
 //   config, models, images and reports
 // @param config {dictionary} Configuration information assigned by the user 
 //   and related to the current run
@@ -90,7 +95,8 @@ dataCheck.i.pathConstruct:{[config]
   if[config[`saveOption]=2;names:names,`images`report];
   pname:$[`~config`savedModelName;
     dataCheck.i.dateTimePath;
-    dataCheck.i.customPath]config;
+    dataCheck.i.customPath
+    ]config;
   paths:pname,/:string[names],\:"/";
   dictNames:`$string[names],\:"SavePath";
   (dictNames!paths),enlist[`mainSavePath]!enlist pname
@@ -135,7 +141,10 @@ dataCheck.i.logging:{[config]
     if[`~config`loggingDir;
       -1"\nIf saveOption is 0 and loggingDir is not defined,",
         " logging is disabled.\n";
-    .automl.utils.printing:1b;.automl.utils.logging:0b;:config]];
+    .automl.utils.printing:1b;
+    .automl.utils.logging:0b;
+    :config]
+    ];
   if[10h<>type config`loggingDir;string config`loggingDir]
   printDir:$[`~config`loggingDir;
     config[`mainSavePath],"/log/";
@@ -164,7 +173,9 @@ dataCheck.i.logging:{[config]
 // @desc Construct date time string path in appropriate format	
 // @param strPath {string} Date time path string	
 // @return {string} Date and time path converted to appropriate format	
-dataCheck.i.dateTimeStr:{[strPath]ssr[strPath;":";"."]}
+dataCheck.i.dateTimeStr:{[strPath]
+  ssr[strPath;":";"."]
+  }
 
 
 // @kind function
@@ -225,10 +236,12 @@ dataCheck.i.printWarning:{[config;ignore;mainFileExists;loggingExists]
   index:$[ignore=2;0;1];
   if[mainFileExists;
       dataCheck.i.warningOption[config;ignore] 
-      utils.printWarnings[`savePathExists]index];
+      utils.printWarnings[`savePathExists]index
+    ];
   if[loggingExists;
        dataCheck.i.warningOption[config;ignore] 
-       utils.printWarnings[`loggingPathExists]index];
+       utils.printWarnings[`loggingPathExists]index
+    ];
   }
 
 
@@ -238,7 +251,7 @@ dataCheck.i.printWarning:{[config;ignore;mainFileExists;loggingExists]
 //   ignoreWarning option chosen 
 // @param config {dictionary} Configuration information assigned by the user 
 //   and related to the current run
-// @param ignore {int}  The utils.ignoreWarnings options set i.e. 0, 1 or 2
+// @param ignore {int} The utils.ignoreWarnings options set i.e. 0, 1 or 2
 // @return {err|string} Print warning to screen/log file or error out
 dataCheck.i.warningOption:{[config;ignore]
   $[ignore=2;{'x};ignore=1;config`logFunc;]

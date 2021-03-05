@@ -2,8 +2,8 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Preprocess the dataset prior to application of ML algorithms. This includes
-//   the application of symbol encoding, handling of null data/infinities and 
-//   removal of constant columns
+// the application of symbol encoding, handling of null data/infinities and 
+// removal of constant columns
 
 \d .automl
 

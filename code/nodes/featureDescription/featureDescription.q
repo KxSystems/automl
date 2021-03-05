@@ -2,8 +2,8 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Update configuration to include default parameters. Check that various
-//   aspects of the dataset and configuration are suitable for running with
-//   AutoML
+// aspects of the dataset and configuration are suitable for running with
+// AutoML
 
 \d .automl
 

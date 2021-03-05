@@ -2,8 +2,8 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Collect all the parameters relevant for the generation of reports/graphs etc
-//   in the prediction step such they can be consolidated into a single node 
-//   later in the workflow
+// in the prediction step such they can be consolidated into a single node 
+// later in the workflow
 
 \d .automl
 
@@ -18,8 +18,7 @@
 // @param modelMetaData {dictionary} Meta data from finding best model
 // @return {dictionary} Consolidated parameters to be used to generate 
 //   reports/graphs 
-predictParams.node.function:{[bestModel;hyperParams;modelName;testScore;
-  analyzeModel;modelMetaData]
+predictParams.node.function:{[bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData]
   params:`bestModel`hyperParams`modelName`testScore`analyzeModel`modelMetaData;
   params!(bestModel;hyperParams;modelName;testScore;analyzeModel;modelMetaData)
   }
