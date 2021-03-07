@@ -21,7 +21,7 @@ featureCreation.nlp.create:{[features;config]
   featNLP:charPrep`features;
   featNLP:.ml.dropConstant featNLP;
   // Run normal feature creation on numeric datasets and add to NLP features 
-  //   if relevant
+  // if relevant
   cols2use:cols[features]except charPrep`stringCols;
   if[0<count cols2use;
     nonTextFeat:charPrep[`stringCols]_features;

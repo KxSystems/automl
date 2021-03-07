@@ -115,9 +115,9 @@ dataCheck.NLPSchema:{[config;features]
 dataCheck.featureTypes:{[features;config]
   typ:config`featureExtractionType;
   $[typ in`tseries`normal;
-      [fCols:.ml.i.findCols[features;"sfihjbepmdznuvt"];
-       tab:flip fCols!features fCols
-       ];
+    [fCols:.ml.i.findCols[features;"sfihjbepmdznuvt"];
+     tab:flip fCols!features fCols
+    ];
     typ=`fresh;
       // Ignore aggregating columns for FRESH as these can be of any type
       [apprCols:flip(aggCols:config[`aggregationColumns])_ flip features;
@@ -148,12 +148,12 @@ dataCheck.length:{[features;target;config]
   $[-11h=type typ;
     $[`fresh=typ;
      // Check that the number of unique aggregate equals the number of targets
-        [aggcols:config`aggregationColumns;
-         featAggCols:$[1=count aggcols;features aggcols;(,'/)features aggcols];
-         if[count[target]<>count distinct featAggCols;
-           '`$"Target count must equal count of unique agg values for FRESH"
-           ];
+      [aggcols:config`aggregationColumns;
+       featAggCols:$[1=count aggcols;features aggcols;(,'/)features aggcols];
+       if[count[target]<>count distinct featAggCols;
+         '`$"Target count must equal count of unique agg values for FRESH"
          ];
+       ];
       typ in`normal`nlp;
         if[count[target]<>count features;
           '"Must have the same number of targets as values in table"

@@ -23,7 +23,7 @@ labelEncode.node.function:{[target]
   }
 
 // Input information
-labelEncode.node.inputs  :"F"
+labelEncode.node.inputs:"F"
 
 // Output information
-labelEncode.node.outputs :`symMap`target!"!F"
+labelEncode.node.outputs:`symMap`target!"!F"

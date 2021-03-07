@@ -184,7 +184,7 @@ featureCreation.nlp.word2vec:{[tokens;config]
    @[gensimWord2Vec .;(tokens;pykwargs args);{
      '"\nGensim returned the following error\n",x,
       "\nPlease review your input NLP data\n"}]
-    ];
+   ];
   if[config`savedWord2Vec;size:model[`:vector_size]`];
   w2vIndex:where each tokens in model[`:wv.index2word]`;
   sentenceVector:featureCreation.nlp.i.w2vTokens[tokens]'[til count w2vIndex;

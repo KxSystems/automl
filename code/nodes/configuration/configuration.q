@@ -18,8 +18,8 @@ configuration.node.function:{[config]
   }
 
 // Input information
-configuration.node.inputs  :"!"
+configuration.node.inputs:"!"
 
 // Output information
-configuration.node.outputs :"!"
+configuration.node.outputs:"!"
 

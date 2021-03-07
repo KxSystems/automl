@@ -22,7 +22,7 @@ featureDescription.node.function:{[config;features]
   }
 
 // Input information
-featureDescription.node.inputs  :`config`features!"!+"
+featureDescription.node.inputs:`config`features!"!+"
 
 // Output information
-featureDescription.node.outputs :`symEncode`dataDescription`features!"S++"
+featureDescription.node.outputs:`symEncode`dataDescription`features!"S++"

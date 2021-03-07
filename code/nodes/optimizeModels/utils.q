@@ -32,7 +32,8 @@ optimizeModels.i.extractdict:{[bestModel;cfg]
   typeConvert[n]:`;
   extractParams:$[`gs~hyperTyp;
     optimizeModels.i.gridParams;
-    optimizeModels.i.randomParams] . (extractParams;typeConvert);
+    optimizeModels.i.randomParams
+    ] . (extractParams;typeConvert);
   `hyperTyp`hyperDict!(hyperTyp;extractParams)
   }
 
@@ -56,7 +57,7 @@ optimizeModels.i.gridParams:{[extractParams;typeConvert]
 // @param extractParams {dictionary} Hyperparameters for the given model type
 //   (class/reg)
 //   initially parsed with '.j.k' from 'rsHyperParameters.json'
-// @param typeConvert   {string} List of appropriate types to convert the 
+// @param typeConvert {string} List of appropriate types to convert the 
 //   hyperparameters to
 // @return {dictionary} Hyperparameters converted to an appropriate 
 //   representation
@@ -151,7 +152,8 @@ optimizeModels.i.predShuffle:{[modelDict;bestModel;tts;scoreFunc;seed;idx]
   preds:$[modelDict[`modelLib] in key models;
     [customModel:"." sv string modelDict`modelLib`modelFunc;
      predFunc:get".automl.models.",customModel,".predict";
-     predFunc[tts;bestModel]];
+     predFunc[tts;bestModel]
+     ];
     bestModel[`:predict][tts`xtest]`
     ];
   scoreFunc[preds;tts`ytest]
@@ -231,14 +233,17 @@ hp.i.search:{[scoreFunc;k;n;features;target;dataFunc;hyperparams;testType]
 // @kind data
 // @category optimizeModelsUtility
 // @desc All possible gs/rs functions
+// @type dictionary
 xvKeys:`kfSplit`kfShuff`kfStrat`tsRolls`tsChain`pcSplit`mcSplit
 
 // @kind function
 // @category optimizeModelsUtility
 // @desc Update gs functions with automl `hp.i.search` function
+// @type dictionary
 gs:xvKeys!{hp.i.search last value x}each .ml.gs xvKeys
 
 // @kind data
 // @category optimizeModelsUtility
 // @desc Update rs functions with automl `hp.i.search` function
+// @type dictionary
 rs:xvKeys!{hp.i.search last value x}each .ml.rs xvKeys

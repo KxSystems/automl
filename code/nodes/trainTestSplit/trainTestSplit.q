@@ -22,7 +22,7 @@ trainTestSplit.node.function:{[config;features;target;sigFeats]
   }
 
 // Input information
-trainTestSplit.node.inputs  :`config`features`target`sigFeats!"!+FS"
+trainTestSplit.node.inputs:`config`features`target`sigFeats!"!+FS"
 
 // Output information
-trainTestSplit.node.outputs :"!"
+trainTestSplit.node.outputs:"!"

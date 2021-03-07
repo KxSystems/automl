@@ -16,13 +16,13 @@ featureCreation.fresh.create:{[features;config]
   aggCols:config`aggregationColumns;
   problemFunctions:config`functions;
   params:$[type[problemFunctions]in -11 11h;
-      get;
+    get;
     99h=type problemFunctions;
-	  ;
+    ;
     '"Inappropriate type for FRESH parameter data"
     ]problemFunctions;
   // Feature extraction should be performed on all columns that are 
-  //   non-aggregate columns
+  // non-aggregate columns
   cols2use:cols[features]except aggCols;
   featExtractStart:.z.T;
   // Apply feature creation and encode nulls with the median value of column

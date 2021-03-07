@@ -36,7 +36,7 @@ runModels.node.function:{[config;tts;modelTab]
   }
 
 // Input information
-runModels.node.inputs :`config`ttsObject`models!"!!+"
+runModels.node.inputs:`config`ttsObject`models!"!!+"
 
 // Output information
 runModels.i.k:`orderFunc`bestModel`bestScoringName`modelMetaData;

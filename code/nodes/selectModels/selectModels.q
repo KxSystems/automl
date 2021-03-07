@@ -27,7 +27,7 @@ selectModels.node.function:{[tts;target;modelTab;config]
   }
 
 // Input information
-selectModels.node.inputs  :`ttsObject`target`models`config!"!F+!"
+selectModels.node.inputs:`ttsObject`target`models`config!"!F+!"
 
 // Output information
-selectModels.node.outputs :"+"
+selectModels.node.outputs:"+"

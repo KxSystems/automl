@@ -20,7 +20,7 @@ saveModels.node.function:{[params]
   }
 
 // Input information
-saveModels.node.inputs  :"!"
+saveModels.node.inputs:"!"
 
 // Output information
-saveModels.node.outputs :"!"
+saveModels.node.outputs:"!"

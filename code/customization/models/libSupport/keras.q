@@ -18,7 +18,8 @@
 //   applied to input data
 models.keras.fitScore:{[data;seed;mname]
   if[mname~`multi;
-    data[;1]:models.i.npArray@'flip@'value@'.ml.i.oneHot each data[;1]];
+    data[;1]:models.i.npArray@'flip@'value@'.ml.i.oneHot each data[;1]]
+    ;
   dataDict:`xtrain`ytrain`xtest`ytest!raze data;
   mdl:get[".automl.models.keras.",string[mname],".model"][dataDict;seed];
   mdl:get[".automl.models.keras.",string[mname],".fit"][dataDict;mdl];
@@ -135,11 +136,11 @@ models.keras.multi.predict:{[data;model]
   }
 
 // load required python modules
-models.i.npArray   :.p.import[`numpy        ]`:array;
-models.i.kerasSeq  :.p.import[`keras.models ]`:Sequential;
+models.i.npArray:.p.import[`numpy        ]`:array;
+models.i.kerasSeq:.p.import[`keras.models ]`:Sequential;
 models.i.kerasDense:.p.import[`keras.layers ]`:Dense;
-models.i.numpySeed :.p.import[`numpy.random ]`:seed;
-models.i.backend   :.p.import[`keras.backend]`:backend;
+models.i.numpySeed:.p.import[`numpy.random ]`:seed;
+models.i.backend:.p.import[`keras.backend]`:backend;
 
 // Check if tensorflow is being used as the backend for keras
 models.i.tensorflowBackend:"tensorflow"~models.i.backend[]`
@@ -161,4 +162,4 @@ p)def tfWarnings(warn):
 if[0>system"s";
   .ml.mproc.init[abs system"s"]("system[\"l automl/automl.q\"]";
   ".automl.loadfile`:init.q")
- ];
+  ];

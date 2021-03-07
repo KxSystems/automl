@@ -18,9 +18,9 @@ dataPreprocessing.symEncoding:{[features;config;symEncode]
   if[all{not` in x}each value symEncode;
     if[count symEncode`freq;
       features:$[`fresh~typ;
-	    [aggColData:0!config[`aggregationColumns]xgroup features;
+        [aggColData:0!config[`aggregationColumns]xgroup features;
          raze .ml.freqEncode[;symEncode`freq]each flip each aggColData
-		 ];
+        ];
         .ml.freqEncode[features;symEncode`freq]
         ]; 
       ];
@@ -99,4 +99,3 @@ dataPreprocessing.nullEncode:{[features;func]
    flip 0^(func each flip features)^flip[features],names!nullValues
    ]
   }
-

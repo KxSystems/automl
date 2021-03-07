@@ -48,9 +48,9 @@ dataCheck.i.getCustomConfig:{[feat;config;default;ptyp]
       config:string config
       ];
     $[min key[config]in key default;
-    default,config;
-    '`$"Inappropriate key provided for configuration input"
-     ]
+      default,config;
+      '`$"Inappropriate key provided for configuration input"
+      ]
     ];
     not any config;d;
     '`$"config must be passed the identity `(::)`, a filepath to a ", 
@@ -58,11 +58,13 @@ dataCheck.i.getCustomConfig:{[feat;config;default;ptyp]
     ];
   if[ptyp=`fresh;
     aggcols:dict`aggregationColumns;
-    dict[`aggregationColumns]:$[100h~typagg:type aggcols;aggcols feat;
-    11h~abs typagg;aggcols;
-    '`$"aggcols must be passed function or list of columns"
-    ]
-  ];
+    dict[`aggregationColumns]:$[100h~typAgg:type aggcols;
+      aggcols feat;
+      11h~abs typAgg;
+      aggcols;
+      '`$"aggcols must be passed function or list of columns"
+      ]
+    ];
   dict
   }
 
@@ -123,9 +125,11 @@ dataCheck.i.dateTimePath:{[config]
 // @return {string} Path constructed based on user defined custom model name
 dataCheck.i.customPath:{[config]
   modelName:config[`savedModelName];
-  modelName:$[10h=type modelName;modelName;
-   -11h=type modelName;string modelName;
-   '"unsupported input type, model name must be a symbol atom or string"];
+  modelName:$[10h=type modelName;
+    modelName;
+    -11h=type modelName;string modelName;
+    '"unsupported input type, model name must be a symbol atom or string"
+    ];
   config[`savedModelName]:modelName;
   path,"/outputs/namedModels/",modelName,"/"
   }
@@ -153,7 +157,8 @@ dataCheck.i.logging:{[config]
      loggingDir:$[10h=typeLogDir;;
        -11h=typeLogDir;string;
        '"type must be a char array or symbol"]config`loggingDir;
-    path,"/",loggingDir,"/"]
+    path,"/",loggingDir,"/"
+    ]
     ];
   if[`~config`loggingFile;
     date:string config`startDate;
@@ -177,7 +182,6 @@ dataCheck.i.logging:{[config]
 dataCheck.i.dateTimeStr:{[strPath]
   ssr[strPath;":";"."]
   }
-
 
 // @kind function
 // @category dataCheckUtility

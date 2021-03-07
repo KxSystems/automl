@@ -81,4 +81,3 @@ check.loadtheano:{
      ];
     ]
   }
-

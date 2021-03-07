@@ -26,7 +26,7 @@ saveGraph.node.function:{[params]
   }
 
 // Input information
-saveGraph.node.inputs  :"!"
+saveGraph.node.inputs:"!"
 
 // Output information
-saveGraph.node.outputs :"!"
+saveGraph.node.outputs:"!"

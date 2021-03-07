@@ -22,7 +22,7 @@ dataPreprocessing.node.function:{[config;features;symEncode]
   }
 
 // Input information
-dataPreprocessing.node.inputs  :`config`features`symEncode!"!+S"
+dataPreprocessing.node.inputs:`config`features`symEncode!"!+S"
 
 // Output information
-dataPreprocessing.node.outputs :"+"
+dataPreprocessing.node.outputs:"+"

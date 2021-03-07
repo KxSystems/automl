@@ -24,7 +24,7 @@ featureSignificance.node.function:{[config;features;target]
   }
 
 // Input information
-featureSignificance.node.inputs  :`config`features`target!"!+F"
+featureSignificance.node.inputs:`config`features`target!"!+F"
 
 // Output information
-featureSignificance.node.outputs :`sigFeats`features!"S+"
+featureSignificance.node.outputs:`sigFeats`features!"S+"

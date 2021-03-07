@@ -21,7 +21,7 @@ modelGeneration.node.function:{[config;target]
   }
 
 // Input information
-modelGeneration.node.inputs  :`config`target!"!F"
+modelGeneration.node.inputs:`config`target!"!F"
 
 // Output information
-modelGeneration.node.outputs :"+"
+modelGeneration.node.outputs:"+"

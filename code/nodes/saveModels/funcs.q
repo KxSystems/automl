@@ -19,13 +19,13 @@ saveModels.saveModel:{[params;savePath]
   filePath:savePath,"/",modelName;
   joblib:.p.import`joblib;
   $[modelLib in`sklearn`theano;
-      joblib[`:dump][bestModel;filePath];
-    `keras~modelLib;
-      bestModel[`:save][filePath,".h5"];
-    `torch~modelLib;
-      torch[`:save][bestModel;filePath,".pt"];
-    -1"\nSaving of non keras/sklearn/torch models types is not currently ",
-      "supported\n"
+    joblib[`:dump][bestModel;filePath];
+      `keras~modelLib;
+    bestModel[`:save][filePath,".h5"];
+      `torch~modelLib;
+    torch[`:save][bestModel;filePath,".pt"];
+      -1"\nSaving of non keras/sklearn/torch models types is not currently ",
+        "supported\n"
     ]; 
   printPath:utils.printDict[`model],savePath;
   params[`config;`logFunc]printPath;

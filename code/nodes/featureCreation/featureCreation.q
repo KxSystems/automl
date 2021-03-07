@@ -28,8 +28,8 @@ featureCreation.node.function:{[config;features]
   }
 
 // Input information
-featureCreation.node.inputs  :`config`features!"!+"
+featureCreation.node.inputs:`config`features!"!+"
 
 // Output information
-featureCreation.node.outputs :`creationTime`features`featModel!"t+<"
+featureCreation.node.outputs:`creationTime`features`featModel!"t+<"
 

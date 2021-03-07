@@ -16,7 +16,7 @@
 featureCreation.normal.create:{[features;config]
   featureExtractStart:.z.T;
   // Time columns are extracted such that constituent parts can be used but are
-  //   not transformed according to remaining procedures
+  // not transformed according to remaining procedures
   timeCols:.ml.i.findCols[features;"dmntvupz"];
   featTable:(cols[features]except timeCols)#features;
   // Apply user defined functions to the table

@@ -16,7 +16,7 @@ saveMeta.extractModelMeta:{[params]
   modelLib:modelMeta`modelLib;
   modelFunc:modelMeta`modelFunc;
   `modelLib`modelFunc!(modelLib;modelFunc)
-   }
+  }
 
 // @kind function
 // @category saveMeta

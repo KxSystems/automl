@@ -19,7 +19,7 @@ saveReport.node.function:{[params]
   }
 
 // Input information
-saveReport.node.inputs  :"!"
+saveReport.node.inputs:"!"
 
 // Output information
-saveReport.node.outputs :"!"
+saveReport.node.outputs:"!"

@@ -18,11 +18,11 @@ cli.i.checkCustom:{[fileName]
   fileName:raze fileName;
   filePath:path,"/code/customization/configuration/customConfig/",fileName;
   $[not()~key hsym`$filePath;
-      :filePath;
-    not()~key hsym`$filePath:"./",fileName;
-      :filePath;
-    'fileName," does not exist in current directory or '",path,
-      "/code/configuration/customConfig/'"
+    :filePath;
+      not()~key hsym`$filePath:"./",fileName;
+    :filePath;
+      'fileName," does not exist in current directory or '",path,
+        "/code/configuration/customConfig/'"
     ]
   }
 
@@ -53,11 +53,11 @@ cli.i.parseParameters:{[cliInput;sectionType]
 //   converted values
 cli.i.convertParameters:{[param]
   $["symbol"~param`type;
-      `$param`value;
-    "lambda"~param`type;
-      get param`value;
-    "string"~param`type;
-      param`value;
-    (`$param`type)$param`value
+    `$param`value;
+      "lambda"~param`type;
+    get param`value;
+      "string"~param`type;
+    param`value;
+      (`$param`type)$param`value
     ]
   }

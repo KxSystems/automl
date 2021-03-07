@@ -18,7 +18,6 @@ saveGraph.i.regTargetPlot:{[params;savePath]
   saveGraph.i.targetPlot[utils.plt;savePath]
   }
 
-
 // @kind function
 // @category saveGraphUtility
 // @desc Create binary target distribution plot and save down locally
@@ -36,7 +35,6 @@ saveGraph.i.classTargetPlot:{[params;savePath]
   saveGraph.i.targetPlot[utils.plt;savePath]
   }
 
-
 // @kind function
 // @category saveGraphUtility
 // @desc Save target plot locally
@@ -51,7 +49,6 @@ saveGraph.i.targetPlot:{[pltObj;savePath]
   pltObj[`:savefig][filePath;`bbox_inches pykw"tight"];
   pltObj[`:close][];
   }
-
 
 // @kind function
 // @category saveGraphUtility
@@ -83,7 +80,6 @@ saveGraph.i.displayConfMatrix:{[confMatrix;classes;modelName;savePath]
   utils.plt[`:close][];
   } 
 
-
 // @kind function
 // @category saveGraphUtility
 // @desc Add text to confusion matrix
@@ -98,7 +94,6 @@ saveGraph.i.addText:{[confMatrix;thresh;i;j]
   utils.plt[`:text][j;i;valueStr;`horizontalalignment pykw`center;
     `color pykw color];
   }
-
 
 // @kind function
 // @category saveGraphUtility
@@ -126,7 +121,6 @@ saveGraph.i.plotImpact:{[impact;modelName;savePath]
   utils.plt[`:savefig][filePath;`bbox_inches pykw"tight"];
   utils.plt[`:close][];
   }
-
 
 // @kind function
 // @category saveGraphUtility

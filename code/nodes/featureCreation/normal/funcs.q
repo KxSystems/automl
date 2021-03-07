@@ -60,7 +60,7 @@ featureCreation.normal.bulkTransform:{[features]
   bulkCols@:.ml.combs[count bulkCols;2];
   joinCols:raze(,'/)`$("_"sv'string each bulkCols),\:/:stringFunc;
   // Apply transforms based on naming conventions chosen and re-form the table 
-  //   with these appended
+  // with these appended
   funcList:(prd;sum;{first(%)x};{last deltas x});
   flip flip[features],joinCols!(,/)funcList@/:\:features bulkCols
   }

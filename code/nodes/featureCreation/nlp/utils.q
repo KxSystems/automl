@@ -8,7 +8,7 @@
 // @kind function
 // @category featureCreationUtility
 // @desc Retrieves the word2vec items for sentences based on the model
-// @param model    {<} Model to be applied
+// @param model {<} Model to be applied
 // @param sentence {symbol} Sentence to retrieve information from 
 // @return {float[]} word2vec transformation for sentence
 featureCreation.nlp.i.w2vItem:{[model;sentence]

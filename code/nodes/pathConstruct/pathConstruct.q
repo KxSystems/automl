@@ -23,7 +23,7 @@ pathConstruct.node.function:{[preProcParams;predictionStore]
   }
 
 // Input information
-pathConstruct.node.inputs  :`preprocParams`predictionStore!"!!"
+pathConstruct.node.inputs:`preprocParams`predictionStore!"!!"
 
 // Output information
-pathConstruct.node.outputs :"!"
+pathConstruct.node.outputs:"!"

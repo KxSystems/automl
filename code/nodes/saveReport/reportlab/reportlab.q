@@ -92,7 +92,8 @@ saveReport.reportlabGenerate:{[params;filePath]
     "grid";
     srch in`random`sobol;
     "random";
-    '"inappropriate type"];
+    '"inappropriate type"
+    ];
   hpFunc:string config`$hptyp,"SearchFunction";
   hpSize:string config`$hptyp,"SearchArgument";
   hpMethod:`$last"."vs hpFunc;
@@ -114,10 +115,12 @@ saveReport.reportlabGenerate:{[params;filePath]
   $[ptype like"*class*";
     [f:saveReport.i.image[pdf;plots`conf;f;300;250;250];
      saveReport.i.text[pdf;f;25;"Figure 4: This is the confusion matrix",
-     " produced for predictions made on the testing set";"Helvetica";10]];
+     " produced for predictions made on the testing set";"Helvetica";10]
+     ];
     [f:saveReport.i.image[pdf;plots`reg;f;300;250;250];
      saveReport.i.text[pdf;f;25;"Figure 4: Regression analysis plot produced",
-       " for predictions made on the testing set";"Helvetica";10]];
+       " for predictions made on the testing set";"Helvetica";10]
+     ];
     ];
   pdf[`:save][];
   }

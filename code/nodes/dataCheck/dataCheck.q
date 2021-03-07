@@ -33,8 +33,8 @@ dataCheck.node.function:{[config;features;target]
   }
 
 // Input information
-dataCheck.node.inputs   :`config`features`target!"!+F"
+dataCheck.node.inputs:`config`features`target!"!+F"
 
 // Output information
-dataCheck.node.outputs  :`config`features`target!"!+F"
+dataCheck.node.outputs:`config`features`target!"!+F"
 

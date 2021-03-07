@@ -23,7 +23,7 @@ saveMeta.node.function:{[params]
   }
 
 // Input information
-saveMeta.node.inputs  :"!"
+saveMeta.node.inputs:"!"
 
 // Output information
-saveMeta.node.outputs :"!"
+saveMeta.node.outputs:"!"

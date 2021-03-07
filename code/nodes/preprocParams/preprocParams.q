@@ -23,7 +23,7 @@
 //   reports/graphs
 preprocParams.node.function:{[config;descrip;cTime;sigFeats;symEncode;symMap;featModel;tts]
   params:`config`dataDescription`creationTime`sigFeats`symEncode`symMap,
-  `featModel`ttsObject;
+    `featModel`ttsObject;
   params!(config;descrip;cTime;sigFeats;symEncode;symMap;featModel;tts)
   }
 
