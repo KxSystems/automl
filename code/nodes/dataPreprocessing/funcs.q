@@ -24,7 +24,7 @@ dataPreprocessing.symEncoding:{[features;config;symEncode]
         .ml.freqEncode[features;symEncode`freq]
         ]; 
       ];
-    features:.ml.oneHot.fitPredict[0!features;symEncode`ohe];
+    features:.ml.oneHot.fitTransform[0!features;symEncode`ohe];
     // Extract symbol columns from dictionary
     symbolCols:distinct raze symEncode;
     :flip symbolCols _ flip features

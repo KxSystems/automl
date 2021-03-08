@@ -154,7 +154,7 @@
         "type" :"symbol"
       },
       "trainTestSplit":{
-        "value":".ml.traintestsplit",
+        "value":".ml.trainTestSplit",
         "type" :"symbol"
       }
     },
@@ -164,7 +164,7 @@
         "type" :"symbol"
       },
       "trainTestSplit":{
-        "value":".ml.traintestsplit",
+        "value":".ml.trainTestSplit",
         "type" :"symbol"
       },
       "w2v":{

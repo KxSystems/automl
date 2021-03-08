@@ -17,7 +17,7 @@ labelEncode.node.function:{[target]
   if[11h~type target;
     encode:.ml.labelEncode.fit target;
     symMap:encode`modelInfo;
-    target:encode[`predict] target
+    target:encode[`transform] target
     ];
   `symMap`target!(symMap;target)
   }

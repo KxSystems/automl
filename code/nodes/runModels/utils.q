@@ -47,7 +47,7 @@ runModels.i.customModel:{[bestModel;tts;modelTab;scoreFunc;cfg]
 //   and testing set
 // @return {dictionary} Preprocessed target values
 runModels.i.prepMultiTarget:{[tts]
-  models.i.npArray flip value .ml.i.onehot1 tts`ytrain
+  models.i.npArray flip value .ml.i.oneHot tts`ytrain
   }
 
 
