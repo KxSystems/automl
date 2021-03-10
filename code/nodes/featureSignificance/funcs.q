@@ -8,7 +8,7 @@
 
 // @kind function
 // @category featureSignificance
-// @desc Extract feature significant tests and apply to feature data
+// @desc Extract feature significance tests and apply to feature data
 // @param config {dictionary} Information related to the current run of AutoML
 // @param features {table} Feature data as a table 
 // @param target {number[]} Numerical vector containing target data

@@ -18,8 +18,8 @@
 //   applied to input data
 models.keras.fitScore:{[data;seed;mname]
   if[mname~`multi;
-    data[;1]:models.i.npArray@'flip@'value@'.ml.i.oneHot each data[;1]]
-    ;
+    data[;1]:models.i.npArray@'flip@'value@'.ml.i.oneHot each data[;1]
+    ];
   dataDict:`xtrain`ytrain`xtest`ytest!raze data;
   mdl:get[".automl.models.keras.",string[mname],".model"][dataDict;seed];
   mdl:get[".automl.models.keras.",string[mname],".fit"][dataDict;mdl];
@@ -148,8 +148,10 @@ models.i.tensorflowBackend:"tensorflow"~models.i.backend[]`
 // import appropriate random seed depending on tensorflow version
 if[models.i.tensorflowBackend;
   models.i.tf:.p.import[`tensorflow];
-  models.i.tfType:$[2>"I"$first models.i.tf[`:__version__]`;`:set_random_seed;
-    `:random.set_seed];
+  models.i.tfType:$[2>"I"$first models.i.tf[`:__version__]`;
+    `:set_random_seed;
+    `:random.set_seed
+    ];
   models.i.tensorflowSeed:models.i.tf models.i.tfType
   ];
 

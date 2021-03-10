@@ -119,17 +119,17 @@ dataCheck.featureTypes:{[features;config]
      tab:flip fCols!features fCols
     ];
     typ=`fresh;
-      // Ignore aggregating columns for FRESH as these can be of any type
-      [apprCols:flip(aggCols:config[`aggregationColumns])_ flip features;
-       cls:.ml.i.findCols[apprCols;"sfiehjb"];
-       // Restore aggregating columns
-       tab:flip(aggCols!features aggCols,:()),cls!features cls;
-       fCols:cols tab
-       ];
+    // Ignore aggregating columns for FRESH as these can be of any type
+    [apprCols:flip(aggCols:config[`aggregationColumns])_ flip features;
+     cls:.ml.i.findCols[apprCols;"sfiehjb"];
+     // Restore aggregating columns
+     tab:flip(aggCols!features aggCols,:()),cls!features cls;
+     fCols:cols tab
+     ];
     typ=`nlp;
-      [fCols:.ml.i.findCols[features;"sfihjbepmdznuvtC"];
-       tab:flip fCols!features fCols
-       ];
+    [fCols:.ml.i.findCols[features;"sfihjbepmdznuvtC"];
+     tab:flip fCols!features fCols
+     ];
     '`$"This form of feature extraction is not currently supported"
     ];
   dataCheck.i.errColumns[cols features;fCols;typ;config];

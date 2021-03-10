@@ -1,7 +1,7 @@
 // code/commandLine/cli.q - Command line input
 // Copyright (c) 2021 Kx Systems Inc
 //
-// Retrive data from config file to build paramDict and problemDict.
+// Retrieve data from config file to build paramDict and problemDict.
 
 \d .automl
 

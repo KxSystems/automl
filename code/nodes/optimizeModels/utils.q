@@ -183,7 +183,7 @@ optimizeModels.i.shuffle:{[data;col]
 // @param ordFunc {fn} Ordering of scores 
 // @return {dictionary} Impact score of each column in ascending order 
 optimizeModels.i.impact:{[scores;countCols;ordFunc]
-  scores:$[any 0>scores;.ml.minMaxScaler.fitPredict;]scores;
+  scores:$[any 0>scores;.ml.minMaxScaler.fitTransform;]scores;
   scores:$[ordFunc~desc;1-;]scores;
   keyDict:til countCols;
   asc keyDict!scores%max scores

@@ -15,10 +15,10 @@
 //   the structure outlined in `graph/Automl_Graph.png`
 // @param features {dictionary|table} Unkeyed tabular feature data or a 
 //   dictionary outlining how to retrieve the data in accordance with 
-//   `.ml.i.loaddset`
+//   `.ml.i.loadDataset`
 // @param target {dictionary|any[]} Target vector of any type or a dictionary
 //   outlining how to retrieve the target vector in accordance with
-//   `.ml.i.loaddset`
+//   `.ml.i.loadDataset`
 // @param ftype {symbol} Feature extraction type (`nlp/`normal/`fresh)
 // @param ptype {symbol} Problem type being solved (`reg/`class)
 // @param params {dictionary|char[]|::} One of the following:

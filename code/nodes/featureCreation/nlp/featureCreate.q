@@ -2,7 +2,7 @@
 // Copyright (c) 2021 Kx Systems Inc
 //
 // Apply NLP specific feature extraction on string characters and normal
-// preprcoessing methods to remaining data
+// preprocessing methods to remaining data
 
 \d .automl
 
