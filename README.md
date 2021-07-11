@@ -79,9 +79,9 @@ The NLP functionality contained within AutoML requires the [Kx NLP library](http
 
 Place the library file in `$QHOME` and load into a q instance using `automl/automl.q`
 
-This will load all the functions contained within the `.ml` namespace  
-```q
-$q automl/automl.q
+This will load all the functions contained within the `.automl` namespace  
+```
+q)\l automl/automl.q
 q).automl.loadfile`:init.q
 ```
 
