@@ -14,11 +14,11 @@ The following are the procedures completed when the default system configuration
 ## Processing nodes
 
 
-> `.automl.X.node.function`   **Top-level processing node functions**
-> 
-> [`selectModels`](#automlselectmodelsnodefunction)    Select a subset of models based on dataset imposed limitations.
-> [`runModels`](#automlrunmodelsnodefunction)       Select the most promising model from the table of models provided.
-> [`optimizeModels`](#automloptimizemodelsnodefunction)  Apply a user defined optimization method (grid/random/sobol).
+`.automl.X.node.function`   **Top-level processing node functions**
+
+[`selectModels`](#automlselectmodelsnodefunction)    Select a subset of models based on dataset imposed limitations<br>
+[`runModels`](#automlrunmodelsnodefunction)       Select the most promising model from the table of models provided<br>
+[`optimizeModels`](#automloptimizemodelsnodefunction)  Apply a user defined optimization method (grid/random/sobol)
 
 
 

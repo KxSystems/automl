@@ -15,15 +15,15 @@ The outputs are in subfolders `images`, `models`, `config`, and `reports` respec
 
 ## Processing nodes
 
-> `.automl.X.node.function`   **Top-level processing node functions**
->
-> [`preprocParams`](#automlpreprocparamsnodefunction)  Collect parameters for report/graph generation from preprocessing nodes<br>
-> [`predictParams`](#automlpredictparamsnodefunction)  Collect parameters for report/graph generation from prediction stages<br>
-> [`pathConstruct`](#automlpathconstructnodefunction)  Construct save paths for generated graphs/reports<br>
-> [`saveGraph`](#automlsavegraphnodefunction)      Save all the graphs required for report generation<br>
-> [`saveMeta`](#automlsavemetanodefunction)       Save relevant metadata for use with a persisted model on new data<br>
-> [`saveReport`](#automlsavereportnodefunction)     Save Python generated report summarizing current run via pyLatex/reportlab<br>
-> [`saveModels`](#automlsavemodelsnodefunction)     Save encoded representation of best model retrieved during run of AutoML
+`.automl.X.node.function`   **Top-level processing node functions**
+
+[`preprocParams`](#automlpreprocparamsnodefunction)  Collect parameters for report/graph generation from preprocessing nodes<br>
+[`predictParams`](#automlpredictparamsnodefunction)  Collect parameters for report/graph generation from prediction stages<br>
+[`pathConstruct`](#automlpathconstructnodefunction)  Construct save paths for generated graphs/reports<br>
+[`saveGraph`](#automlsavegraphnodefunction)      Save all the graphs required for report generation<br>
+[`saveMeta`](#automlsavemetanodefunction)       Save relevant metadata for use with a persisted model on new data<br>
+[`saveReport`](#automlsavereportnodefunction)     Save Python generated report summarizing current run via pyLatex/reportlab<br>
+[`saveModels`](#automlsavemodelsnodefunction)     Save encoded representation of best model retrieved during run of AutoML
 
 
 

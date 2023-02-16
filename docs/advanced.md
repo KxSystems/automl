@@ -159,11 +159,11 @@ params:`crossValidationFunction`crossValidationArgument!
 .automl.fit[features;target;ftype;ptype;params]
 ```
 
-:warning: **Custom cross-validation function**
-
-To add a custom cross-validation function to those provided, follow the [guidelines for function definition](https://code.kx.com/ml/tree/master/docs/xval.md).
-
-Contact ai@kx.com with questions on this: it is more complicated than other customizations.
+> **Custom cross-validation function**
+> 
+> To add a custom cross-validation function to those provided, follow the [guidelines for function definition](https://code.kx.com/ml/tree/master/docs/xval.md).
+> 
+> Contact ai@kx.com with questions on this: it is more complicated than other customizations.
 
 
 ## `functions`
@@ -248,7 +248,7 @@ params:`gridSearchFunction`gridSearchArgument!
 .automl.fit[features;target;ftype;ptype;params]
 ```
 
->:warning: **Custom grid-search function**
+>**Custom grid-search function**
 >
 > To add a custom grid search function, follow the [guidelines for function definition](../../toolkit/xval.md).
 >
@@ -599,9 +599,9 @@ params:`hyperparameterSearchType`randomSearchFunction`randomSearchArgument!
 .automl.fit[features;target;ftype;ptype;params]
 ```
 
-> :warning: **Custom random/Sobol-random search function**
+> **Custom random/Sobol-random search function**
 >
-> To add a custom random/Sobol-random search function, follow the [guidelines for function definition](../../toolkit/xval.md).
+> To add a custom random/Sobol-random search function, follow the [guidelines for function definition](https://github.com/KxSystems/ml/tree/master/xval).
 >
 > Contact ai@kx.com with questions on this: it is more complicated than other customizations.
 

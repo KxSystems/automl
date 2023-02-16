@@ -73,7 +73,7 @@ theano
 
 **NLP**
 
-The NLP functionality in AutoML requires the [Kx NLP library](https://github.com/KxSystems/nlp) along with `gensim` which can be installed using conda or pip.
+The NLP functionality in AutoML requires the [KX NLP library](https://github.com/KxSystems/nlp) along with `gensim` which can be installed using conda or pip.
 
 
 ## Installation

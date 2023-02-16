@@ -10,19 +10,19 @@ It is particularly important when it comes to automated pipelines where, by defi
 ## Preprocessing nodes
 
 
-> `.automl.X.node.function`    **Top-level preprocessing node functions**
-> 
-> [`configuration`](#automlconfigurationnodefunction)         Pass run configuration into AutoML graph
-> [`featureData`](#automlfeaturedatanodefunction)          Load feature data from process/alternative data source
-> [`targetData`](#automltargetdatanodefunction)           Load target vector from process/alternative data source
-> [`dataCheck`](#automldatachecknodefunction)            Build configuration dictionary and check dataset is suitable
-> [`modelGeneration`](#automlmodelgenerationnodefunction)      Create table of models to apply
-> [`featureDescription`](#automlfeaturedescriptionnodefunction)   Information needed for report generation or running on new data
-> [`labelEncode`](#automllabelencodenodefunction)          Encode symbol target data
-> [`dataPreprocessing`](#automldatapreprocessingnodefunction)    Preprocess data prior to application of ML algorithms
-> [`featureCreation`](#automlfeaturecreationnodefunction)      Generate appropriate features based on problem type
-> [`featureSignificance`](#automlfeaturesignificancenodefunction)   Apply feature-significance tests and return significant features
-> [`trainTestSplit`](#automltraintestsplitnodefunction)       Split features and target into training and testing sets
+`.automl.X.node.function`    **Top-level preprocessing node functions**
+
+[`configuration`](#automlconfigurationnodefunction)         Pass run configuration into AutoML graph<br>
+[`featureData`](#automlfeaturedatanodefunction)          Load feature data from process/alternative data source<br>
+[`targetData`](#automltargetdatanodefunction)           Load target vector from process/alternative data source<br>
+[`dataCheck`](#automldatachecknodefunction)            Build configuration dictionary and check dataset is suitable<br>
+[`modelGeneration`](#automlmodelgenerationnodefunction)      Create table of models to apply<br>
+[`featureDescription`](#automlfeaturedescriptionnodefunction)   Information needed for report generation or running on new data<br>
+[`labelEncode`](#automllabelencodenodefunction)          Encode symbol target data<br>
+[`dataPreprocessing`](#automldatapreprocessingnodefunction)    Preprocess data prior to application of ML algorithms<br>
+[`featureCreation`](#automlfeaturecreationnodefunction)      Generate appropriate features based on problem type<br>
+[`featureSignificance`](#automlfeaturesignificancenodefunction)   Apply feature-significance tests and return significant features<br>
+[`trainTestSplit`](#automltraintestsplitnodefunction)       Split features and target into training and testing sets
 
 
 
@@ -157,9 +157,9 @@ To split the data, a number of train-test split procedures are implemented for t
 
 problem type | function                | description 
 -------------|-------------------------|-------------
-Normal       |.ml.trainTestSplit       | Shuffle the dataset and split into training and testing set with defined percentage in each
-FRESH        |.automl.utils.ttsNonShuff| Without shuffling, the dataset is split into training and testing set with defined percentage in each to ensure no time leakage.
-NLP          |.ml.trainTestSplit       | Shuffle the dataset and split into training and testing set with defined percentage in each
+Normal       |`.ml.trainTestSplit`       | Shuffle the dataset and split into training and testing set with defined percentage in each
+FRESH        |`.automl.utils.ttsNonShuff`| Without shuffling, the dataset is split into training and testing set with defined percentage in each to ensure no time leakage.
+NLP          |`.ml.trainTestSplit`       | Shuffle the dataset and split into training and testing set with defined percentage in each
 
 For classification problems, not all the distinct target classes will necessarily appear in both the training and testing sets. This is an issue for the Keras neural-network models, which require a sample from each target class present in both splits of the data.
 

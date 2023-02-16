@@ -12,16 +12,18 @@ The top-level functions in the repository are:
 
 .automl   **Top-level functions**
 
-* Generate, retrieve, delete models
-  - [`fit`](#automlfit)                    Apply AutoML to provided features and associated targets
-  - [`getModel`](#automlgetmodel)              Retrieve a previously fit AutoML model
-  - [`deleteModels`](#automldeletemodels)          Delete model/s
-*  Generate configuration 
-  - [`newConfig`](#automlnewconfig)             Generate a new JSON parameter file for use with .automl.fit
-*  Updates
-  - [`updateIgnoreWarnings`](#automlupdateignorewarnings)  Update print warning severity level
-  - [`updateLogging`](#automlupdatelogging)         Update logging state
-  - [`updatePrinting`](#automlupdateprinting)        Update printing state
+Generate, retrieve, delete models
+* [`fit`](#automlfit)                    Apply AutoML to provided features and associated targets
+* [`getModel`](#automlgetmodel)              Retrieve a previously fit AutoML model
+* [`deleteModels`](#automldeletemodels)          Delete model/s
+
+Generate configuration 
+* [`newConfig`](#automlnewconfig)             Generate a new JSON parameter file for use with .automl.fit
+
+Updates
+* [`updateIgnoreWarnings`](#automlupdateignorewarnings)  Update print warning severity level
+* [`updateLogging`](#automlupdatelogging)         Update logging state
+* [`updatePrinting`](#automlupdateprinting)        Update printing state
 
 You can call `.automl.fit` with arguments to suit a specific use case. 
 The functions listed above cover a wide range of options. 

@@ -1,4 +1,4 @@
-# Frequently-asked questions
+# Frequently asked questions
 
 ## How can the automated machine-learning framework be configured for distributed execution?
 
@@ -167,7 +167,7 @@ def runmodel(model,optimizer,criterion,dataloader,n_epoch):
     return model
 ```
 
-** Step 3**
+**Step 3**
 When constructing the `.q` file, follow this naming convention for model, fit and prediction functions:
 
 ```txt
@@ -268,7 +268,7 @@ models.torch.fitScore:{[data;seed;mname]
 ```
 
 **Step 5**
-Go to [models.json](ug/config.md#json-configuration-files) and include the model under the problem type `classification` or `regression`. 
+Go to [models.json](config.md#json-configuration-files) and include the model under the problem type `classification` or `regression`. 
 
 Example for the classification section:
 
