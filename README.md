@@ -80,9 +80,9 @@ The NLP functionality in AutoML requires the [KX NLP library](https://github.com
 
 Place the library file in `$QHOME` and load into a q instance using `automl/automl.q`
 
-This will load all the functions contained within the `.ml` namespace  
-```q
-$q automl/automl.q
+This will load all the functions contained within the `.automl` namespace  
+```
+q)\l automl/automl.q
 q).automl.loadfile`:init.q
 ```
 
